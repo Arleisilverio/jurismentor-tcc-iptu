@@ -8,6 +8,7 @@ import { BancaTab } from '@/components/BancaTab';
 import { PresentationTab } from '@/components/PresentationTab';
 import { TccDataTab } from '@/components/TccDataTab';
 import { SettingsModal } from '@/components/SettingsModal';
+import { CyberCanvas } from '@/components/CyberCanvas';
 import { getSupabaseClient } from '@/lib/supabaseClient';
 
 export default function Home() {
@@ -17,8 +18,8 @@ export default function Home() {
 
   const checkSupabaseStatus = () => {
     if (typeof window === 'undefined') return;
-    const url = localStorage.getItem('JURIS_SUPABASE_URL');
-    const key = localStorage.getItem('JURIS_SUPABASE_KEY');
+    const url = localStorage.getItem('JURIS_SUPABASE_URL') || process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = localStorage.getItem('JURIS_SUPABASE_KEY') || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
     if (url && key) {
       const client = getSupabaseClient(url, key);
       setSupabaseConnected(!!client);
@@ -32,34 +33,37 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
-      {/* Top Header */}
+    <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100 relative selection:bg-amber-400 selection:text-slate-950 font-sans">
+      {/* 2D Cyber Canvas Background Animation */}
+      <CyberCanvas />
+
+      {/* Top Gamer HUD Navbar */}
       <Navbar
         onOpenSettings={() => setIsSettingsOpen(true)}
         supabaseConnected={supabaseConnected}
         activeMode={
           activeTab === 'chat'
-            ? 'Mentor & Tutor'
+            ? 'Modo Sábio // Mentor'
             : activeTab === 'banca'
-            ? 'Banca Simulada'
+            ? 'Arena // Boss Fight'
             : activeTab === 'apresentacao'
-            ? 'Ensaio de Fala'
-            : 'Guia da Tese'
+            ? 'Speedrun // 15 Min'
+            : 'Grimório da Tese'
         }
       />
 
-      {/* Main Content Area based on Active Tab */}
-      <main className="flex-1 overflow-x-hidden">
+      {/* Main Interactive Screen with relative z-index over canvas */}
+      <main className="flex-1 overflow-x-hidden relative z-10">
         {activeTab === 'chat' && <ChatTab />}
         {activeTab === 'banca' && <BancaTab />}
         {activeTab === 'apresentacao' && <PresentationTab />}
         {activeTab === 'tese' && <TccDataTab />}
       </main>
 
-      {/* Mobile Fixed Bottom Navigation Bar */}
+      {/* Fixed Bottom Gamer Navigation Deck */}
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
 
-      {/* Configuration & Connections Modal */}
+      {/* Settings & Keys Modal */}
       <SettingsModal
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}
