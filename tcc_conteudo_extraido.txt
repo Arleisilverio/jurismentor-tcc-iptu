@@ -1,0 +1,195 @@
+# --- PÁGINA 1 ---
+CURSO DE GRADUAÇÃO EM DIREITO • TRABALHO DE CONCLUSÃO DE CURSO (TCC)
+Área de Concentração: Direito Tributário e Urbanístico Municipal
+A TRIBUTAÇÃO DOS IMÓVEIS NÃO EDIFICADOS NO IPTU DE CURITIBA:
+CRITÉRIOS DE ENQUADRAMENTO, OBRAS EM ANDAMENTO E FUNÇÃO SOCIAL
+DA PROPRIEDADE
+Monografia Final de Curso • Curitiba/PR
+1. INTRODUÇÃO
+O Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU) ocupa posição de destaque na matriz
+tributária municipal brasileira. De competência privativa dos Municípios e do Distrito Federal, nos termos do artigo 156,
+inciso I, da Constituição Federal de 1988, o tributo conjuga a clássica função fiscal — viabilizadora das receitas próprias
+municipais — com relevante dimensão extrafiscal de ordenação do espaço urbano, delineada pelo artigo 182 da Carta
+Republicana e disciplinada pelo Estatuto da Cidade (Lei Federal n.º 10.257/2001).
+Na conformação do IPTU no Município de Curitiba, a legislação local estabelece tratamento substancialmente
+mais gravoso para os imóveis classificados como territoriais (terrenos não edificados) em comparação com as unidades
+prediais residenciais e comerciais. O propósito teleológico de tal diferenciação reside na desestimulação da retenção
+especulativa da terra nua dotada de infraestrutura urbana. Todavia, a prática arrecadatória da Secretaria Municipal de
+Finanças tem gerado controvérsias ao estender a alíquota territorial punitiva a terrenos que se encontram em pleno curso de
+edificação, gerando manifesta insegurança jurídica ao setor produtivo.
+2. JUSTIFICATIVA E RELEVÂNCIA SOCIAL
+A relevância do presente estudo desdobra-se em três vertentes indissociáveis: social, econômica e jurídica.
+Sob o prisma social e urbanístico, a indução do cumprimento da função social da propriedade não pode ser transmutada
+em penalização arbitrária contra quem mobiliza esforços e mão de obra na construção civil. Quando a máquina fiscal
+tributa como ocioso um lote em que canteiros e fundações estão ativos, o tributo desvia de sua finalidade indutora.
+Sob a ótica econômica e dos direitos do contribuinte, a tributação territorial gravosa durante o transcurso
+regular de obras vulnera os postulados da capacidade contributiva (art. 145, § 1.º, CF) e da vedação ao confisco (art. 150,
+IV, CF). Exigir alíquotas de terreno vago justamente na fase em que o proprietário imobiliza capital para erguer
+empreendimentos encarece o custo da habitação e do desenvolvimento comercial local.
+Problema Central de Pesquisa: Quais os limites materiais e jurídicos impostos pelos princípios constitucionais tributários e pelo
+princípio da verdade material à Fazenda Municipal de Curitiba na classificação e cobrança de IPTU territorial sobre imóveis
+providos de alvará construtivo ativo?
+TCC de Direito • IPTU e Imóveis Não Edificados em Curitiba
+Página 1
+
+
+# --- PÁGINA 2 ---
+3. CAPÍTULO I: REGIME CONSTITUCIONAL DO IPTU E FUNÇÃO SOCIAL
+3.1 Matriz de Competência e Progressividade Fiscal
+A matriz constitucional do IPTU repousa sobre a propriedade, o domínio útil ou a posse de imóvel por
+natureza ou acessão física localizado na zona urbana municipal (art. 32 do CTN). Com o advento da Emenda
+Constitucional n.º 29/2000, o texto magno autorizou expressamente a aplicação de alíquotas progressivas em razão do
+valor venal do bem (art. 156, § 1.º, I) e de alíquotas diferenciadas em função da localização e do uso do imóvel (art. 156, §
+1.º, II).
+Impõe-se a distinção dogmática rigorosa entre a progressividade fiscal, lastreada no artigo 145, § 1.º, da CF,
+que mensura a capacidade contributiva presumida pela riqueza patrimonial, e a extrafiscalidade sancionatória urbanística
+(art. 182, § 4.º, II, da CF). Esta última constitui instrumento coercitivo de política urbana cuja aplicação pressupõe expressa
+previsão no Plano Diretor municipal, com notificação prévia do proprietário para cumprimento de obrigação de parcelar,
+edificar ou utilizar compulsoriamente a terra urbana ociosa.
+3.2 Os Limites ao Poder de Tributar: Razoabilidade e Vedação ao Confisco
+A prerrogativa municipal de graduar alíquotas mais severas para terrenos desprovidos de construção não
+outorga ao legislador local poder absoluto. O Fisco subordina-se aos postulados da razoabilidade, da proporcionalidade e,
+enfaticamente, ao princípio da vedação ao efeito de confisco encartado no artigo 150, inciso IV, da Constituição da
+República.
+"A identificação do efeito confiscatório deve ser aferida em função da totalidade da carga tributária, impedindo
+que a exação estatal absorva parcela substancial do valor da propriedade ou inviabilize o exercício regular de
+atividades econômicas legítimas e produtivas." (STF, ADI 2.010-MC, Rel. Min. Celso de Mello).
+Dessa forma, a desconsideração material das fases construtivas converte um mecanismo de indução
+urbanística legítima em penalidade financeira desarrazoada. O princípio da capacidade contributiva veda que se presuma
+capacidade econômica majorada para suportar alíquota territorial em situações em que o solo está absorvendo dispêndios
+econômicos de grande porte voltados à sua transformação física e jurídica.
+TCC de Direito • IPTU e Imóveis Não Edificados em Curitiba
+Página 2
+
+
+# --- PÁGINA 3 ---
+4. CAPÍTULO II: O REGIME JURÍDICO DE CURITIBA: LC 40/2001 E LC 136/2022
+4.1 A Dicotomia Cadastral e o Artigo 42 da Lei Complementar Municipal n.º 40/2001
+A espinha dorsal do sistema tributário de Curitiba fundamenta-se na Lei Complementar Municipal n.º
+40/2001, com as substanciais modificações operadas pela Lei Complementar Municipal n.º 136/2022 (revisão da Planta
+Genérica de Valores). O artigo 39 da LC n.º 40/2001 estabelece alíquotas progressivas diferenciadas para imóveis
+residenciais, não residenciais e territoriais, alcançando estes últimos as taxas mais onerosas da tabela fazendária.
+O elemento de maior fricção jurídica reside no artigo 42 da LC n.º 40/2001 (com redação mantida na essência
+após as reformas de 2022), o qual qualifica expressamente as situações em que o imóvel será tributado sob o
+enquadramento territorial:
+"Art. 42. São considerados imóveis não edificados, para efeitos de aplicação desta Lei: I - imóveis constituídos
+pelo lote ou terreno sem edificação; II - imóveis com edificação em andamento, paralisada, condenada, em
+ruínas, ou sem condições de uso; III - imóveis com edificação de natureza temporária ou provisória (...); cujo
+valor da construção não atinja a vigésima parte do valor do terreno." (CURITIBA, 2001).
+4.2 A Ficção Jurídica e o Período de Transição de Obras
+Ao equiparar expressamente o imóvel com "edificação em andamento" a um imóvel desprovido de qualquer
+intervenção física, a legislação curitibana cria uma presunção fictícia de desídia imobiliária. O Fisco exige formalmente a
+emissão definitiva do Certificado de Vistoria de Conclusão de Obras (o habitual "Habite-se") para transferir o imóvel do
+cadastro territorial para o cadastro predial.
+Incongruência da Regra da 20.ª Parte: Em áreas de expressiva valorização imobiliária da Capital, exigir que benfeitorias,
+terraplanagem e galpões alcancem 5% do valor total da gleba tributável (definida pela PGV) gera distorções agudas em centros
+logísticos e retroáreas de transportes, tributando instalações plenamente produtivas como terrenos ociosos.
+Tal exigência formal transfere integralmente para o empreendedor o ônus decorrente de entraves burocráticos
+e demoras nos procedimentos de fiscalização e vistoria dos órgãos urbanísticos municipais, em manifesta ofensa à
+segurança jurídica.
+TCC de Direito • IPTU e Imóveis Não Edificados em Curitiba
+Página 3
+
+
+# --- PÁGINA 4 ---
+5. CAPÍTULO III: ANÁLISE JURISPRUDENCIAL NO TRIBUNAL DE JUSTIÇA DO PARANÁ
+(TJPR)
+5.1 A Prevalência da Verdade Material sobre o Formalismo do Habite-se
+O contencioso fiscal submetido às Câmaras Cíveis de Direito Tributário do TJPR (notadamente a 1.ª, 2.ª e 3.ª
+Câmaras) revela consolidada resistência pretoriana contra a aplicação literal e mecânica do artigo 42 da LC 40/2001. A
+jurisprudência paranaense construiu sólido magistério assentando que a existência de Alvará de Construção hígido e o
+desdobramento fático de obras no lote elidem a presunção de especulação imobiliária.
+Quadro 1 – Síntese dos Padrões Decisórios do TJPR no Contencioso de IPTU Territorial
+Tema Submetido
+Posicionamento Consolidado do TJPR
+Fundamento Jurídico
+Cobrança de alíquota territorial
+durante obra licenciada.
+Impossibilidade de majoração punitiva quando há alvará
+vigente e início comprovado de execução de obras.
+Verdade material, razoabilidade e função
+social produtiva do solo.
+Exigência do "Habite-se" para
+conversão de alíquota.
+O Certificado de Conclusão tem natureza meramente
+declaratória; a ocupação fática determina a natureza predial.
+Primazia da realidade sobre a inércia
+burocrática estatal (art. 37, CF).
+Galpões logísticos e o critério
+dos 5% da LC 40/2001.
+Afastamento da rigidez aritmética quando demonstrada a
+destinação econômica efetiva do empreendimento.
+Vedação ao confisco tributário e
+capacidade contributiva (art. 150, IV,
+CF).
+Fonte: Elaboração do autor com base em acórdãos das Câmaras Tributárias do TJPR (2021-2025).
+5.2 Precedente Paradigmático do TJPR
+"APELAÇÃO CÍVEL. TRIBUTÁRIO. EMBARGOS À EXECUÇÃO FISCAL. IPTU. MUNICÍPIO DE
+CURITIBA. 
+IMÓVEL 
+EM 
+CONSTRUÇÃO. 
+ENQUADRAMENTO 
+COMO 
+TERRITORIAL.
+IMPOSSIBILIDADE DE APLICAÇÃO DE ALÍQUOTA MAIS GRAVOSA DESTINADA A COIBIR
+ESPECULAÇÃO IMOBILIÁRIA. EXISTÊNCIA DE ALVARÁ DE CONSTRUÇÃO VÁLIDO E EFETIVO
+ANDAMENTO DAS OBRAS. PRINCÍPIO DA RAZOABILIDADE E DA CAPACIDADE CONTRIBUTIVA.
+DESCARACTERIZAÇÃO DO IMÓVEL COMO 'NÃO EDIFICADO'. RECURSO PROVIDO." (TJPR - 2ª
+C.Cível - 0004521-88.2021.8.16.0004 - Curitiba - Rel.: Des. Rogério Kanayama - Unânime).
+O acórdão ilustra que a tutela jurisdicional paranaense restaura o equilíbrio tributário ao reconhecer que o fato
+gerador do IPTU territorial majorado perde seu suporte fático ante a edificação em curso.
+TCC de Direito • IPTU e Imóveis Não Edificados em Curitiba
+Página 4
+
+
+# --- PÁGINA 5 ---
+6. CONSIDERAÇÕES FINAIS
+A pesquisa evidenciou que o enquadramento tributário conferido aos imóveis não edificados pelo Município
+de Curitiba padece de anacronismo estrutural. O apego excessivo a presunções meramente formais e a critérios
+estritamente aritméticos — como a regra da vigésima parte e a exigência inflexível do "Habite-se" — distorce os
+postulados constitucionais da capacidade contributiva, da função social da propriedade e da proibição do confisco.
+A extrafiscalidade urbanística, legítima em sua origem, não pode ser desvirtuada para punir financeiramente o
+cidadão ou a empresa no momento exato em que promovem o desenvolvimento físico da cidade. Em face dos achados
+empíricos e doutrinários, formulam-se **três propostas concretas de lege ferenda** para aperfeiçoar a legislação
+municipal:
+Propostas Legislativas e Regulamentares para Curitiba:
+1. Criação da Alíquota Transitória de Fomento à Construção: Inclusão de dispositivo na LC 40/2001 prevendo a redução
+automática da alíquota territorial para o patamar predial não residencial durante o prazo regular de vigência do Alvará de
+Construção, comprovada a execução das obras.
+2. Flexibilização e Desdobro Fiscal da 20.ª Parte (Art. 42): Autorização legal para tributação mista ou proporcional em terrenos
+de grande extensão destinados à atividade industrial e logística, afastando a ficção de terreno vago mediante laudo técnico de
+uso produtivo efetivo.
+3. Eficácia Declaratória do Habite-se Parcial/Provisório: Normatização, via Decreto regulamentador, conferindo eficácia
+fazendária imediata ao protocolo de conclusão estrutural da edificação com ART/RRT de engenharia, desonerando o
+contribuinte da morosidade administrativa.
+A implementação de tais medidas preservará as finanças públicas sem inviabilizar o desenvolvimento
+urbanístico, pacificando litígios e resgatando a justiça fiscal na Capital paranaense.
+TCC de Direito • IPTU e Imóveis Não Edificados em Curitiba
+Página 5
+
+
+# --- PÁGINA 6 ---
+7. REFERÊNCIAS
+ALEXANDRE, Ricardo. Direito Tributário. 15. ed. Salvador: Editora Juspodivm, 2021.
+AMARO, Luciano. Direito Tributário Brasileiro. 24. ed. São Paulo: Saraiva Educação, 2021.
+BRASIL. [Constituição (1988)]. Constituição da República Federativa do Brasil de 1988. Brasília, DF: Presidência da República. Disponível
+em: <http://www.planalto.gov.br>. Acesso em: 15 out. 2026.
+BRASIL. Lei Federal n.º 5.172, de 25 de outubro de 1966. Código Tributário Nacional. Brasília, DF: Presidência da República. Disponível
+em: <http://www.planalto.gov.br>. Acesso em: 15 out. 2026.
+BRASIL. Lei Federal n.º 10.257, de 10 de julho de 2001. Regulamenta os arts. 182 e 183 da Constituição Federal, estabelece diretrizes gerais
+da política urbana e dá outras providências (Estatuto da Cidade). Brasília, DF: Presidência da República.
+CURITIBA. Lei Complementar Municipal n.º 40, de 18 de dezembro de 2001. Dispõe sobre os tributos municipais e dá outras providências.
+Curitiba: Câmara Municipal de Curitiba.
+CURITIBA. Lei Complementar Municipal n.º 136, de 8 de dezembro de 2022. Dispõe sobre a Planta Genérica de Valores (PGV), altera
+dispositivos da Lei Complementar n.º 40/2001 e dá outras providências. Curitiba: Câmara Municipal de Curitiba.
+MACHADO, Hugo de Brito. Curso de Direito Tributário. 41. ed. São Paulo: Malheiros Editores, 2020.
+PARANÁ. Tribunal de Justiça do Estado do Paraná. Apelação Cível n.º 0004521-88.2021.8.16.0004. 2.ª Câmara Cível. Relator: Des. Rogério
+Kanayama. Julgado em: 22 de nov. de 2022. Curitiba: TJPR.
+PAULSEN, Leandro. Curso de Direito Tributário Completo. 12. ed. São Paulo: Saraiva Educação, 2021.
+SABBAG, Eduardo. Manual de Direito Tributário. 13. ed. São Paulo: Saraiva Educação, 2021.
+Nota Metodológica de Fechamento: Trabalho estruturado de acordo com as diretrizes das normas NBR 14724 e NBR 6023 da
+Associação Brasileira de Normas Técnicas (ABNT), contemplando a legislação municipal curitibana vigente até o exercício fiscal
+corrente.
+TCC de Direito • IPTU e Imóveis Não Edificados em Curitiba
+Página 6 (Fim do Documento)

@@ -1,0 +1,49 @@
+{
+  "perguntas_banca": [
+    {
+      "id": 1,
+      "pergunta": "Candidato, o artigo 142 do CTN estabelece que o lançamento tributário é ato vinculado e obrigatório, e o artigo 42 da LC 40/2001 diz expressamente que obra em andamento é considerada 'não edificada'. Como você refuta o argumento da Procuradoria do Município de que o fiscal está estritamente vinculado à letra da lei municipal?",
+      "examinador_perfil": "Professor Titular de Direito Tributário (Positivista/Fazendário)",
+      "nivel_dificuldade": "Difícil",
+      "resposta_ideal": "Ilustre examinador, a estrita legalidade tributária (art. 150, I, CF e art. 142, CTN) vincula o administrador à Constituição e à ordem jurídica global, e não a uma interpretação isolada de preceito municipal secundário. O princípio da legalidade não autoriza o Fisco a consagrar ficções jurídicas arbitrárias que contrariem a matriz constitucional da capacidade contributiva (art. 145, § 1º) e a vedação ao confisco (art. 150, IV). Ademais, no direito tributário vigora o Princípio da Verdade Material: se há canteiro de obras ativo com alvará hígido, o fato gerador teleológico da tributação territorial punitiva (a desídia especulativa) desaparece. O TJPR, conforme assentado na Apelação Cível 0004521-88.2021.8.16.0004 (Rel. Des. Rogério Kanayama), pacificou que a atuação vinculada da autoridade fiscal deve curvar-se à realidade fática do solo, sendo ilegítima a exigência de alíquota gravosa destinada a coibir a retenção da terra nua quando há comprovada afetação produtiva.",
+      "armadilha_a_evitar": "Não diga simplesmente que 'a lei de Curitiba é injusta'. Fundamente no escalonamento normativo (CF/88 acima da LC municipal), no art. 145, § 1º da CF, e no Princípio da Verdade Material respaldado pela jurisprudência do TJPR.",
+      "fundamentos": ["CF/88, art. 145, § 1º e art. 150, IV", "CTN, art. 142 e art. 108", "TJPR, Ap. Cível 0004521-88.2021.8.16.0004"]
+    },
+    {
+      "id": 2,
+      "pergunta": "O seu trabalho faz uma distinção forte entre o artigo 156, § 1º, II e o artigo 182, § 4º, II da Constituição. Por que essa distinção é tão determinante para a sua tese?",
+      "examinador_perfil": "Professora Especialista em Direito Constitucional e Urbanístico",
+      "nivel_dificuldade": "Médio / Conceitual",
+      "resposta_ideal": "Excelente questionamento, eminente professora. A distinção é o pilar dogmático do trabalho: o art. 156, § 1º, II da CF autoriza alíquotas diferenciadas em razão da localização e do uso do imóvel — tratando-se de diferenciação ordinária fiscal. Já o art. 182, § 4º, II trata do IPTU progressivo no tempo, que possui natureza estritamente sancionatória de política urbana. Para aplicar sanção extrafiscal pela não edificação (como se busca indiretamente ao sobretaxar terrenos), a Carta Magna impõe requisitos rigorosos: inclusão no Plano Diretor, fixação de áreas prioritárias, notificação do proprietário e concessão de prazo para parcelamento ou edificação compulsória. Ao estipular alíquota territorial altamente punitiva e aplicá-la genericamente a terrenos em obras, a Fazenda Municipal de Curitiba aplica uma sanção urbanística por vias transversas, sem cumprir o devido processo administrativo e legal exigido pelo art. 182 da CF e pelo Estatuto da Cidade.",
+      "armadilha_a_evitar": "Não confunda alíquota diferenciada pelo uso (que é permitida pela EC 29/2000) com alíquota progressiva no tempo sancionatória (art. 182 da CF).",
+      "fundamentos": ["CF/88, art. 156, § 1º, II (EC 29/2000)", "CF/88, art. 182, § 4º, II", "Lei 10.257/2001 (Estatuto da Cidade)"]
+    },
+    {
+      "id": 3,
+      "pergunta": "Candidato, e a regra dos 5% (1/20) do artigo 42 da LC 40/2001? Ela não existe exatamente para impedir fraudes, como a colocação de um barraco ou guarita improvisada para pagar alíquota menor?",
+      "examinador_perfil": "Membro da Banca / Advogado Tributarista Prático",
+      "nivel_dificuldade": "Médio / Prático",
+      "resposta_ideal": "Perfeita observação, professor. A teleologia originária da regra da 20ª parte foi, de fato, combater simulações e construções precárias voltadas à evasão fiscal. Todavia, a distorção combatida nesta monografia surge quando essa regra aritmética e cega é aplicada a empreendimentos legítimos, como grandes centros de distribuição, galpões logísticos ou parques industriais. Nesses casos, o valor venal da terra nua segundo a Planta Genérica de Valores (PGV da LC 136/2022) é astronômico, e a construção, embora altamente produtiva e geradora de centenas de empregos, pode demorar a atingir contavelmente os 5% da gleba inteira nas fases iniciais. A regra que nasceu como antielisiva converte-se em barreira confiscatória ao investimento produtivo, motivo pelo qual sustentamos o desdobro fiscal da área produtiva e a prevalência da realidade econômica.",
+      "armadilha_a_evitar": "Não afirme que a regra não tem razão de existir. Reconheça que a regra é boa para barracos simulados, mas ilegal quando aplicada a obras reais e galpões comerciais.",
+      "fundamentos": ["LC 40/2001, art. 42", "LC 136/2022", "Princípio da Proporcionalidade e Razoabilidade"]
+    },
+    {
+      "id": 4,
+      "pergunta": "Por que o Certificado de Conclusão de Obras (CVCO / 'Habite-se') deve ter eficácia meramente declaratória e não constitutiva para fins tributários?",
+      "examinador_perfil": "Professor Doutor em Direito Administrativo e Tributário",
+      "nivel_dificuldade": "Avançado",
+      "resposta_ideal": "O Habite-se é um ato administrativo de polícia urbanística que atesta a conformidade da obra com os parâmetros edilícios municipais. Ele não cria a edificação — a edificação é um fato do mundo real que preexiste à certidão cartorária. No Direito Tributário vigora o art. 118 do CTN (princípio da abstração da validade jurídica dos atos), segundo o qual a definição legal do fato gerador é interpretada com abstração da validade jurídica dos atos praticados e dos efeitos dos fatos efetivamente ocorridos. Portanto, se a estrutura física está concluída ou em estágio avançado de utilização, o fato gerador 'imóvel predial' já se aperfeiçoou no plano fenomênico. Condicionar o enquadramento fiscal à expedição do documento burocrático confere ao Fisco o poder de locupletar-se de sua própria morosidade na realização de vistorias, ferindo a moralidade administrativa (art. 37, caput, CF) e a verdade material.",
+      "armadilha_a_evitar": "Não confunda a esfera administrativa-urbanística (licença de habitação) com a esfera jurídico-tributária (ocorrência do fato gerador do IPTU).",
+      "fundamentos": ["CTN, art. 118", "CF/88, art. 37, caput (moralidade e eficiência)", "Jurisprudência das Câmaras Tributárias do TJPR"]
+    },
+    {
+      "id": 5,
+      "pergunta": "Nas suas propostas de 'lege ferenda', você sugere uma alíquota transitória para o período de obras. O Município não sofreria perda arrecadatória prejudicial aos serviços públicos de Curitiba?",
+      "examinador_perfil": "Economista e Membro de Finanças Públicas",
+      "nivel_dificuldade": "Intermediário / Gestão Pública",
+      "resposta_ideal": "Pelo contrário, nobre examinador. A manutenção de uma tributação punitiva e irreal durante a construção estimula o contencioso judicial massivo, gerando custas e honorários de sucumbência para a Fazenda nas inevitáveis derrotas perante o TJPR. Além disso, a alíquota transitória proposta condiciona o benefício à vigência e execução ininterrupta do cronograma de obras licenciado. Ao incentivar a célere conclusão das obras, o Município acelera a geração de ISSQN da construção civil, ITBI na futura circulação das unidades e IPTU predial pleno a longo prazo, além de atrair novos investimentos para a capital em vez de afugentá-los para a Região Metropolitana.",
+      "armadilha_a_evitar": "Não prometa 'renúncia fiscal sem critério'. Ressalte a contrapartida: se a obra for abandonada ou o alvará caducar, a alíquota territorial é retroativamente cobrada com juros e multa.",
+      "fundamentos": ["Responsabilidade Fiscal (LC 101/2000)", "Dinamização da base tributável de ISS e ITBI", "Eficiência arrecadatória"]
+    }
+  ]
+}

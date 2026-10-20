@@ -1,0 +1,86 @@
+{
+  "monografia": {
+    "titulo": "A Tributação dos Imóveis Não Edificados no IPTU de Curitiba: Análise Jurídica dos Critérios de Enquadramento, Transição em Obras e a Função Social da Propriedade Urbana",
+    "autor": "Aluno do 8º Período de Direito",
+    "local": "Curitiba/PR",
+    "area": "Direito Tributário e Urbanístico Municipal",
+    "problema_central": "Quais os limites materiais e jurídicos impostos pelos princípios constitucionais tributários e pelo princípio da verdade material à Fazenda Municipal de Curitiba na classificação e cobrança de IPTU territorial sobre imóveis providos de alvará construtivo ativo?",
+    "hipotese_confirmada": "A exigência fazendária de alíquota territorial cheia durante o período de obras e o condicionamento formal ao CVCO/Habite-se violam a verdade material, a capacidade contributiva (art. 145, § 1º, CF) e a vedação ao confisco (art. 150, IV, CF), desvirtuando a extrafiscalidade urbanística em sanção financeira indevida.",
+    "capitulos": [
+      {
+        "numero": "Introdução",
+        "titulo": "Contextualização e Relevância",
+        "resumo": "O IPTU conjuga função fiscal de arrecadação com dimensão extrafiscal de ordenação urbana (arts. 156, I e 182 da CF; Estatuto da Cidade). Curitiba impõe alíquota substancialmente mais gravosa para terrenos territoriais (não edificados) para reprimir especulação imobiliária. A controvérsia surge quando o Fisco estende essa tributação punitiva a terrenos com obras ativas sob alvará regular."
+      },
+      {
+        "numero": "Capítulo I",
+        "titulo": "Regime Constitucional do IPTU e Função Social",
+        "resumo": "Matriz de competência no art. 156, I, CF e art. 32 do CTN. A EC 29/2000 introduziu a progressividade fiscal em razão do valor venal (art. 156, § 1º, I) e alíquotas diferenciadas por uso e localização (art. 156, § 1º, II). Distinção crucial: progressividade fiscal (capacidade contributiva, art. 145, § 1º) versus extrafiscalidade sancionatória do IPTU progressivo no tempo (art. 182, § 4º, II, que exige previsão no Plano Diretor e notificação prévia). Limites ao poder de tributar: vedação ao confisco (art. 150, IV) e razoabilidade."
+      },
+      {
+        "numero": "Capítulo II",
+        "titulo": "O Regime Jurídico de Curitiba: LC 40/2001 e LC 136/2022",
+        "resumo": "A LC 40/2001 (CTM de Curitiba), atualizada pela LC 136/2022 (PGV), fixa alíquotas progressivas para residenciais, não residenciais e territoriais (as mais altas). O ponto nevrálgico é o art. 42 da LC 40/2001: considera não edificado o lote sem edificação, com edificação em andamento, paralisada, provisória ou cujo valor da construção não atinja 1/20 (5%) do valor do terreno. Isso cria uma ficção jurídica que desconsidera canteiros ativos e condiciona a conversão predial à emissão e averbação do CVCO ('Habite-se')."
+      },
+      {
+        "numero": "Capítulo III",
+        "titulo": "Análise Jurisprudencial no Tribunal de Justiça do Paraná (TJPR)",
+        "resumo": "As Câmaras Tributárias do TJPR (1ª, 2ª e 3ª Câmaras Cíveis) consolidaram entendimento de que alvará de construção ativo e efetivo andamento das obras elidem a presunção de especulação imobiliária. Prevalência da verdade material sobre o formalismo do Habite-se. Precedente paradigmático: Apelação Cível 0004521-88.2021.8.16.0004 (Rel. Des. Rogério Kanayama, 2ª C.Cível). Inaplicabilidade da rigidez aritmética dos 5% (art. 42) quando há destinação econômica real (ex: galpões e centros logísticos)."
+      },
+      {
+        "numero": "Considerações Finais",
+        "titulo": "Conclusão e Propostas de Lege Ferenda",
+        "resumo": "O modelo curitibano padece de anacronismo e rigidez formal. Formulam-se 3 propostas de reforma legislativa e regulamentar: 1) Alíquota Transitória de Fomento à Construção (alíquota predial não residencial durante o prazo do alvará ativo); 2) Flexibilização e desdobro fiscal da regra da 20ª parte (art. 42); 3) Eficácia declaratória do Habite-se parcial/provisório com ART/RRT de engenharia."
+      }
+    ],
+    "propostas_lege_ferenda": [
+      {
+        "item": 1,
+        "nome": "Alíquota Transitória de Fomento à Construção Civil",
+        "descricao": "Alteração na LC 40/2001 para reduzir automaticamente a alíquota de imóvel territorial para predial não residencial durante a vigência do Alvará de Obras, desde que comprovada a continuidade das obras."
+      },
+      {
+        "item": 2,
+        "nome": "Flexibilização e Desdobro Fiscal do Art. 42 (Regra dos 5%)",
+        "descricao": "Autorização de tributação mista ou proporcional em glebas de grande extensão (especialmente logística e galpões industriais), tributando como predial a fração afetada à atividade produtiva."
+      },
+      {
+        "item": 3,
+        "nome": "Eficácia Declaratória do Habite-se Parcial/Provisório",
+        "descricao": "Decreto municipal permitindo que a conclusão estrutural com protocolo e laudo ART/RRT tenha efeitos fiscais imediatos de enquadramento predial, afastando o prejuízo pela mora administrativa."
+      }
+    ],
+    "dispositivos_chave": [
+      {
+        "diploma": "Constituição Federal de 1988",
+        "artigos": [
+          {"art": "Art. 145, § 1º", "tema": "Princípio da Capacidade Contributiva"},
+          {"art": "Art. 150, IV", "tema": "Vedação Constitucional ao Efeito de Confisco"},
+          {"art": "Art. 156, I e § 1º, I e II", "tema": "Competência do IPTU, progressividade por valor venal e alíquotas diferenciadas por uso e localização (EC 29/2000)"},
+          {"art": "Art. 182, § 4º, II", "tema": "IPTU progressivo no tempo com caráter sancionatório urbanístico (instrumento do Plano Diretor)"}
+        ]
+      },
+      {
+        "diploma": "Código Tributário Nacional (CTN)",
+        "artigos": [
+          {"art": "Arts. 32 a 34", "tema": "Fato gerador do IPTU, zona urbana, base de cálculo (valor venal) e sujeição passiva"}
+        ]
+      },
+      {
+        "diploma": "Legislação de Curitiba",
+        "artigos": [
+          {"art": "Art. 42 da LC 40/2001", "tema": "Ficção jurídica que enquadra como não edificado: terrenos sem obra, com obra em andamento/paralisada, e construções cujo valor não atinja 1/20 (5%) do terreno"},
+          {"art": "LC 136/2022", "tema": "Atualização da Planta Genérica de Valores (PGV) e regras de transição fiscal"}
+        ]
+      },
+      {
+        "diploma": "Jurisprudência Paradigmática",
+        "artigos": [
+          {"art": "TJPR - Apelação 0004521-88.2021.8.16.0004", "tema": "Rel. Des. Rogério Kanayama, 2ª C.Cível: elisão da presunção de especulação ante alvará ativo e obras regulares"},
+          {"art": "Súmula 160 STJ", "tema": "Defeso aos Municípios atualizar o IPTU mediante decreto em percentual superior ao índice oficial de correção"},
+          {"art": "Súmula 668 STF", "tema": "Inconstitucionalidade da progressividade fiscal antes da EC 29/2000"}
+        ]
+      }
+    ]
+  }
+}
