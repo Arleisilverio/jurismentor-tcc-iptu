@@ -1,0 +1,116 @@
+[
+  {
+    "diploma": "Constituição da República Federativa do Brasil de 1988",
+    "sigla": "CF/88",
+    "artigos": [
+      {
+        "art": "Art. 145, § 1º",
+        "titulo": "Princípio da Capacidade Contributiva e Pessoalidade dos Impostos",
+        "texto_integral": "Sempre que possível, os impostos terão caráter pessoal e serão graduados segundo a capacidade econômica do contribuinte, facultado à administração tributária, especialmente para conferir efetividade a esses objetivos, identificar, respeitados os direitos individuais e nos termos da lei, o patrimônio, os rendimentos e as atividades econômicas do contribuinte.",
+        "comentario_tcc": "Pilar dogmático do Capítulo I. Sustenta que o Fisco não pode presumir capacidade econômica majorada para suportar alíquota punitiva de terreno baldio sobre um imóvel que está imobilizando vultosos recursos financeiros e mão de obra na construção civil."
+      },
+      {
+        "art": "Art. 150, IV",
+        "titulo": "Princípio da Vedação Constitucional ao Efeito de Confisco",
+        "texto_integral": "Sem prejuízo de outras garantias asseguradas ao contribuinte, é vedado à União, aos Estados, ao Distrito Federal e aos Municípios: (...) IV - utilizar tributo com efeito de confisco;",
+        "comentario_tcc": "Impede que a carga tributária territorial absorva parcela substancial da riqueza ou torne economicamente inviável o desenvolvimento de empreendimentos industriais e logísticos na capital."
+      },
+      {
+        "art": "Art. 156, I e § 1º, I e II",
+        "titulo": "Competência do IPTU, Progressividade Fiscal e Alíquotas Diferenciadas (EC 29/2000)",
+        "texto_integral": "Art. 156. Compete aos Municípios instituir impostos sobre: I - propriedade predial e territorial urbana; (...) § 1º Sem prejuízo da progressividade no tempo a que se refere o art. 182, § 4º, inciso II, o imposto previsto no inciso I poderá: I - ser progressivo em razão do valor do imóvel; e II - ter alíquotas diferentes de acordo com a localização e o uso do imóvel.",
+        "comentario_tcc": "Diferenciação ordinária fiscal. Permite ao Município de Curitiba cobrar alíquotas residenciais, não residenciais e territoriais. A tese demonstra que obra em andamento sob alvará é destinação produtiva em curso, e não terra nua."
+      },
+      {
+        "art": "Art. 182, § 4º, II",
+        "titulo": "IPTU Progressivo no Tempo com Caráter Sancionatório Urbanístico",
+        "texto_integral": "É facultado ao Poder Público municipal, mediante lei específica para área incluída no plano diretor, exigir, nos termos da lei federal, do proprietário do solo urbano não edificado, subutilizado ou não utilizado, que promova seu adequado aproveitamento, sob pena, sucessivamente, de: I - parcelamento ou edificação compulsórios; II - imposto sobre a propriedade predial e territorial urbana progressivo no tempo; III - desapropriação (...)",
+        "comentario_tcc": "Distinção vital do trabalho: a progressividade no tempo exige lei de plano diretor, notificação prévia do contribuinte e descumprimento de prazos. A Fazenda de Curitiba não pode aplicar alíquotas punitivas 'por vias transversas' ignorando este artigo."
+      }
+    ]
+  },
+  {
+    "diploma": "Legislação Municipal de Curitiba",
+    "sigla": "LC 40/2001 & LC 136/2022",
+    "artigos": [
+      {
+        "art": "Art. 42 da LC 40/2001",
+        "titulo": "A Ficção Jurídica dos Imóveis Não Edificados e a Regra da 20ª Parte (5%)",
+        "texto_integral": "Art. 42. Não se considera edificado o imóvel cujo valor da construção não alcance a 20ª (vigésima) parte do valor venal do respectivo terreno, à exceção daquele de: I - uso próprio, exclusivamente residencial, cujo terreno, nos termos da legislação específica, não seja divisível; II - uso residencial, cuja área construída represente um coeficiente de aproveitamento não inferior a 5,0% (cinco por cento) (...); ou cujas construções sejam de caráter provisório ou precário, ou com edificações em andamento ou paralisadas.",
+        "comentario_tcc": "O núcleo de toda a polêmica da monografia. Este artigo cria uma presunção fictícia de ociosidade, desconsiderando investimentos reais em fundações e galpões. Foi rechaçado pelas Câmaras Tributárias do TJPR quando há alvará ativo."
+      },
+      {
+        "art": "Art. 39 da LC 40/2001",
+        "titulo": "Tabela de Alíquotas Progressivas do IPTU de Curitiba",
+        "texto_integral": "Art. 39. As alíquotas do imposto são progressivas e diferenciadas em razão do valor venal, localização e uso do imóvel, fixadas conforme tabelas anexas integrantes desta lei: Tabela I (Residencial: alíquotas mais brandas); Tabela II (Não Residencial/Comercial: alíquotas intermediárias); Tabela III (Territorial/Não Edificado: alíquotas majoradas para desestimular retenção especulativa).",
+        "comentario_tcc": "Estabelece o abismo de valores entre a tributação territorial e a predial, incentivando a Fazenda Municipal a manter terrenos em obras sob a alíquota territorial cheia para inflar a arrecadação."
+      },
+      {
+        "art": "LC Municipal 136/2022",
+        "titulo": "Revisão da Planta Genérica de Valores (PGV) e Regras de Transição",
+        "texto_integral": "Dispõe sobre a Planta Genérica de Valores (PGV), altera dispositivos da Lei Complementar n.º 40/2001 e dá outras providências. Atualiza o valor do metro quadrado de terrenos e construções em Curitiba, estabelece travas de transição anual e recalibra faixas de alíquotas progressivas.",
+        "comentario_tcc": "Com o aumento astronômico do valor venal dos terrenos industriais e logísticos na PGV de 2022, a regra dos 5% do art. 42 tornou-se ainda mais desproporcional e violadora do não confisco em Curitiba."
+      }
+    ]
+  },
+  {
+    "diploma": "Código Tributário Nacional",
+    "sigla": "Lei Federal 5.172/1966 (CTN)",
+    "artigos": [
+      {
+        "art": "Art. 32 do CTN",
+        "titulo": "Fato Gerador do IPTU e Requisitos da Zona Urbana",
+        "texto_integral": "Art. 32. O imposto, de competência dos Municípios, sobre a propriedade predial e territorial urbana tem como fato gerador a propriedade, o domínio útil ou a posse de bem imóvel por natureza ou por acessão física, como definido na lei civil, localizado na zona urbana do Município. § 1º Para os efeitos deste imposto, entende-se como zona urbana a definida em lei municipal; observado o requisito mínimo da existência de melhoramentos em pelo menos 2 (dois) dos incisos seguintes (...)",
+        "comentario_tcc": "Fixa a matriz legal nacional do fato gerador. A existência de acessão física em andamento descaracteriza a premissa de 'terra nua' ociosa."
+      },
+      {
+        "art": "Art. 118 do CTN",
+        "titulo": "Princípio da Abstração da Validade Jurídica dos Atos (Cláusula Non Olet)",
+        "texto_integral": "Art. 118. A definição legal do fato gerador é interpretada com abstração: I - da validade jurídica dos atos efetivamente praticados pelos contribuintes, responsáveis, ou terceiros, bem como da natureza do seu objeto ou dos seus efeitos; II - dos efeitos dos fatos efetivamente ocorridos.",
+        "comentario_tcc": "Fundamento fulcral contra a exigência do Habite-se. O fato gerador 'imóvel predial' se concretiza com a existência fática da edificação, independentemente da chancela burocrática final do órgão urbanístico."
+      },
+      {
+        "art": "Art. 142 do CTN",
+        "titulo": "Atividade Vinculada do Lançamento e Limites Materiais",
+        "texto_integral": "Art. 142. Compete privativamente à autoridade administrativa constituir o crédito tributário pelo lançamento, assim entendido o procedimento administrativo tendente a verificar a ocorrência do fato gerador da obrigação correspondente (...). Parágrafo único. A atividade administrativa de lançamento é vinculada e obrigatória, sob pena de responsabilidade funcional.",
+        "comentario_tcc": "Argumento da Fazenda: o auditor fiscal é obrigado a seguir a lei local. Contra-argumento do TCC: o lançamento vinculado deve curvar-se à supremacia da Constituição e à verdade material apurada in loco."
+      }
+    ]
+  },
+  {
+    "diploma": "Estatuto da Cidade",
+    "sigla": "Lei Federal 10.257/2001",
+    "artigos": [
+      {
+        "art": "Art. 7º do Estatuto da Cidade",
+        "titulo": "Diretrizes Nacionais do IPTU Progressivo no Tempo",
+        "texto_integral": "Art. 7º Em caso de descumprimento das condições e dos prazos previstos na forma do caput do art. 5º desta Lei (...), o Município procederá à aplicação do imposto sobre a propriedade predial e territorial urbana (IPTU) progressivo no tempo, mediante a majoração da alíquota pelo prazo de cinco anos consecutivos. § 1º O valor da alíquota (...) não excederá a duas vezes o valor referente ao ano anterior, respeitada a alíquota máxima de quinze por cento.",
+        "comentario_tcc": "Demonstra que a extrafiscalidade punitiva possui balizas federais obrigatórias que impedem os municípios de criarem penalidades disfarçadas fora do rito do Estatuto da Cidade."
+      }
+    ]
+  },
+  {
+    "diploma": "Jurisprudência Vinculante e Paradigmática",
+    "sigla": "TJPR • STJ • STF",
+    "artigos": [
+      {
+        "art": "TJPR - Apelação Cível 0004521-88.2021.8.16.0004",
+        "titulo": "Precedente Paradigmático das Câmaras Tributárias do Paraná (Rel. Des. Rogério Kanayama)",
+        "texto_integral": "APELAÇÃO CÍVEL. TRIBUTÁRIO. EMBARGOS À EXECUÇÃO FISCAL. IPTU. MUNICÍPIO DE CURITIBA. IMÓVEL EM CONSTRUÇÃO. ENQUADRAMENTO COMO TERRITORIAL. IMPOSSIBILIDADE DE APLICAÇÃO DE ALÍQUOTA MAIS GRAVOSA DESTINADA A COIBIR ESPECULAÇÃO IMOBILIÁRIA. EXISTÊNCIA DE ALVARÁ DE CONSTRUÇÃO VÁLIDO E EFETIVO ANDAMENTO DAS OBRAS. PRINCÍPIO DA RAZOABILIDADE E DA CAPACIDADE CONTRIBUTIVA. DESCARACTERIZAÇÃO DO IMÓVEL COMO 'NÃO EDIFICADO'. RECURSO CONHECIDO E PROVIDO.",
+        "comentario_tcc": "O acórdão mais importante do seu TCC. Comprova que o Tribunal de Justiça do Paraná anula a cobrança territorial quando o particular demonstra a vigência do alvará e a materialidade da obra."
+      },
+      {
+        "art": "Súmula 160 do STJ",
+        "titulo": "Reserva Legal para Atualização da Base de Cálculo do IPTU",
+        "texto_integral": "É defeso, ao Município, atualizar o IPTU, mediante decreto, em percentual superior ao índice oficial de correção monetária.",
+        "comentario_tcc": "Garante a segurança jurídica tributária, impedindo que atos do Poder Executivo municipal majorem indiretamente a base de cálculo sem prévio crivo do Poder Legislativo."
+      },
+      {
+        "art": "Súmula 668 do STF",
+        "titulo": "Inconstitucionalidade de Progressividade Fiscal sem Previsão Constitucional",
+        "texto_integral": "É inconstitucional a lei municipal que tenha estabelecido, antes da Emenda Constitucional 29/2000, alíquotas progressivas para o IPTU, salvo se destinada a assegurar o cumprimento da função social da propriedade urbana.",
+        "comentario_tcc": "Demonstra a evolução histórica da jurisprudência do Supremo Tribunal Federal e a necessidade de estrita aderência ao texto constitucional vigente."
+      }
+    ]
+  }
+]

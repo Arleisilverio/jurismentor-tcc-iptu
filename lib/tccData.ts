@@ -42,9 +42,25 @@ export interface BancaQuestion {
   fundamentos: string[];
 }
 
+import grimorioLeis from '@/data/grimorio_leis.json';
+
+export interface LegalArticle {
+  art: string;
+  titulo: string;
+  texto_integral: string;
+  comentario_tcc: string;
+}
+
+export interface LegalDiploma {
+  diploma: string;
+  sigla: string;
+  artigos: LegalArticle[];
+}
+
 export const MONOGRAFIA = tccKnowledge.monografia;
 export const SLIDES: PresentationSlide[] = tccPresentation.apresentacao.slides;
 export const PERGUNTAS_BANCA: BancaQuestion[] = bancaQuestions.perguntas_banca;
+export const GRIMORIO_LEIS: LegalDiploma[] = grimorioLeis as LegalDiploma[];
 
 export const QUICK_PROMPTS = [
   "Explique a regra dos 5% do art. 42 da LC 40/2001",
