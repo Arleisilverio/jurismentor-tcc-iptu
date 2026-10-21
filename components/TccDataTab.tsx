@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { BookOpen, Scale, Lightbulb, Search, Award, ScrollText, Zap, ChevronDown, ChevronUp, Copy, Check, ShieldCheck, ExternalLink } from 'lucide-react';
+import { BookOpen, Scale, Lightbulb, Search, Award, ScrollText, Zap, ChevronDown, ChevronUp, Copy, Check, ShieldCheck, ExternalLink, FileText, Printer, Download, Sparkles } from 'lucide-react';
 import { MONOGRAFIA, GRIMORIO_LEIS, LegalArticle } from '@/lib/tccData';
+import { ARTIGO_COMPLETO_MD } from '@/lib/artigoData';
 
 export const TccDataTab: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeSection, setActiveSection] = useState<'normas' | 'capitulos' | 'propostas'>('normas');
+  const [activeSection, setActiveSection] = useState<'artigo' | 'normas' | 'capitulos' | 'propostas'>('artigo');
   const [expandedArticles, setExpandedArticles] = useState<{ [key: string]: boolean }>({
     'Art. 42 da LC 40/2001': true, // Open by default since it's the core of the thesis!
     'Art. 145, § 1º': true,
@@ -24,6 +25,18 @@ export const TccDataTab: React.FC = () => {
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
+  const handleDownloadMd = () => {
+    const blob = new Blob([ARTIGO_COMPLETO_MD], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ARTIGO_CIENTIFICO_TCC_IPTU_CURITIBA_ABNT.md';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const filteredChapters = MONOGRAFIA.capitulos.filter(c =>
     c.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.resumo.toLowerCase().includes(searchTerm.toLowerCase())
@@ -33,11 +46,16 @@ export const TccDataTab: React.FC = () => {
     <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 pb-24 space-y-4">
       {/* Monograph Header Card */}
       <div className="bg-slate-900/95 rounded-2xl p-5 sm:p-6 border border-amber-500/30 shadow-[0_0_20px_rgba(0,0,0,0.5)] space-y-3">
-        <div className="flex items-center space-x-2">
-          <span className="px-3 py-1 rounded-lg text-xs font-black bg-amber-400/15 text-amber-300 border border-amber-400/30 uppercase tracking-widest">
-            {MONOGRAFIA.area}
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center space-x-2">
+            <span className="px-3 py-1 rounded-lg text-xs font-black bg-amber-400/15 text-amber-300 border border-amber-400/30 uppercase tracking-widest">
+              Artigo Científico • TCC
+            </span>
+            <span className="text-xs sm:text-sm text-slate-300">• 8º Período de Direito</span>
+          </div>
+          <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
+            Normas ABNT NBR 6022 & 6023
           </span>
-          <span className="text-xs sm:text-sm text-slate-300">• Curitiba/PR</span>
         </div>
 
         <h2 className="text-lg sm:text-2xl font-black text-white leading-snug">
@@ -55,10 +73,21 @@ export const TccDataTab: React.FC = () => {
 
       {/* Section Switcher & Search Bar */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-        <div className="flex items-center space-x-2 p-1.5 rounded-xl bg-slate-900 border border-slate-800">
+        <div className="flex items-center space-x-1.5 p-1.5 rounded-xl bg-slate-900 border border-slate-800 overflow-x-auto">
+          <button
+            onClick={() => setActiveSection('artigo')}
+            className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black transition flex items-center gap-1.5 shrink-0 ${
+              activeSection === 'artigo'
+                ? 'bg-amber-400 text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
+                : 'text-slate-400 hover:text-white'
+            }`}
+          >
+            <FileText className="w-4 h-4" />
+            <span>Artigo Científico</span>
+          </button>
           <button
             onClick={() => setActiveSection('normas')}
-            className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-black transition ${
+            className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black transition shrink-0 ${
               activeSection === 'normas'
                 ? 'bg-amber-400 text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
                 : 'text-slate-400 hover:text-white'
@@ -68,7 +97,7 @@ export const TccDataTab: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveSection('capitulos')}
-            className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-black transition ${
+            className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black transition shrink-0 ${
               activeSection === 'capitulos'
                 ? 'bg-amber-400 text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
                 : 'text-slate-400 hover:text-white'
@@ -78,7 +107,7 @@ export const TccDataTab: React.FC = () => {
           </button>
           <button
             onClick={() => setActiveSection('propostas')}
-            className={`flex-1 sm:flex-none px-4 py-2 rounded-lg text-xs sm:text-sm font-black transition ${
+            className={`px-3.5 py-2 rounded-lg text-xs sm:text-sm font-black transition shrink-0 ${
               activeSection === 'propostas'
                 ? 'bg-amber-400 text-slate-950 shadow-[0_0_12px_rgba(245,158,11,0.4)]'
                 : 'text-slate-400 hover:text-white'
@@ -95,10 +124,144 @@ export const TccDataTab: React.FC = () => {
             placeholder="Buscar artigo, lei ou tema..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full sm:w-64 pl-10 pr-4 py-2.5 text-xs sm:text-sm rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
+            className="w-full sm:w-60 pl-10 pr-4 py-2 text-xs sm:text-sm rounded-xl bg-slate-900 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400"
           />
         </div>
       </div>
+
+      {/* 0. SEÇÃO DO ARTIGO CIENTÍFICO COMPLETO */}
+      {activeSection === 'artigo' && (
+        <div className="space-y-4">
+          {/* Action Bar for Printing / Downloading / Copying */}
+          <div className="bg-slate-900/95 rounded-2xl p-4 border border-amber-500/35 shadow-xl flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm sm:text-base font-black text-amber-300 flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-amber-400" />
+                <span>Artigo Científico Pronto para Protocolo (ABNT)</span>
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300">
+                Formatado em A4 com margens 3cm/2cm, citações NBR 10520 e referências NBR 6023.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={() => window.open('/artigo_tcc_abnt.html', '_blank')}
+                className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:brightness-110 text-slate-950 font-black text-xs sm:text-sm shadow-md transition flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                title="Abrir página diagramada em folha A4 para imprimir ou salvar como PDF"
+              >
+                <Printer className="w-4 h-4" />
+                <span>Imprimir / Salvar PDF</span>
+              </button>
+
+              <button
+                onClick={() => handleCopyText('artigo_completo', ARTIGO_COMPLETO_MD)}
+                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-xs sm:text-sm border border-slate-700 transition flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                title="Copiar texto integral em Markdown para Word ou Docs"
+              >
+                {copiedKey === 'artigo_completo' ? (
+                  <>
+                    <Check className="w-4 h-4 text-emerald-400" />
+                    <span className="text-emerald-400">Copiado!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4" />
+                    <span>Copiar Texto</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={handleDownloadMd}
+                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-xs sm:text-sm border border-slate-700 transition flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                title="Baixar arquivo Markdown (.md)"
+              >
+                <Download className="w-4 h-4" />
+                <span>Baixar .md</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Academic Article Reader Card */}
+          <div className="bg-slate-900/90 rounded-2xl p-6 sm:p-8 border border-slate-700 shadow-2xl space-y-6 text-slate-200 font-sans leading-relaxed">
+            {/* Title & Author */}
+            <div className="text-center border-b border-slate-800 pb-6 space-y-2">
+              <h1 className="text-base sm:text-xl font-black text-white uppercase tracking-wide">
+                A Tributação dos Imóveis Não Edificados no IPTU de Curitiba: Análise Jurídica dos Critérios de Enquadramento, Transição em Obras e a Função Social da Propriedade Urbana
+              </h1>
+              <p className="text-sm font-bold text-amber-400">
+                Arlei Silvério¹
+              </p>
+              <p className="text-xs text-slate-400 italic">
+                ¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito. Pesquisador em Direito Tributário e Urbanístico Municipal.
+              </p>
+            </div>
+
+            {/* Resumo */}
+            <div className="p-4 sm:p-5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2 text-xs sm:text-sm leading-relaxed">
+              <strong className="text-amber-400 uppercase text-xs tracking-wider block">Resumo</strong>
+              <p>
+                O presente artigo científico analisa criticamente o regime de tributação dos imóveis não edificados no âmbito do Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU) do Município de Curitiba. O ponto nevrálgico da investigação repousa sobre o artigo 42 da Lei Complementar Municipal n.º 40/2001, o qual equipara a imóveis não edificados aqueles com edificação em andamento ou cujo valor da construção não atinja a vigésima parte (5%) do valor venal do terreno, submetendo-os a alíquotas territoriais substancialmente mais gravosas (até 3,5%) em detrimento das alíquotas prediais. Problematiza-se a legalidade e a constitucionalidade da extensão dessa tributação punitiva sobre terrenos com alvará construtivo ativo e obras em andamento físico, bem como a prática da Secretaria Municipal de Finanças (SMFI) de condicionar o reenquadramento predial à expedição formal do Certificado de Vistoria de Conclusão de Obras (CVCO / &quot;Habite-se&quot;). Por meio de metodologia dedutiva e análise empírico-jurisprudencial das 1.ª, 2.ª e 3.ª Câmaras Cíveis de Direito Tributário do Tribunal de Justiça do Estado do Paraná (TJPR), demonstra-se que a jurisprudência paranaense pacificou a prevalência do princípio da verdade material, da capacidade contributiva (art. 145, § 1.º, CF) e da vedação ao confisco (art. 150, IV, CF). Conclui-se que o alvará ativo e o canteiro de obras descaracterizam a retenção especulativa da terra, formulando-se três proposições concretas de <em>lege ferenda</em>.
+              </p>
+              <p className="pt-1 text-slate-300">
+                <strong className="text-amber-400">Palavras-chave:</strong> IPTU. Imóveis Não Edificados. Curitiba. Lei Complementar n.º 40/2001. Verdade Material. Capacidade Contributiva. Função Social da Propriedade.
+              </p>
+            </div>
+
+            {/* Abstract */}
+            <div className="p-4 sm:p-5 rounded-xl bg-slate-950/70 border border-slate-800 space-y-2 text-xs sm:text-sm leading-relaxed italic text-slate-300">
+              <strong className="text-cyan-400 uppercase text-xs tracking-wider block not-italic">Abstract</strong>
+              <p>
+                This scientific paper provides a critical legal analysis of the taxation regime for vacant and unbuilt urban land under the Urban Property Tax (IPTU) in the Municipality of Curitiba, Brazil. The focal point of the inquiry lies in Article 42 of Municipal Supplementary Law No. 40/2001, which classifies properties with ongoing construction or whose building value does not reach one-twentieth (5%) of the assessed land value as &quot;unbuilt land&quot;, subjecting them to significantly heavier territorial tax rates (up to 3.5%) rather than built property rates. The study addresses the constitutionality and legality of enforcing punitive territorial rates on properties with active building permits and real ongoing construction, alongside the municipal practice of conditioning tax reclassification strictly upon the formal issuance of the Certificate of Building Completion (CVCO / &quot;Habite-se&quot;). Employing a deductive methodology backed by doctrinal, statutory, and empirical case-law research from the specialized Tax Chambers of the Court of Justice of the State of Paraná (TJPR), it demonstrates that judicial precedents uphold the primacy of substantive reality, the principle of ability to pay, and the prohibition of confiscatory taxation.
+              </p>
+              <p className="pt-1 not-italic">
+                <strong className="text-cyan-400">Keywords:</strong> Property Tax (IPTU). Vacant Urban Land. Curitiba. Supplementary Law No. 40/2001. Substantive Reality. Ability to Pay. Social Function of Urban Property.
+              </p>
+            </div>
+
+            {/* Seções em destaque */}
+            <div className="space-y-4 text-xs sm:text-sm text-slate-200">
+              <h2 className="text-sm sm:text-base font-black text-amber-400 uppercase tracking-wide border-b border-slate-800 pb-1 pt-2">
+                1. Introdução e Contextualização
+              </h2>
+              <p>
+                O Imposto sobre a Propriedade Predial e Territorial Urbana (IPTU), de matriz privativa municipal por força do artigo 156, inciso I, da Constituição da República de 1988, conjuga a clássica função fiscal com relevante dimensão extrafiscal de ordenação do espaço urbano (art. 182 da CF; Estatuto da Cidade). Em Curitiba, a LC 40/2001 e a reforma da LC 136/2022 estipulam alíquotas de até 3,5% para terrenos territoriais contra 0,7% a 1,4% para prediais. O problema emerge quando a Fazenda Municipal aplica a alíquota territorial máxima a imóveis providos de alvará ativo e em obras, recusando a conversão predial sem o Habite-se.
+              </p>
+
+              <h2 className="text-sm sm:text-base font-black text-amber-400 uppercase tracking-wide border-b border-slate-800 pb-1 pt-2">
+                2. O Regime Constitucional e a Distinção Dogmática
+              </h2>
+              <p>
+                A progressividade fiscal do art. 156, § 1.º, I e as alíquotas diferenciadas por uso e localização do art. 156, § 1.º, II (após a EC 29/2000) não se confundem com o <strong>IPTU progressivo no tempo</strong> do art. 182, § 4.º, II da CF. Este último é sanção urbanística punitiva que exige expressa inclusão no Plano Diretor, notificação averbada no registro de imóveis e concessão de prazos legais. A tributação territorial em canteiro de obras vulnera a capacidade contributiva (art. 145, § 1.º) e a vedação ao confisco (art. 150, IV).
+              </p>
+
+              <h2 className="text-sm sm:text-base font-black text-amber-400 uppercase tracking-wide border-b border-slate-800 pb-1 pt-2">
+                3. A Ficção do Artigo 42 da LC 40/2001 e a Regra dos 5%
+              </h2>
+              <p>
+                O art. 42 equipara &quot;obra em andamento&quot; a terreno não edificado e desconsidera como predial a construção cujo valor venal não alcance 1/20 (5%) do valor do terreno. Em áreas industriais e logísticas de grande extensão (CIC, Contorno Sul), a nova PGV elevou o valor venal do terreno a dezenas de milhões de reais, tornando impossível para galpões e centros de triagem atingir 5%, ensejando tributação confiscatória desarrazoada.
+              </p>
+
+              <h2 className="text-sm sm:text-base font-black text-amber-400 uppercase tracking-wide border-b border-slate-800 pb-1 pt-2">
+                4. A Resposta do TJPR: Precedente Kanayama e Verdade Material
+              </h2>
+              <p>
+                As 1.ª, 2.ª e 3.ª Câmaras Cíveis de Direito Tributário do TJPR pacificaram que a existência de alvará hígido e a execução real de obras elidem de pleno direito a presunção de especulação imobiliária (Apelação Cível 0004521-88.2021.8.16.0004, Rel. Des. Rogério Kanayama). O Habite-se tem eficácia meramente declaratória; pelo art. 118 do CTN, a verdade material e a destinação produtiva do solo sobrepõem-se à inércia dos órgãos burocráticos municipais.
+              </p>
+
+              <h2 className="text-sm sm:text-base font-black text-amber-400 uppercase tracking-wide border-b border-slate-800 pb-1 pt-2">
+                5. Proposições de Lege Ferenda para Curitiba
+              </h2>
+              <ul className="list-disc pl-5 space-y-1.5">
+                <li><strong>Proposta 1:</strong> Alíquota Transitória de Fomento à Construção na LC 40/2001 (alíquota predial não residencial durante o prazo do alvará ativo);</li>
+                <li><strong>Proposta 2:</strong> Desdobro fiscal proporcional da regra dos 5% do art. 42 para glebas industriais e logísticas superiores a 5.000 m²;</li>
+                <li><strong>Proposta 3:</strong> Eficácia declaratória imediata da conclusão estrutural atestada por laudo com ART/RRT de engenharia via Decreto regulamentador.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 1. SEÇÃO DE LEIS & ARTIGOS CLICÁVEIS COM TEXTO INTEGRAL */}
       {activeSection === 'normas' && (

@@ -13,7 +13,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) 
     { id: 'chat' as TabType, label: 'Mentor', icon: MessageSquare, badge: 'TUTOR' },
     { id: 'banca' as TabType, label: 'Banca', icon: Swords, badge: 'BOSS' },
     { id: 'apresentacao' as TabType, label: 'Ensaio', icon: Timer, badge: 'RUN' },
-    { id: 'tese' as TabType, label: 'Grimório', icon: ScrollText, badge: 'LEIS' },
+    { id: 'tese' as TabType, label: 'Artigo', icon: ScrollText, badge: 'ABNT' },
   ];
 
   return (

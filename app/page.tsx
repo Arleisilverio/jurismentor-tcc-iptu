@@ -51,7 +51,7 @@ export default function Home() {
             ? 'Arena // Boss Fight'
             : activeTab === 'apresentacao'
             ? 'Speedrun // 15 Min'
-            : 'Grimório da Tese'
+            : 'Artigo Científico // ABNT'
         }
       />
 

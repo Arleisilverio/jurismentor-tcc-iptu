@@ -103,12 +103,20 @@ export const ChatTab: React.FC = () => {
       return `💡 **As 3 Propostas de Lege Ferenda do seu TCC (Capítulo de Fechamento)**:\n\n1. **Alíquota Transitória de Fomento à Construção Civil**:\n   * Alteração na LC 40/2001 para reduzir automaticamente a alíquota territorial para o patamar predial não residencial durante o prazo regular do Alvará de Construção (condicionada à continuidade das obras).\n\n2. **Flexibilização e Desdobro Fiscal da Regra dos 5% (Art. 42)**:\n   * Permitir a tributação proporcional em glebas extensas (centros logísticos e indústrias), tributando como predial a fração afetada à atividade produtiva.\n\n3. **Eficácia Declaratória do Habite-se Parcial/Provisório**:\n   * Decreto municipal conferindo eficácia fazendária imediata ao laudo estrutural conclusivo com ART/RRT de engenharia, desonerando o proprietário dos atrasos de vistoria da Prefeitura.`;
     }
 
+    if (mode === 'Redator ABNT') {
+      return `📜 **[MINUTA EM PADRÃO ABNT - NBR 6022 & NBR 10520]**:\n\n> "A pretensão arrecadatória municipal de tributar terrenos com obras ativas sob alíquotas territoriais punitivas (art. 42 da LC n.º 40/2001) vulnera frontalmente o postulado da capacidade contributiva encartado no artigo 145, § 1.º, da Constituição da República de 1988. O canteiro de obras em pleno desenvolvimento e amparado por alvará construtivo válido atesta o cumprimento efetivo da função social da propriedade urbana (art. 182, CF), descaracterizando a retenção especulativa do solo e tornando imperativa a aplicação do regime predial ordinário." (SILVÉRIO, 2026).\n\n**Referências Convocadas (ABNT NBR 6023)**:\n* ALEXANDRE, Ricardo. **Direito Tributário**. 15. ed. Salvador: Juspodivm, 2021.\n* CURITIBA. **Lei Complementar n.º 40/2001**. Dispõe sobre os tributos municipais. Curitiba: CMC, 2001.\n* PARANÁ. Tribunal de Justiça. **Apelação Cível n.º 0004521-88.2021.8.16.0004**. Rel.: Des. Rogério Kanayama. Curitiba: TJPR, 2022.`;
+    }
+
+    if (mode === 'Consultoria Prática') {
+      return `🛡️ **[ESTRATÉGIA PRÁTICA & PROCESSUAL - SMFI / TJPR]**:\n\n1. **Via Administrativa (SMFI Curitiba)**:\n   * **Peça**: Reclamação / Impugnação de Lançamento de IPTU (Prazo de 30 dias contados da notificação do carnet).\n   * **Provas Essenciais**: Cópia do Alvará de Construção em vigor; Anotação de Responsabilidade Técnica (ART/RRT) quitada; Laudo pericial com relatório fotográfico do canteiro de obras comprovando início contínuo das fundações/alvenarias.\n\n2. **Via Judicial (TJPR - Varas da Fazenda Pública)**:\n   * **Peça**: Ação Anulatória de Débito Fiscal c/c Repetição de Indébito ou Mandado de Segurança com Pedido de Tutela de Urgência (art. 300 do CPC).\n   * **Fumaça do Bom Direito**: Jurisprudência pacificada da 2ª Câmara Cível do TJPR (Precedente Des. Rogério Kanayama - Ap. Cív. 0004521-88.2021.8.16.0004).\n   * **Perigo da Demora**: Risco iminente de ajuizamento de Execução Fiscal com penhora de ativos via SISBAJUD.`;
+    }
+
     if (mode === 'Banca Examinadora') {
       const q = PERGUNTAS_BANCA[Math.floor(Math.random() * PERGUNTAS_BANCA.length)];
       return `⚔️ **[SIMULAÇÃO DE BANCA - ${q.examinador_perfil}]**\n\n${q.pergunta}\n\n*Dificuldade: ${q.nivel_dificuldade}*\n\n👉 **Dica Tática**: Formule sua resposta com calma. Em seguida, acesse a aba **Banca** no menu inferior para ver o modelo ideal de sustentação oral e as armadilhas a evitar.`;
     }
 
-    return `Entendido! Analisando seu questionamento sob a ótica do seu TCC (*"${MONOGRAFIA.titulo}"*):\n\nO pilar central da sua sustentação oral é a **vitória da Verdade Material sobre o Formalismo Burocrático da Secretaria de Finanças de Curitiba**.\n\nA Fazenda Municipal sustenta a letra fria do art. 42 da LC 40/2001 e exige o Habite-se (CVCO). Por outro lado, nossa pesquisa comprova que a jurisprudência das Câmaras Tributárias do TJPR (como o julgado do Des. Rogério Kanayama) anula essa cobrança territorial majorada quando comprovado o alvará ativo e o canteiro de obras em execução, protegendo a capacidade contributiva (art. 145, § 1º, CF) e a vedação ao confisco (art. 150, IV, CF).\n\nComo deseja aprofundar? Em **Minuta ABNT**, **Simulação de Pergunta da Banca** ou **Roteiro para a Apresentação**?`;
+    return `Entendido! Analisando seu questionamento sob a ótica do seu Artigo Científico (*"${MONOGRAFIA.titulo}"*):\n\nO pilar central da sua sustentação oral é a **vitória da Verdade Material sobre o Formalismo Burocrático da Secretaria de Finanças de Curitiba**.\n\nA Fazenda Municipal sustenta a letra fria do art. 42 da LC 40/2001 e exige o Habite-se (CVCO). Por outro lado, nossa pesquisa comprova que a jurisprudência das Câmaras Tributárias do TJPR (como o julgado do Des. Rogério Kanayama) anula essa cobrança territorial majorada quando comprovado o alvará ativo e o canteiro de obras em execução, protegendo a capacidade contributiva (art. 145, § 1º, CF) e a vedação ao confisco (art. 150, IV, CF).\n\nComo deseja aprofundar? Em **Minuta ABNT**, **Simulação de Pergunta da Banca** ou **Consultoria Prática Processual**?`;
   };
 
   const handleSendMessage = async (textToSend?: string) => {
@@ -141,12 +149,12 @@ export const ChatTab: React.FC = () => {
                   role: 'user',
                   parts: [
                     {
-                      text: `Você é o JurisMentor IPTU Curitiba, consultor de TCC em Direito Tributário Municipal e examinador de banca.
-TCC: "${MONOGRAFIA.titulo}".
-Bases: LC 40/2001 (art. 42), LC 136/2022, CF/88 (art. 145 §1, 150 IV, 156 §1, 182 §4), CTN 32-34, precedentes do TJPR (Rel. Des. Rogério Kanayama).
-Modo: ${activeMode}.
-Pergunta: "${text.trim()}".
-Responda com autoridade, clareza, em português, com termos jurídicos precisos e fontes destacadas.`
+                      text: `Você é o "JurisMentor IPTU Curitiba", consultor acadêmico sênior, especialista em Direito Tributário Municipal e membro de banca examinadora de TCC.
+Tese do Orientando Arlei Silvério: "${MONOGRAFIA.titulo}".
+Bases Obrigatórias: LC 40/2001 (art. 42 - ficção da vigésima parte), LC 136/2022 (PGV), CF/88 (art. 145 §1, 150 IV, 156 §1, 182 §4), CTN arts. 32-34 e 118, precedentes do TJPR (Rel. Des. Rogério Kanayama - Ap. Cív. 0004521-88.2021.8.16.0004).
+Modo Operacional Ativo: ${activeMode}.
+Pergunta do Aluno: "${text.trim()}".
+Diretrizes: NUNCA confunda IPTU progressivo no tempo (sanção do art. 182 da CF) com alíquotas ordinárias diferenciadas por uso e destinação (art. 156 §1 II CF). Mantenha foco regional curitibano e rigor formal acadêmico.`
                     }
                   ]
                 }
