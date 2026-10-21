@@ -6,11 +6,29 @@
   <title>Artigo Científico TCC - IPTU Curitiba - Arlei Silvério</title>
   <style>
     /* Regras ABNT NBR 6022, 6023, 6028, 10520 e 14724 */
-    /* Margem 0 no @page = navegador NÃO imprime URL, data, título nem localhost.
-       As margens ABNT são recriadas abaixo (espaçadores repetidos em cada página). */
+    /* Margens ABNT reais + numeração no canto superior direito.
+       As demais caixas de margem ficam vazias para o navegador NÃO imprimir
+       URL (localhost), data e título. */
     @page {
       size: A4 portrait;
-      margin: 0;
+      margin: 3.0cm 2.0cm 2.0cm 3.0cm;
+
+      @top-right {
+        content: counter(page);
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 10pt;
+        vertical-align: bottom;
+        padding-bottom: 1.0cm;
+      }
+      @top-left { content: ""; }
+      @top-center { content: ""; }
+      @top-left-corner { content: ""; }
+      @top-right-corner { content: ""; }
+      @bottom-left { content: ""; }
+      @bottom-center { content: ""; }
+      @bottom-right { content: ""; }
+      @bottom-left-corner { content: ""; }
+      @bottom-right-corner { content: ""; }
     }
 
     table.print-layout {
@@ -97,18 +115,13 @@
       }
       .paper-container {
         margin: 0;
-        /* Margens ABNT laterais: esquerda 3cm, direita 2cm */
-        padding: 0 2.0cm 0 3.0cm;
+        padding: 0;
         box-shadow: none;
         max-width: none;
         width: 100%;
         min-height: 0;
       }
-      /* Margens ABNT superior 3cm e inferior 2cm, repetidas em TODAS as páginas */
-      table.print-layout > thead { display: table-header-group; }
-      table.print-layout > tfoot { display: table-footer-group; }
-      .print-header-space { height: 3.0cm; }
-      .print-footer-space { height: 2.0cm; }
+      .print-header-space, .print-footer-space { height: 0; }
     }
 
     h1.article-title {
