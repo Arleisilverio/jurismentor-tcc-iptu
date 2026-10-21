@@ -6,17 +6,25 @@
   <title>Artigo Científico TCC - IPTU Curitiba - Arlei Silvério</title>
   <style>
     /* Regras ABNT NBR 6022, 6023, 6028, 10520 e 14724 */
+    /* Margem 0 no @page = navegador NÃO imprime URL, data, título nem localhost.
+       As margens ABNT são recriadas abaixo (espaçadores repetidos em cada página). */
     @page {
       size: A4 portrait;
-      margin-top: 3.0cm;
-      margin-bottom: 2.0cm;
-      margin-left: 3.0cm;
-      margin-right: 2.0cm;
-      @top-right {
-        content: counter(page);
-        font-family: 'Times New Roman', Times, serif;
-        font-size: 10pt;
-      }
+      margin: 0;
+    }
+
+    table.print-layout {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    table.print-layout > thead > tr > td,
+    table.print-layout > tfoot > tr > td,
+    table.print-layout > tbody > tr > td {
+      padding: 0;
+      border: none;
+    }
+    .print-header-space, .print-footer-space {
+      height: 0;
     }
 
     * {
@@ -77,19 +85,30 @@
     }
 
     @media print {
-      body {
+      html, body {
         background: #fff;
+        margin: 0;
+        padding: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
       .no-print-bar {
         display: none !important;
       }
       .paper-container {
         margin: 0;
-        padding: 0;
+        /* Margens ABNT laterais: esquerda 3cm, direita 2cm */
+        padding: 0 2.0cm 0 3.0cm;
         box-shadow: none;
         max-width: none;
         width: 100%;
+        min-height: 0;
       }
+      /* Margens ABNT superior 3cm e inferior 2cm, repetidas em TODAS as páginas */
+      table.print-layout > thead { display: table-header-group; }
+      table.print-layout > tfoot { display: table-footer-group; }
+      .print-header-space { height: 3.0cm; }
+      .print-footer-space { height: 2.0cm; }
     }
 
     h1.article-title {
@@ -269,6 +288,10 @@
   </div>
 
   <div class="paper-container">
+  <table class="print-layout">
+    <thead><tr><td><div class="print-header-space"></div></td></tr></thead>
+    <tfoot><tr><td><div class="print-footer-space"></div></td></tr></tfoot>
+    <tbody><tr><td>
 
     <!-- TÍTULO -->
     <h1 class="article-title">
@@ -509,6 +532,8 @@
       </div>
     </div>
 
+    </td></tr></tbody>
+  </table>
   </div>
 
 </body>
