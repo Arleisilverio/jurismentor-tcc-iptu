@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Play, Pause, RotateCcw, Clock, CheckCircle, AlertOctagon, ChevronLeft, ChevronRight, Mic, Volume2, Sparkles, Timer } from 'lucide-react';
+import { Play, Pause, RotateCcw, Clock, CheckCircle, AlertOctagon, ChevronLeft, ChevronRight, Mic, Volume2, Sparkles, Timer, Presentation } from 'lucide-react';
 import { SLIDES, PresentationSlide } from '@/lib/tccData';
 
-export const PresentationTab: React.FC = () => {
+interface PresentationTabProps {
+  onOpenPresentationGenerator?: () => void;
+}
+
+export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresentationGenerator }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -35,6 +39,32 @@ export const PresentationTab: React.FC = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 pb-24 space-y-4">
+      {/* PPTX Generator Quick Banner */}
+      {onOpenPresentationGenerator && (
+        <div className="bg-gradient-to-r from-amber-500/15 via-yellow-500/10 to-amber-700/15 rounded-2xl p-4 border border-amber-500/35 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0">
+              <Presentation className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="text-sm sm:text-base font-black text-amber-300">
+                Gerador de Slides PowerPoint (.pptx)
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300">
+                Exporte apresentação acadêmica no estilo editorial NotebookLM com tabelas e gráficos.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onOpenPresentationGenerator}
+            className="w-full sm:w-auto px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:brightness-110 text-slate-950 font-black text-xs sm:text-sm shadow-[0_0_15px_rgba(245,158,11,0.3)] active:scale-95 transition flex items-center justify-center space-x-2 shrink-0 cursor-pointer"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Gerar Slides PPTX</span>
+          </button>
+        </div>
+      )}
+
       {/* Stopwatch & Speedrun HUD */}
       <div className="bg-slate-900/95 rounded-2xl p-4 sm:p-5 border border-amber-500/30 shadow-[0_0_20px_rgba(0,0,0,0.6)] space-y-3">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3">

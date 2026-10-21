@@ -8,12 +8,14 @@ import { BancaTab } from '@/components/BancaTab';
 import { PresentationTab } from '@/components/PresentationTab';
 import { TccDataTab } from '@/components/TccDataTab';
 import { SettingsModal } from '@/components/SettingsModal';
+import { PresentationGeneratorModal } from '@/components/PresentationGeneratorModal';
 import { CyberCanvas } from '@/components/CyberCanvas';
 import { getSupabaseClient } from '@/lib/supabaseClient';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>('chat');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isPresentationGenOpen, setIsPresentationGenOpen] = useState(false);
   const [supabaseConnected, setSupabaseConnected] = useState(false);
 
   const checkSupabaseStatus = () => {
@@ -40,6 +42,7 @@ export default function Home() {
       {/* Top Gamer HUD Navbar */}
       <Navbar
         onOpenSettings={() => setIsSettingsOpen(true)}
+        onOpenPresentationGenerator={() => setIsPresentationGenOpen(true)}
         supabaseConnected={supabaseConnected}
         activeMode={
           activeTab === 'chat'
@@ -56,12 +59,20 @@ export default function Home() {
       <main className="flex-1 overflow-x-hidden relative z-10">
         {activeTab === 'chat' && <ChatTab />}
         {activeTab === 'banca' && <BancaTab />}
-        {activeTab === 'apresentacao' && <PresentationTab />}
+        {activeTab === 'apresentacao' && (
+          <PresentationTab onOpenPresentationGenerator={() => setIsPresentationGenOpen(true)} />
+        )}
         {activeTab === 'tese' && <TccDataTab />}
       </main>
 
       {/* Fixed Bottom Gamer Navigation Deck */}
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+
+      {/* Presentation Generator Modal */}
+      <PresentationGeneratorModal
+        isOpen={isPresentationGenOpen}
+        onClose={() => setIsPresentationGenOpen(false)}
+      />
 
       {/* Settings & Keys Modal */}
       <SettingsModal

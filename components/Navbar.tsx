@@ -1,14 +1,16 @@
 import React from 'react';
-import { Shield, Settings, Zap, Database, Terminal } from 'lucide-react';
+import { Shield, Settings, Zap, Database, Terminal, Presentation } from 'lucide-react';
 
 interface NavbarProps {
   onOpenSettings: () => void;
+  onOpenPresentationGenerator: () => void;
   supabaseConnected: boolean;
   activeMode: string;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   onOpenSettings,
+  onOpenPresentationGenerator,
   supabaseConnected,
   activeMode,
 }) => {
@@ -46,6 +48,16 @@ export const Navbar: React.FC<NavbarProps> = ({
             <Zap className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
             <span>{activeMode}</span>
           </div>
+
+          {/* Gerar PPTX Action Button */}
+          <button
+            onClick={onOpenPresentationGenerator}
+            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 text-amber-300 hover:text-amber-200 transition-all border border-amber-500/40 active:scale-95 shadow-[0_0_12px_rgba(245,158,11,0.2)] text-xs font-bold cursor-pointer"
+            title="Gerar Apresentação de Slides (PowerPoint / NotebookLM)"
+          >
+            <Presentation className="w-3.5 h-3.5 text-amber-400" />
+            <span className="hidden sm:inline">Gerar PPTX</span>
+          </button>
 
           {/* Supabase Status */}
           <div
