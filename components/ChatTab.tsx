@@ -10,15 +10,24 @@ export const MODES = [
   { id: 'Consultoria Prática', label: '🛡️ Modo Escudo', desc: 'Estratégias de defesa na SMFI e no TJPR', icon: Shield },
 ];
 
-export const ChatTab: React.FC = () => {
-  const [messages, setMessages] = useState<Array<{ id: string; sender: 'user' | 'assistant'; content: string; mode?: string }>>([
-    {
-      id: 'welcome',
-      sender: 'assistant',
-      content: `⚡ **JURISMENTOR ONLINE // BASE DE DADOS DO TCC SINCRONIZADA**\n\nSaudações, futuro Bacharel! Eu sou o seu parceiro tático de estudos e consultor sênior para o seu TCC:\n\n*"${MONOGRAFIA.titulo}"*.\n\n### 🎯 Nossas Missões de Treino:\n1. **Dominar a Tese**: tirar dúvidas do art. 42 da LC 40/2001, CF/88 (art. 156 vs 182) e jurisprudência do TJPR.\n2. **Vencer a Banca**: treinar réplicas e tréplicas afiadas contra argumentos da Procuradoria Municipal.\n3. **Redação & Prática**: redigir parágrafos em norma ABNT e estruturar peças contra execuções fiscais.\n\nEscolha seu modo tático acima ou toque em uma pergunta rápida para começar!`,
-      mode: 'Tutor Explicativo'
-    }
-  ]);
+type ChatMsg = { id: string; sender: 'user' | 'assistant'; content: string; mode?: string; provider?: string };
+
+const WELCOME_MESSAGE: ChatMsg = {
+  id: 'welcome',
+  sender: 'assistant',
+  content: `⚡ **JURISMENTOR ONLINE // BASE DE DADOS DO TCC SINCRONIZADA**\n\nSaudações, futuro Bacharel! Eu sou o seu parceiro tático de estudos e consultor sênior para o seu TCC:\n\n*"${MONOGRAFIA.titulo}"*.\n\n### 🎯 Nossas Missões de Treino:\n1. **Dominar a Tese**: tirar dúvidas do art. 42 da LC 40/2001, CF/88 (art. 156 vs 182) e jurisprudência do TJPR.\n2. **Vencer a Banca**: treinar réplicas e tréplicas afiadas contra argumentos da Procuradoria Municipal.\n3. **Redação & Prática**: redigir parágrafos em norma ABNT e estruturar peças contra execuções fiscais.\n\nEscolha seu modo tático acima ou toque em uma pergunta rápida para começar!`,
+  mode: 'Tutor Explicativo'
+};
+
+/** Quantas mensagens anteriores vão como contexto para a IA */
+const CONTEXT_MESSAGES = 20;
+
+interface ChatTabProps {
+  userId: string;
+}
+
+export const ChatTab: React.FC<ChatTabProps> = ({ userId }) => {
+  const [messages, setMessages] = useState<ChatMsg[]>([WELCOME_MESSAGE]);
   const [inputValue, setInputValue] = useState('');
   const [activeMode, setActiveMode] = useState('Tutor Explicativo');
   const [isLoading, setIsLoading] = useState(false);
@@ -26,8 +35,12 @@ export const ChatTab: React.FC = () => {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // Histórico separado por usuário no navegador
+  const storageKey = `JURIS_CHAT_HISTORY_${userId}`;
+
   useEffect(() => {
-    const saved = localStorage.getItem('JURIS_CHAT_HISTORY');
+    // 1) Carrega rápido do navegador
+    const saved = localStorage.getItem(storageKey);
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
@@ -38,12 +51,34 @@ export const ChatTab: React.FC = () => {
         console.error(e);
       }
     }
-  }, []);
+
+    // 2) Sincroniza com o Supabase (fonte oficial entre dispositivos)
+    const client = getSupabaseClient();
+    if (!client) return;
+    client
+      .from('chat_messages')
+      .select('id, sender, content, mode, created_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: true })
+      .limit(500)
+      .then(({ data, error }) => {
+        if (error) {
+          console.warn('Supabase: não foi possível carregar o histórico:', error.message);
+          return;
+        }
+        if (data && data.length > 0) {
+          setMessages([
+            WELCOME_MESSAGE,
+            ...data.map((m: any) => ({ id: m.id, sender: m.sender, content: m.content, mode: m.mode || undefined })),
+          ]);
+        }
+      });
+  }, [storageKey, userId]);
 
   useEffect(() => {
-    localStorage.setItem('JURIS_CHAT_HISTORY', JSON.stringify(messages));
+    localStorage.setItem(storageKey, JSON.stringify(messages));
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages, storageKey]);
 
   const handleToggleSpeak = (id: string, text: string) => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
@@ -73,11 +108,17 @@ export const ChatTab: React.FC = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
-  const handleClearHistory = () => {
-    if (confirm('Deseja reiniciar a sessão de treino do chat?')) {
-      const reset = [messages[0]];
+  const handleClearHistory = async () => {
+    if (confirm('Deseja reiniciar a sessão de treino do chat? O histórico também será apagado do Supabase.')) {
+      const reset = [WELCOME_MESSAGE];
       setMessages(reset);
-      localStorage.setItem('JURIS_CHAT_HISTORY', JSON.stringify(reset));
+      localStorage.setItem(storageKey, JSON.stringify(reset));
+
+      const client = getSupabaseClient();
+      if (client) {
+        const { error } = await client.from('chat_messages').delete().eq('user_id', userId);
+        if (error) console.warn('Supabase: erro ao apagar histórico:', error.message);
+      }
     }
   };
 
@@ -123,12 +164,18 @@ export const ChatTab: React.FC = () => {
     const text = textToSend || inputValue;
     if (!text.trim() || isLoading) return;
 
-    const userMsg = {
+    const userMsg: ChatMsg = {
       id: Date.now().toString(),
-      sender: 'user' as const,
+      sender: 'user',
       content: text.trim(),
       mode: activeMode,
     };
+
+    // Contexto da conversa (sem a mensagem de boas-vindas)
+    const history = messages
+      .filter((m) => m.id !== 'welcome')
+      .slice(-CONTEXT_MESSAGES)
+      .map((m) => ({ sender: m.sender, content: m.content }));
 
     setMessages((prev) => [...prev, userMsg]);
     setInputValue('');
@@ -136,68 +183,54 @@ export const ChatTab: React.FC = () => {
 
     try {
       let botResponseText = '';
-      const customGeminiKey = typeof window !== 'undefined' ? localStorage.getItem('JURIS_GEMINI_KEY') : null;
+      let provider = '';
+      const client = getSupabaseClient();
 
-      if (customGeminiKey && customGeminiKey.trim()) {
-        try {
-          const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${customGeminiKey.trim()}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [
-                {
-                  role: 'user',
-                  parts: [
-                    {
-                      text: `Você é o "JurisMentor IPTU Curitiba", consultor acadêmico sênior, especialista em Direito Tributário Municipal e membro de banca examinadora de TCC.
-Tese do Orientando Arlei Silvério: "${MONOGRAFIA.titulo}".
-Bases Obrigatórias: LC 40/2001 (art. 42 - ficção da vigésima parte), LC 136/2022 (PGV), CF/88 (art. 145 §1, 150 IV, 156 §1, 182 §4), CTN arts. 32-34 e 118, precedentes do TJPR (Rel. Des. Rogério Kanayama - Ap. Cív. 0004521-88.2021.8.16.0004).
-Modo Operacional Ativo: ${activeMode}.
-Pergunta do Aluno: "${text.trim()}".
-Diretrizes: NUNCA confunda IPTU progressivo no tempo (sanção do art. 182 da CF) com alíquotas ordinárias diferenciadas por uso e destinação (art. 156 §1 II CF). Mantenha foco regional curitibano e rigor formal acadêmico.`
-                    }
-                  ]
-                }
-              ]
-            })
-          });
-          const data = await res.json();
-          if (data?.candidates?.[0]?.content?.parts?.[0]?.text) {
-            botResponseText = data.candidates[0].content.parts[0].text;
-          }
-        } catch (apiErr) {
-          console.warn('Fallback para motor local:', apiErr);
+      try {
+        const { data: sessionData } = (await client?.auth.getSession()) || { data: { session: null } };
+        const token = sessionData.session?.access_token;
+
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify({ message: text.trim(), mode: activeMode, history }),
+        });
+        const data = await res.json();
+        if (res.ok && data?.reply) {
+          botResponseText = data.reply;
+          provider = data.provider || '';
+        } else if (data?.errors?.length || data?.error) {
+          console.warn('IA indisponível, usando motor local:', data.errors || data.error);
         }
+      } catch (apiErr) {
+        console.warn('Fallback para motor local:', apiErr);
       }
 
       if (!botResponseText) {
         await new Promise((r) => setTimeout(r, 500));
         botResponseText = generateKnowledgeResponse(text, activeMode);
+        provider = 'Motor local (offline)';
       }
 
-      const botMsg = {
+      const botMsg: ChatMsg = {
         id: (Date.now() + 1).toString(),
-        sender: 'assistant' as const,
+        sender: 'assistant',
         content: botResponseText,
         mode: activeMode,
+        provider,
       };
 
       setMessages((prev) => [...prev, botMsg]);
 
-      const customUrl = localStorage.getItem('JURIS_SUPABASE_URL') || undefined;
-      const customKey = localStorage.getItem('JURIS_SUPABASE_KEY') || undefined;
-      const client = getSupabaseClient(customUrl, customKey);
       if (client) {
-        (async () => {
-          try {
-            await client.from('chat_messages').insert([
-              { sender: 'user', content: text, mode: activeMode },
-              { sender: 'assistant', content: botResponseText, mode: activeMode }
-            ]);
-          } catch (syncErr) {
-            console.warn('Supabase sync notice:', syncErr);
-          }
-        })();
+        const { error: syncErr } = await client.from('chat_messages').insert([
+          { user_id: userId, sender: 'user', content: text.trim(), mode: activeMode },
+          { user_id: userId, sender: 'assistant', content: botResponseText, mode: activeMode },
+        ]);
+        if (syncErr) console.warn('Supabase sync notice:', syncErr.message);
       }
 
     } catch (err) {
@@ -268,7 +301,9 @@ Diretrizes: NUNCA confunda IPTU progressivo no tempo (sanção do art. 182 da CF
 
                 {!isUser && (
                   <div className="mt-3 pt-2.5 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400 font-medium">
-                    <span className="text-amber-400/80 tracking-wide font-mono">JURISMENTOR // TCC IPTU</span>
+                    <span className="text-amber-400/80 tracking-wide font-mono">
+                      JURISMENTOR // {msg.provider ? msg.provider.toUpperCase() : 'TCC IPTU'}
+                    </span>
                     <div className="flex items-center space-x-2">
                       <button
                         onClick={() => handleToggleSpeak(msg.id, msg.content)}

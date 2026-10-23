@@ -243,6 +243,12 @@ PARANÁ. Tribunal de Justiça do Estado do Paraná (2.ª Câmara Cível). **Apel
 
 PAULSEN, Leandro. **Curso de Direito Tributário Completo**. 12. ed. São Paulo: Saraiva Educação, 2021.
 
+BRASIL. Superior Tribunal de Justiça (1.ª Seção). **Súmula n.º 160**: É defeso, ao município, atualizar o IPTU, mediante decreto, em percentual superior ao índice oficial de correção monetária. Julgado em: 12 de jun. de 1996. Diário da Justiça: Brasília, DF, 19 jun. 1996, p. 21940.
+
+BRASIL. Supremo Tribunal Federal (Plenário). **Recurso Extraordinário com Agravo n.º 1.593.784/SC** (Tema 1.455 da Repercussão Geral). IPTU. Alíquota em razão da área do imóvel. Inconstitucionalidade. Relator: Min. Dias Toffoli. Julgado em: 06 de ago. de 2026. Brasília, DF: DJe, 2026.
+
+HARADA, Kiyoshi. **Direito Financeiro e Tributário**. 31. ed. São Paulo: Atlas/GEN, 2022.
+
 SABBAG, Eduardo. **Manual de Direito Tributário**. 13. ed. São Paulo: Saraiva Educação, 2021.
 
 ---

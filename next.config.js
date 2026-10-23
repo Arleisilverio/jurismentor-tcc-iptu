@@ -4,6 +4,23 @@ const path = require('path');
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+
+  // Cabeçalhos de Segurança HTTP (OWASP / Defesa em Profundidade)
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' }, // Evita Clickjacking
+          { key: 'X-Content-Type-Options', value: 'nosniff' }, // Evita MIME sniffing
+          { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+        ],
+      },
+    ];
+  },
+
   webpack: (config, { isServer, webpack }) => {
     config.plugins.push(
       new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
@@ -31,4 +48,3 @@ const nextConfig = {
 };
 
 module.exports = nextConfig;
-

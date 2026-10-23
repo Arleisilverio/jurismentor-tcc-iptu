@@ -1,17 +1,9 @@
 import { NextResponse } from 'next/server';
-import { MONOGRAFIA, PERGUNTAS_BANCA } from '@/lib/tccData';
+import { createClient } from '@supabase/supabase-js';
 
-export async function POST(req: Request) {
-  try {
-    const { message, mode, history } = await req.json();
+export const runtime = 'nodejs';
 
-    if (!message) {
-      return NextResponse.json({ error: 'Mensagem obrigatória' }, { status: 400 });
-    }
-
-    const apiKey = process.env.GEMINI_API_KEY || process.env.OPENAI_API_KEY;
-
-    const SYSTEM_PROMPT = `# SYSTEM PROMPT: ESPECIALISTA TCC - IPTU E DIREITO TRIBUTÁRIO MUNICIPAL DE CURITIBA
+const SYSTEM_PROMPT = `# SYSTEM PROMPT: ESPECIALISTA TCC - IPTU E DIREITO TRIBUTÁRIO MUNICIPAL DE CURITIBA
 
 ## 1. IDENTIDADE E PROPÓSITO
 Você é o "JurisMentor IPTU Curitiba", consultor acadêmico sênior, especialista em Direito Tributário Municipal, Direito Urbanístico e membro rigoroso de bancas examinadoras de TCC de Direito.
@@ -27,7 +19,8 @@ Suas análises, minutas e orientações devem sempre se ancorar com precisão ci
 - Código Tributário Nacional (CTN): Arts. 32 a 34 e Art. 118 (interpretação com abstração da validade formal - primazia da realidade material).
 - Lei Federal n.º 10.257/2001 (Estatuto da Cidade): instrumentos de política urbana.
 - Jurisprudência do TJPR: 1ª, 2ª e 3ª Câmaras Cíveis (alvará ativo e obras em andamento afastam presunção de especulação imobiliária; Precedente Des. Rogério Kanayama - Ap. Cív. 0004521-88.2021.8.16.0004).
-- STJ e STF: Súmula 160 do STJ, Súmulas 583 e 668 do STF, Tema 211 de Repercussão Geral.
+- STJ e STF: Súmula 160 do STJ (reserva legal e vedação de majoração por decreto - REsp 21.776/MS), Súmulas 583 e 668 do STF, Tema 211 do STF, e especialmente o paradigmático TEMA 1.455 do STF (ARE 1.593.784/SC, Rel. Min. Dias Toffoli, julgado em 06/08/2026: tese vinculante que declara inconstitucional a fixação de alíquota de IPTU em razão da área do imóvel, reafirmando que seletividade só se aplica a uso/destinação e não a metragem ou frações aritméticas como a regra da 20ª parte do art. 42 da LC 40/2001).
+- Doutrina de Referência: Kiyoshi Harada (limites da extrafiscalidade), Ricardo Alexandre, Luciano Amaro e Hugo de Brito Machado.
 
 ## 3. MODOS DE OPERAÇÃO
 1. MODO [REDATOR ABNT]:
@@ -45,40 +38,143 @@ Suas análises, minutas e orientações devem sempre se ancorar com precisão ci
 ## 4. DIRETRIZES DE ESTILO E CONDUTA
 - Precisão Técnica: NUNCA confunda IPTU progressivo no tempo (sanção do art. 182 da CF) com alíquotas ordinárias diferenciadas por uso e destinação (art. 156, § 1º, II, CF).
 - Foco Regional Curitibano: Priorize sempre o direito tributário municipal de Curitiba (LC 40/2001 e LC 136/2022) e a jurisprudência do TJPR.
-- Pragmatismo: Valorize o impacto sobre a atividade econômica real (galpões logísticos, canteiros de obras e moradia).`;
+- Pragmatismo: Valorize o impacto sobre a atividade econômica real (galpões logísticos, canteiros de obras e moradia).
+- Honestidade acadêmica: se não tiver certeza de um número de processo, data ou citação literal, diga isso explicitamente e recomende a conferência na fonte oficial. Nunca invente julgados.`;
 
-    // If an API key is configured on server (e.g. on Vercel environment variables)
-    if (process.env.GEMINI_API_KEY) {
-      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`;
-      const response = await fetch(geminiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [
-            {
-              role: 'user',
-              parts: [
-                {
-                  text: `${SYSTEM_PROMPT}\n\n[MODO ATIVO]: ${mode || 'Tutor Explicativo'}\n[MENSAGEM DO ALUNO]: "${message}"\n\nResponda estritamente dentro das diretrizes acima no modo solicitado.`
-                }
-              ]
-            }
-          ]
-        })
-      });
+type HistoryItem = { sender: 'user' | 'assistant'; content: string };
 
-      const data = await response.json();
-      const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (reply) {
-        return NextResponse.json({ reply });
-      }
+const MAX_HISTORY = 20;
+
+const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-5-mini';
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+
+/** Valida o token de login do Supabase enviado pelo navegador. */
+async function getAuthenticatedUser(req: Request) {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const token = req.headers.get('authorization')?.replace(/^Bearer\s+/i, '');
+  if (!url || !anonKey || !token) return null;
+
+  const supabase = createClient(url, anonKey, { auth: { persistSession: false } });
+  const { data, error } = await supabase.auth.getUser(token);
+  if (error || !data?.user) return null;
+  return data.user;
+}
+
+async function askOpenAI(mode: string, history: HistoryItem[], message: string): Promise<string | null> {
+  const apiKey = process.env.OPENAI_API_KEY;
+  if (!apiKey) return null;
+
+  const messages = [
+    { role: 'system', content: `${SYSTEM_PROMPT}\n\n[MODO ATIVO]: ${mode}` },
+    ...history.map((h) => ({ role: h.sender, content: h.content })),
+    { role: 'user', content: message },
+  ];
+
+  const res = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify({ model: OPENAI_MODEL, messages }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(`OpenAI (${res.status}): ${data?.error?.message || 'erro desconhecido'}`);
+  }
+  return data?.choices?.[0]?.message?.content || null;
+}
+
+async function askGemini(mode: string, history: HistoryItem[], message: string): Promise<string | null> {
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (!apiKey) return null;
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': apiKey },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: `${SYSTEM_PROMPT}\n\n[MODO ATIVO]: ${mode}` }] },
+        contents: [
+          ...history.map((h) => ({
+            role: h.sender === 'assistant' ? 'model' : 'user',
+            parts: [{ text: h.content }],
+          })),
+          { role: 'user', parts: [{ text: message }] },
+        ],
+      }),
+    }
+  );
+
+  const data = await res.json();
+  if (!res.ok) {
+    throw new Error(`Gemini (${res.status}): ${data?.error?.message || 'erro desconhecido'}`);
+  }
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || null;
+}
+
+/** Status dos provedores de IA (sem expor chaves). */
+export async function GET(req: Request) {
+  const user = await getAuthenticatedUser(req);
+  if (!user) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 });
+
+  return NextResponse.json({
+    openai: !!process.env.OPENAI_API_KEY,
+    openaiModel: OPENAI_MODEL,
+    gemini: !!process.env.GEMINI_API_KEY,
+    geminiModel: GEMINI_MODEL,
+  });
+}
+
+export async function POST(req: Request) {
+  try {
+    // Somente usuários logados podem consumir os créditos de IA.
+    const user = await getAuthenticatedUser(req);
+    if (!user) {
+      return NextResponse.json({ error: 'Faça login para usar o JurisMentor.' }, { status: 401 });
     }
 
-    // Default response using local intelligence synthesis
-    return NextResponse.json({
-      reply: `[JurisMentor - ${mode || 'Tutor'}] Recebido: "${message}".\n\nLembre-se sempre de contrapor o formalismo do art. 42 da LC 40/2001 e a exigência do Habite-se à verdade material e à capacidade contributiva (art. 145, § 1º da CF), conforme consolidado na 2ª Câmara Cível do TJPR (Ap. Cível 0004521-88.2021.8.16.0004).`
-    });
+    const { message, mode, history } = await req.json();
+    if (!message || typeof message !== 'string') {
+      return NextResponse.json({ error: 'Mensagem obrigatória' }, { status: 400 });
+    }
 
+    const activeMode = typeof mode === 'string' && mode ? mode : 'Tutor Explicativo';
+    const cleanHistory: HistoryItem[] = Array.isArray(history)
+      ? history
+          .filter(
+            (h: any) =>
+              h && (h.sender === 'user' || h.sender === 'assistant') && typeof h.content === 'string'
+          )
+          .slice(-MAX_HISTORY)
+          .map((h: any) => ({ sender: h.sender, content: h.content }))
+      : [];
+
+    const errors: string[] = [];
+
+    // 1º GPT (OpenAI) — provedor principal
+    try {
+      const reply = await askOpenAI(activeMode, cleanHistory, message);
+      if (reply) return NextResponse.json({ reply, provider: `OpenAI · ${OPENAI_MODEL}` });
+    } catch (e: any) {
+      console.error(e);
+      errors.push(e.message);
+    }
+
+    // 2º Gemini — reserva, se configurado
+    try {
+      const reply = await askGemini(activeMode, cleanHistory, message);
+      if (reply) return NextResponse.json({ reply, provider: `Gemini · ${GEMINI_MODEL}` });
+    } catch (e: any) {
+      console.error(e);
+      errors.push(e.message);
+    }
+
+    // Nenhum provedor disponível: o navegador usa o motor local offline.
+    return NextResponse.json({ reply: null, provider: 'local', errors });
   } catch (error: any) {
     console.error('API Chat Error:', error);
     return NextResponse.json({ error: error.message || 'Erro interno' }, { status: 500 });

@@ -35,9 +35,8 @@ export const BancaTab: React.FC = () => {
     const newScores = { ...savedScores, [currentQ.id]: score };
     setSavedScores(newScores);
 
-    const customUrl = localStorage.getItem('JURIS_SUPABASE_URL') || undefined;
-    const customKey = localStorage.getItem('JURIS_SUPABASE_KEY') || undefined;
-    const client = getSupabaseClient(customUrl, customKey);
+    // user_id é preenchido automaticamente pelo banco (DEFAULT auth.uid())
+    const client = getSupabaseClient();
     if (client) {
       try {
         await client.from('banca_simulations').insert([

@@ -1,11 +1,12 @@
 import React from 'react';
-import { Shield, Settings, Zap, Database, Terminal, Presentation } from 'lucide-react';
+import { Shield, Settings, Zap, Database, Terminal, Presentation, Crown } from 'lucide-react';
 
 interface NavbarProps {
   onOpenSettings: () => void;
   onOpenPresentationGenerator: () => void;
   supabaseConnected: boolean;
   activeMode: string;
+  isAdmin?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -13,6 +14,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenPresentationGenerator,
   supabaseConnected,
   activeMode,
+  isAdmin = false,
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-slate-950/85 backdrop-blur-md border-b border-amber-500/25 px-4 py-3 shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
@@ -34,6 +36,15 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="px-2 py-0.5 rounded text-xs font-black bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 tracking-widest uppercase">
                 LVL 8
               </span>
+              {isAdmin && (
+                <span
+                  title="Administrador: acesso total ao app e ao banco"
+                  className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-black bg-amber-400/20 text-amber-300 border border-amber-400/50 tracking-widest uppercase shadow-[0_0_8px_rgba(245,158,11,0.3)]"
+                >
+                  <Crown className="w-3 h-3" />
+                  ADM
+                </span>
+              )}
             </div>
             <p className="text-xs text-slate-300 font-medium tracking-wide">
               TCC: Imóveis Não Edificados • Curitiba

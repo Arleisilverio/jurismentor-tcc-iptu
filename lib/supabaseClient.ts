@@ -1,16 +1,25 @@
-import { createClient } from '@supabase/supabase-js';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-// Supabase client initialization with graceful fallback
-export const getSupabaseClient = (customUrl?: string, customKey?: string) => {
-  const url = customUrl || process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-  const key = customKey || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// Instância única do Supabase no navegador.
+// Precisa ser singleton para que a sessão de login (Supabase Auth) seja
+// compartilhada por todas as abas/componentes do app.
+let browserClient: SupabaseClient | null = null;
+
+export const getSupabaseClient = (): SupabaseClient | null => {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 
   if (!url || !key) {
     return null;
   }
 
+  if (browserClient) return browserClient;
+
   try {
-    return createClient(url, key);
+    browserClient = createClient(url, key, {
+      auth: { persistSession: true, autoRefreshToken: true },
+    });
+    return browserClient;
   } catch (error) {
     console.warn('Erro ao inicializar Supabase client:', error);
     return null;
@@ -19,6 +28,7 @@ export const getSupabaseClient = (customUrl?: string, customKey?: string) => {
 
 export interface ChatMessage {
   id: string;
+  user_id?: string;
   sender: 'user' | 'assistant';
   content: string;
   mode?: string;
