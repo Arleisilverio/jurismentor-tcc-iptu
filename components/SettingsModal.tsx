@@ -149,6 +149,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
               </div>
             </div>
 
+            <div className="pt-2 border-t border-slate-800 space-y-1.5">
+              <div className="text-[11px] font-bold text-amber-300 uppercase tracking-wider">
+                🤖 Agentes Habilitados com a Mesma Chave:
+              </div>
+              <ul className="text-xs text-slate-300 space-y-1">
+                <li className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                  <span><strong>JurisMentor:</strong> Orientador Jurídico, Banca & Teses do IPTU</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                  <span><strong>Revisor de Texto:</strong> Correção Gramatical, Desconexos & ABNT</span>
+                </li>
+              </ul>
+            </div>
+
             <p className="text-[11px] text-slate-400 leading-relaxed italic">
               💡 Para ativar seus créditos do GPT, adicione <code>OPENAI_API_KEY=sk-...</code> no seu{' '}
               <code>.env.local</code> (e nas Environment Variables da Vercel para celular).

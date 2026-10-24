@@ -145,40 +145,70 @@ export const TccDataTab: React.FC = () => {
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <button
-                onClick={() => window.open('/artigo_tcc_abnt.html', '_blank')}
+              <a
+                href="/Artigo_Cientifico_TCC_IPTU_Curitiba_REVISADO.pdf"
+                download="Artigo_Cientifico_TCC_IPTU_Curitiba_REVISADO.pdf"
                 className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-500 hover:brightness-110 text-slate-950 font-black text-xs sm:text-sm shadow-md transition flex items-center gap-1.5 active:scale-95 cursor-pointer"
-                title="Abrir página diagramada em folha A4 para imprimir ou salvar como PDF"
+                title="Baixar Artigo Completo Revisado em PDF"
               >
-                <Printer className="w-4 h-4" />
-                <span>Imprimir / Salvar PDF</span>
+                <Download className="w-4 h-4" />
+                <span>Baixar PDF</span>
+              </a>
+
+              <a
+                href="/Artigo_Cientifico_TCC_IPTU_Curitiba_REVISADO.docx"
+                download="Artigo_Cientifico_TCC_IPTU_Curitiba_REVISADO.docx"
+                className="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-black text-xs sm:text-sm shadow-md transition flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                title="Baixar Artigo Completo Revisado em Word (.docx)"
+              >
+                <FileText className="w-4 h-4" />
+                <span>Word (.docx)</span>
+              </a>
+
+              <a
+                href="/Artigo_Cientifico_TCC_IPTU_Curitiba_REVISADO.txt"
+                download="Artigo_Cientifico_TCC_IPTU_Curitiba_REVISADO.txt"
+                className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-xs sm:text-sm border border-slate-700 transition flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                title="Baixar Texto Puro (.txt)"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>TXT</span>
+              </a>
+
+              <button
+                onClick={handleDownloadMd}
+                className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-xs sm:text-sm border border-slate-700 transition flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                title="Baixar arquivo Markdown (.md)"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>MD</span>
+              </button>
+
+              <button
+                onClick={() => window.open('/artigo_revisado.html', '_blank')}
+                className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-xs sm:text-sm border border-slate-700 transition flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                title="Abrir versão HTML para impressão ou visualização"
+              >
+                <Printer className="w-3.5 h-3.5" />
+                <span>Imprimir</span>
               </button>
 
               <button
                 onClick={() => handleCopyText('artigo_completo', ARTIGO_COMPLETO_MD)}
-                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-xs sm:text-sm border border-slate-700 transition flex items-center gap-1.5 active:scale-95 cursor-pointer"
-                title="Copiar texto integral em Markdown para Word ou Docs"
+                className="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-xs sm:text-sm border border-slate-700 transition flex items-center gap-1.5 active:scale-95 cursor-pointer"
+                title="Copiar texto integral em Markdown para a área de transferência"
               >
                 {copiedKey === 'artigo_completo' ? (
                   <>
-                    <Check className="w-4 h-4 text-emerald-400" />
+                    <Check className="w-3.5 h-3.5 text-emerald-400" />
                     <span className="text-emerald-400">Copiado!</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-4 h-4" />
-                    <span>Copiar Texto</span>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copiar</span>
                   </>
                 )}
-              </button>
-
-              <button
-                onClick={handleDownloadMd}
-                className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white font-bold text-xs sm:text-sm border border-slate-700 transition flex items-center gap-1.5 active:scale-95 cursor-pointer"
-                title="Baixar arquivo Markdown (.md)"
-              >
-                <Download className="w-4 h-4" />
-                <span>Baixar .md</span>
               </button>
             </div>
           </div>

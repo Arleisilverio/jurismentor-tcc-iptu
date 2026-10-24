@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Sparkles, Volume2, VolumeX, Copy, Check, RotateCcw, Bot, User, Shield, Swords, Scroll, Compass } from 'lucide-react';
+import { Send, Sparkles, Volume2, VolumeX, Copy, Check, RotateCcw, Bot, User, Shield, Swords, Scroll, Compass, SpellCheck } from 'lucide-react';
 import { QUICK_PROMPTS, MONOGRAFIA, PERGUNTAS_BANCA } from '@/lib/tccData';
 import { getSupabaseClient } from '@/lib/supabaseClient';
 
@@ -8,6 +8,7 @@ export const MODES = [
   { id: 'Banca Examinadora', label: '⚔️ Modo Duelo', desc: 'Arguição crítica, cética e teste de contra-argumentos da banca', icon: Swords },
   { id: 'Redator ABNT', label: '📜 Modo Escriba', desc: 'Minutas acadêmicas rigorosas e citações ABNT NBR 10520', icon: Scroll },
   { id: 'Consultoria Prática', label: '🛡️ Modo Escudo', desc: 'Estratégias de defesa na SMFI e no TJPR', icon: Shield },
+  { id: 'Revisor de Texto', label: '📝 Modo Revisor', desc: 'Corrige gramática, coesão e ABNT do seu artigo', icon: SpellCheck },
 ];
 
 type ChatMsg = { id: string; sender: 'user' | 'assistant'; content: string; mode?: string; provider?: string };
@@ -21,6 +22,15 @@ const WELCOME_MESSAGE: ChatMsg = {
 
 /** Quantas mensagens anteriores vão como contexto para a IA */
 const CONTEXT_MESSAGES = 20;
+
+/** Atalhos do Modo Revisor: preenchem o campo para o usuário colar o trecho em seguida */
+const REVISOR_PROMPTS = [
+  'Revise a gramática e a pontuação do trecho abaixo:\n\n',
+  'Encontre trechos desconexos e melhore a coesão do texto abaixo:\n\n',
+  'Padronize as citações e referências segundo a ABNT (NBR 10520 e 6023):\n\n',
+  'Revise o resumo e as palavras-chave do artigo:\n\n',
+  'Faça uma revisão completa (gramática, coesão, estilo e ABNT) do texto abaixo:\n\n',
+];
 
 interface ChatTabProps {
   userId: string;
@@ -124,6 +134,10 @@ export const ChatTab: React.FC<ChatTabProps> = ({ userId }) => {
 
   const generateKnowledgeResponse = (userPrompt: string, mode: string): string => {
     const lower = userPrompt.toLowerCase();
+
+    if (mode === 'Revisor de Texto') {
+      return `📝 **Modo Revisor indisponível offline**\n\nA revisão de texto exige a IA online (OpenAI/Gemini). No momento nenhum provedor respondeu — verifique as chaves de API e tente novamente.`;
+    }
 
     if (lower.includes('42') || lower.includes('5%') || lower.includes('vigésima') || lower.includes('vigesima')) {
       if (mode === 'Banca Examinadora') {
@@ -336,7 +350,7 @@ export const ChatTab: React.FC<ChatTabProps> = ({ userId }) => {
             </div>
             <div className="bg-slate-900/90 border border-amber-500/30 px-4 py-3 rounded-2xl text-sm text-amber-300 flex items-center space-x-2 shadow-lg">
               <span className="w-2 h-2 bg-amber-400 rounded-full animate-ping" />
-              <span>JurisMentor consultando acórdãos do TJPR e normas da LC 40...</span>
+              <span>{activeMode === 'Revisor de Texto' ? 'Revisor analisando gramática, coesão e ABNT...' : 'JurisMentor consultando acórdãos do TJPR e normas da LC 40...'}</span>
             </div>
           </div>
         )}
@@ -346,15 +360,25 @@ export const ChatTab: React.FC<ChatTabProps> = ({ userId }) => {
 
       {/* Quick Tactical Prompt Chips */}
       <div className="py-2 overflow-x-auto no-scrollbar flex items-center space-x-2">
-        {QUICK_PROMPTS.map((prompt, idx) => (
-          <button
-            key={idx}
-            onClick={() => handleSendMessage(prompt)}
-            className="whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900/90 hover:bg-amber-500/15 border border-slate-700/80 hover:border-amber-400/60 text-slate-200 hover:text-amber-300 active:scale-95 transition"
-          >
-            {prompt}
-          </button>
-        ))}
+        {activeMode === 'Revisor de Texto'
+          ? REVISOR_PROMPTS.map((prompt, idx) => (
+              <button
+                key={idx}
+                onClick={() => setInputValue(prompt)}
+                className="whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900/90 hover:bg-amber-500/15 border border-slate-700/80 hover:border-amber-400/60 text-slate-200 hover:text-amber-300 active:scale-95 transition"
+              >
+                {prompt.split(':')[0]}
+              </button>
+            ))
+          : QUICK_PROMPTS.map((prompt, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleSendMessage(prompt)}
+                className="whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold bg-slate-900/90 hover:bg-amber-500/15 border border-slate-700/80 hover:border-amber-400/60 text-slate-200 hover:text-amber-300 active:scale-95 transition"
+              >
+                {prompt}
+              </button>
+            ))}
       </div>
 
       {/* Input Bar */}
@@ -366,12 +390,22 @@ export const ChatTab: React.FC<ChatTabProps> = ({ userId }) => {
           }}
           className="relative flex items-center"
         >
-          <input
-            type="text"
+          <textarea
             value={inputValue}
+            rows={activeMode === 'Revisor de Texto' ? 4 : 1}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder={`Pergunte algo ou treine um contra-argumento no ${activeMode}...`}
-            className="w-full pl-4 pr-24 py-3.5 text-sm sm:text-base rounded-2xl bg-slate-900/95 border border-amber-500/30 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 shadow-[0_0_20px_rgba(0,0,0,0.6)]"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+              }
+            }}
+            placeholder={
+              activeMode === 'Revisor de Texto'
+                ? 'Cole aqui o trecho do artigo para revisar (Shift+Enter = nova linha)...'
+                : `Pergunte algo ou treine um contra-argumento no ${activeMode}...`
+            }
+            className="w-full pl-4 pr-24 py-3.5 text-sm sm:text-base rounded-2xl bg-slate-900/95 border border-amber-500/30 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 shadow-[0_0_20px_rgba(0,0,0,0.6)] resize-none max-h-48"
           />
 
           <div className="absolute right-2 flex items-center space-x-2">

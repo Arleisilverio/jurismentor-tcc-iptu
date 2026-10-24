@@ -231,27 +231,27 @@ BRASIL. **Lei Federal n.º 5.172, de 25 de outubro de 1966**. Dispõe sobre o Si
 
 BRASIL. **Lei Federal n.º 10.257, de 10 de julho de 2001**. Regulamenta os arts. 182 e 183 da Constituição Federal, estabelece diretrizes gerais da política urbana e dá outras providências (Estatuto da Cidade). Brasília, DF: Presidência da República, 2001.
 
+BRASIL. Superior Tribunal de Justiça (1.ª Seção). **Súmula n.º 160**: É defeso, ao município, atualizar o IPTU, mediante decreto, em percentual superior ao índice oficial de correção monetária. Julgado em: 12 jun. 1996. *Diário da Justiça*: Brasília, DF, 19 jun. 1996, p. 21940.
+
 BRASIL. Supremo Tribunal Federal (Pleno). **Ação Direta de Inconstitucionalidade n.º 2.010-MC**. Medida Cautelar. Relator: Min. Celso de Mello. Julgado em: 30 de set. de 1999. Brasília, DF: Diário da Justiça, 12 abr. 2002.
+
+BRASIL. Supremo Tribunal Federal (Plenário). **Recurso Extraordinário com Agravo n.º 1.593.784/SC** (Tema 1.455 da Repercussão Geral). IPTU. Alíquota em razão da área do imóvel. Inconstitucionalidade. Relator: Min. Dias Toffoli. Julgado em: 06 de ago. de 2026. Brasília, DF: *DJe*, 2026.
 
 CURITIBA. **Lei Complementar Municipal n.º 40, de 18 de dezembro de 2001**. Dispõe sobre os tributos municipais e dá outras providências (Código Tributário Municipal de Curitiba). Curitiba: Câmara Municipal de Curitiba, 2001.
 
 CURITIBA. **Lei Complementar Municipal n.º 136, de 8 de dezembro de 2022**. Dispõe sobre a Planta Genérica de Valores (PGV), altera dispositivos da Lei Complementar n.º 40/2001 e dá outras providências. Curitiba: Câmara Municipal de Curitiba, 2022.
 
+HARADA, Kiyoshi. **Direito Financeiro e Tributário**. 31. ed. São Paulo: Atlas/GEN, 2022.
+
 MACHADO, Hugo de Brito. **Curso de Direito Tributário**. 41. ed. São Paulo: Malheiros Editores, 2020.
 
-PARANÁ. Tribunal de Justiça do Estado do Paraná (2.ª Câmara Cível). **Apelação Cível n.º 0004521-88.2021.8.16.0004**. Embargos à Execução Fiscal. IPTU. Município de Curitiba. Imóvel em construção. Relator: Des. Rogério Kanayama. Julgado em: 22 de nov. de 2022. Curitiba: TJPR, 2022.
+PARANÁ. Tribunal de Justiça do Estado do Paraná (2.ª Câmara Cível). **Apelação Cível n.º 0004521-88.2021.8.16.0004**. Relator: Des. Rogério Kanayama. Julgado em: 22 nov. 2022. Curitiba: TJPR, 2022.
 
 PAULSEN, Leandro. **Curso de Direito Tributário Completo**. 12. ed. São Paulo: Saraiva Educação, 2021.
-
-BRASIL. Superior Tribunal de Justiça (1.ª Seção). **Súmula n.º 160**: É defeso, ao município, atualizar o IPTU, mediante decreto, em percentual superior ao índice oficial de correção monetária. Julgado em: 12 de jun. de 1996. Diário da Justiça: Brasília, DF, 19 jun. 1996, p. 21940.
-
-BRASIL. Supremo Tribunal Federal (Plenário). **Recurso Extraordinário com Agravo n.º 1.593.784/SC** (Tema 1.455 da Repercussão Geral). IPTU. Alíquota em razão da área do imóvel. Inconstitucionalidade. Relator: Min. Dias Toffoli. Julgado em: 06 de ago. de 2026. Brasília, DF: DJe, 2026.
-
-HARADA, Kiyoshi. **Direito Financeiro e Tributário**. 31. ed. São Paulo: Atlas/GEN, 2022.
 
 SABBAG, Eduardo. **Manual de Direito Tributário**. 13. ed. São Paulo: Saraiva Educação, 2021.
 
 ---
 
-¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito. Pesquisador em Direito Tributário e Urbanístico Municipal. E-mail: arlei.silverio@academico.direito.br
+¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito. Pesquisador em Direito Tributário e Urbanístico Municipal.
 `;
