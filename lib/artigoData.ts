@@ -96,14 +96,14 @@ Nesse contexto normativo, o ponto de maior fricção dogmática e contenciosa lo
 > IV - imóveis cujo valor venal da construção não atinja a vigésima parte do valor venal do terreno." (CURITIBA, 2001).
 
 O dispositivo consagra duas presunções legais manifestamente lesivas à realidade dos fatos:
-1. **A equiparação da obra em andamento ao terreno baldio** (inciso II): coloca sob o mesmo manto normativo a terra abandonada para especulação e a gleba com projetos aprovados, canteiro instalado e alvenarias em soerguimento;
+1. **A equiparação da obra em andamento ao terreno baldio** (inciso II): coloca sob o mesmo manto normativo a terra abandonada para especulação e o terreno com projetos aprovados, canteiro instalado e alvenarias em soerguimento;
 2. **A regra matemática da vigésima parte (5%)** (inciso IV): desconsidera como predial qualquer imóvel cuja edificação não represente ao menos 5% do valor venal total do terreno apurado na PGV.
 
 ### 3.2 A Distorção Aritmética dos 5% em Grandes Áreas (Galpões e Centros Logísticos)
 
 A regra estrita do inciso IV do artigo 42 da LC 40/2001 gera distorções perversas, em especial após a majoração das bases de cálculo promovida pela LC 136/2022. Em terrenos urbanos de extensa metragem — característicos da Cidade Industrial de Curitiba (CIC), do bairro Pinheirinho, Umbará e retroáreas de transporte ao longo da BR-116 e do Contorno Sul —, o valor venal do solo atinge dezenas de milhões de reais.
 
-Em tais glebas, a instalação de centros de triagem logística, armazéns metálicos leves, garagens estruturadas de frotas e instalações de armazenamento inteligente demanda área construtiva esparsa, com amplos pátios de manobra pavimentados. Ocorre que o valor de custo de um galpão metálico leve sobre uma gleba de 50.000 m² frequentemente não alcança 5% do valor venal atribuído pelo Fisco ao terreno inteiro.
+Nesses grandes terrenos, a instalação de centros de triagem logística, armazéns metálicos leves, garagens estruturadas de frotas e instalações de armazenamento inteligente demanda área construtiva esparsa, com amplos pátios de manobra pavimentados. Ocorre que o valor de custo de um galpão metálico leve sobre um terreno extenso de 50.000 m² frequentemente não alcança 5% do valor venal atribuído pelo Fisco ao terreno inteiro.
 
 Por conseguinte, a Secretaria de Finanças recusa a emissão de carnet predial e lança IPTU territorial sobre toda a propriedade, desconsiderando que o imóvel abriga centenas de empregos diretos e opera em plena conformidade com sua destinação econômica. Essa distorção transmuda o critério dos 5% em armadilha confiscatória, desconectada da realidade de mercado.
 
@@ -158,7 +158,7 @@ Para sintetizar o abismo existente entre a tese fazendária e o entendimento jud
 | :--- | :--- | :--- | :--- |
 | **Imóvel com Obra em Andamento** | Enquadramento como territorial (art. 42, II, LC 40/2001); alíquota territorial máxima (3,0% a 3,5%). | Afastamento da alíquota punitiva; aplicação da alíquota predial durante o alvará ativo. | Verdade material; capacidade contributiva (art. 145, § 1.º) e proporcionalidade. |
 | **Papel do "Habite-se" (CVCO)** | Eficácia constitutiva; retenção predial até expedição documental definitiva. | Eficácia meramente declaratória; a ocupação e a realidade fática definem o uso. | Primazia da realidade fática sobre a inércia administrativa (art. 118 do CTN). |
-| **Regra dos 5% (Glebas e Galpões)** | Rigidez aritmética absoluta; valor da obra < 5% do terreno = terreno não edificado. | Mitigação do critério formal quando demonstrada afetação produtiva da gleba. | Vedação ao efeito confiscatório (art. 150, IV, CF) e função social da propriedade. |
+| **Regra dos 5% (Grandes Terrenos e Galpões)** | Rigidez aritmética absoluta; valor da obra < 5% do terreno = terreno não edificado. | Mitigação do critério formal quando demonstrada afetação produtiva do terreno. | Vedação ao efeito confiscatório (art. 150, IV, CF) e função social da propriedade. |
 | **Presunção de Especulação** | Presunção absoluta (jure et de jure) decorrente da literalidade legal. | Presunção relativa (juris tantum), elidida por alvará válido e canteiro ativo. | Razoabilidade, moralidade administrativa e proibição de excesso estatal. |
 
 *Fonte: Elaborado pelo autor com base em acórdãos das Câmaras Tributárias do TJPR (2021-2025).*
@@ -191,7 +191,7 @@ Para solucionar a injustiça infligida a galpões logísticos e retroáreas de t
 > I - Aplicar-se-á a alíquota predial sobre a fração ideal de terreno afetada diretamente à edificação, pátios operacionais pavimentados e acessos funcionais;  
 > II - Tributar-se-á sob alíquota territorial estritamente a parcela remanescente de solo sem afetação econômica comprovada por laudo pericial ou projeto urbanístico aprovado."*
 
-Com essa sistemática, a Prefeitura preserva o instrumento de coerção contra glebas vazias abandonadas, mas desonera a parcela efetivamente utilizada para a produção e circulação de mercadorias.
+Com essa sistemática, a Prefeitura preserva o instrumento de coerção contra terrenos vazios abandonados, mas desonera a parcela efetivamente utilizada para a produção e circulação de mercadorias.
 
 ### 5.3 Proposição 3: Eficácia Declaratória do Habite-se Parcial via Decreto Regulamentador
 

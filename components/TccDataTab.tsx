@@ -285,7 +285,7 @@ export const TccDataTab: React.FC = () => {
               </h2>
               <ul className="list-disc pl-5 space-y-1.5">
                 <li><strong>Proposta 1:</strong> Alíquota Transitória de Fomento à Construção na LC 40/2001 (alíquota predial não residencial durante o prazo do alvará ativo);</li>
-                <li><strong>Proposta 2:</strong> Desdobro fiscal proporcional da regra dos 5% do art. 42 para glebas industriais e logísticas superiores a 5.000 m²;</li>
+                <li><strong>Proposta 2:</strong> Desdobro fiscal proporcional da regra dos 5% do art. 42 para grandes terrenos industriais e logísticos superiores a 5.000 m²;</li>
                 <li><strong>Proposta 3:</strong> Eficácia declaratória imediata da conclusão estrutural atestada por laudo com ART/RRT de engenharia via Decreto regulamentador.</li>
               </ul>
             </div>

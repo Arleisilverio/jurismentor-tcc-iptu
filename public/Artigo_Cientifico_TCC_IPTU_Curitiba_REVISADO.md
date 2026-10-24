@@ -59,7 +59,7 @@ Enquanto a diferenciação de alíquotas do artigo 156, § 1.º, II, integra a s
 
 > O IPTU progressivo no tempo não tem por finalidade abastecer os cofres públicos municipais, mas coagir o proprietário de solo urbano não edificado, subutilizado ou não utilizado a promover o seu adequado aproveitamento. Trata-se de típica sanção política de índole urbanística, de modo que sua exigibilidade subordina-se a rigoroso rito procedimental estabelecido pelo Estatuto da Cidade. (ALEXANDRE, 2021, p. 289).
 
-O Estatuto da Cidade impõe prévia lei municipal delimitando a área no Plano Diretor, notificação pessoal averbada em Cartório de Registro de Imóveis e prazo razoável para cumprimento das etapas construtivas. Logo, quando a Fazenda Municipal de Curitiba aplica alíquota territorial máxima permanente a glebas providas de canteiro de obras ativo, burla por vias oblíquas os postulados do devido processo legal substantivo que regem as penalidades urbanísticas constitucionais.
+O Estatuto da Cidade impõe prévia lei municipal delimitando a área no Plano Diretor, notificação pessoal averbada em Cartório de Registro de Imóveis e prazo razoável para cumprimento das etapas construtivas. Logo, quando a Fazenda Municipal de Curitiba aplica alíquota territorial máxima permanente a grandes terrenos providos de canteiro de obras ativo, burla por vias oblíquas os postulados do devido processo legal substantivo que regem as penalidades urbanísticas constitucionais.
 
 ### 2.3 Postulados Limitadores: Capacidade Contributiva e Vedação ao Confisco
 
@@ -84,7 +84,7 @@ Ao equiparar expressamente o imóvel com "edificação em andamento" a um imóve
 
 ### 3.2 A Distorção Aritmética dos 5% em Grandes Áreas (Centros Logísticos e Galpões)
 
-Em terrenos urbanos de extensa metragem — característicos da Cidade Industrial de Curitiba (CIC), Pinheirinho e retroáreas ao longo do Contorno Sul e da BR-116 —, o valor venal do terreno atribuído pela nova PGV da LC n.º 136/2022 atinge dezenas de milhões de reais. A instalação de centros de triagem logística, armazéns metálicos leves e garagens estruturadas demanda ampla área livre e pavimentada. O valor de custo dessas construções frequentemente não atinge 5% do valor total da gleba, fazendo com que a SMFI lance IPTU territorial sobre todo o imóvel, gerando cobranças confiscatórias desprovidas de razoabilidade.
+Em terrenos urbanos de extensa metragem — característicos da Cidade Industrial de Curitiba (CIC), Pinheirinho e retroáreas ao longo do Contorno Sul e da BR-116 —, o valor venal do terreno atribuído pela nova PGV da LC n.º 136/2022 atinge dezenas de milhões de reais. A instalação de centros de triagem logística, armazéns metálicos leves e garagens estruturadas demanda ampla área livre e pavimentada. O valor de custo dessas construções frequentemente não atinge 5% do valor total do terreno, fazendo com que a SMFI lance IPTU territorial sobre todo o imóvel, gerando cobranças confiscatórias desprovidas de razoabilidade.
 
 ### 3.3 A Prática Fazendária da SMFI, o Dogma do "Habite-se" (CVCO) e o Tema 1.455 do STF
 
@@ -120,7 +120,7 @@ A Corte paranaense firmou o entendimento de que o *Habite-se* possui natureza me
 | :--- | :--- | :--- |
 | **Imóvel em Obras** | Enquadramento como territorial (art. 42, II, LC 40/2001); alíquota territorial máxima (3,0% a 3,5%). | Afastamento da alíquota territorial; aplicação de alíquota predial durante a vigência do alvará e execução real de obras. |
 | **Papel do "Habite-se" (CVCO)** | Eficácia constitutiva; manutenção do cadastro territorial até averbação formal definitiva do documento. | Eficácia meramente declaratória; a ocupação e a realidade fática materializam a destinação predial (art. 118, CTN). |
-| **Regra dos 5% (Galpões)** | Rigidez aritmética; valor da construção menor que 5% do valor do terreno acarreta sobretaxa sobre toda a gleba. | Mitigação do critério formal quando demonstrada afetação produtiva e econômica da área, vedando confisco. |
+| **Regra dos 5% (Galpões)** | Rigidez aritmética; valor da construção menor que 5% do valor do terreno acarreta sobretaxa sobre todo o terreno. | Mitigação do critério formal quando demonstrada afetação produtiva e econômica da área, vedando confisco. |
 | **Presunção de Especulação** | Presunção absoluta (*jure et de jure*) extraída da letra fria do artigo 42 municipal. | Presunção relativa (*juris tantum*), prontamente elidida por alvará válido e canteiro de obras ativo. |
 
 *Fonte: Elaborado pelo autor com base nos acórdãos das Câmaras Tributárias do TJPR (2021-2025).*
@@ -134,8 +134,8 @@ A reiterada sucumbência da Fazenda Municipal perante o TJPR comprova que o mode
 ### 5.1 Proposição 1: Alíquota Transitória de Fomento à Construção Civil na LC n.º 40/2001
 Inclusão de dispositivo na LC n.º 40/2001 estabelecendo que os imóveis providos de Alvará de Construção hígido e com obras atestadas em andamento sejam tributados pelas alíquotas do regime predial não residencial durante o prazo regular do licenciamento, desonerando o investidor durante a fase de imobilização financeira.
 
-### 5.2 Proposição 2: Desdobro Fiscal e Tributação Proporcional das Construções em Grandes Glebas
-Flexibilização dos critérios de enquadramento do artigo 42 da LC n.º 40/2001 para glebas extensas industriais e logísticas superiores a 5.000 m², autorizando a incidência predial sobre a fração de terreno afetada ao galpão e aos pátios operacionais, mantendo a tributação territorial tão somente sobre a área remanescente comprovadamente ociosa.
+### 5.2 Proposição 2: Desdobro Fiscal e Tributação Proporcional das Construções em Grandes Terrenos
+Flexibilização dos critérios de enquadramento do artigo 42 da LC n.º 40/2001 para grandes terrenos industriais e logísticas superiores a 5.000 m², autorizando a incidência predial sobre a fração de terreno afetada ao galpão e aos pátios operacionais, mantendo a tributação territorial tão somente sobre a área remanescente comprovadamente ociosa.
 
 ### 5.3 Proposição 3: Eficácia Declaratória do Habite-se Parcial via Decreto Municipal
 Edição de Decreto pelo Poder Executivo Municipal outorgando eficácia fazendária imediata ao protocolo do pedido de CVCO acompanhado de Laudo Técnico de Conclusão Estrutural com Anotação de Responsabilidade Técnica (ART/RRT), extinguindo o ônus decorrente de demoras nas vistorias administrativas.

@@ -46,6 +46,20 @@ SUBSTITUICOES_TERMINOLOGICAS = [
     (r'\bLege Ferenda\b', '*Lege Ferenda*'),
     (r'\bjure et de jure\b', '*jure et de jure*'),
     (r'\bjuris tantum\b', '*juris tantum*'),
+    # Simplificação de linguagem jurídica inacessível (Linguagem Simples)
+    (r'\bGrandes Glebas\b', 'Grandes Terrenos'),
+    (r'\bgrandes glebas\b', 'grandes terrenos'),
+    (r'\bglebas extensas\b', 'grandes terrenos'),
+    (r'\bglebas industriais\b', 'terrenos industriais'),
+    (r'\btoda a gleba\b', 'todo o terreno'),
+    (r'\btotal da gleba\b', 'total do terreno'),
+    (r'\bda gleba inteira\b', 'do terreno inteiro'),
+    (r'\bda gleba\b', 'do terreno'),
+    (r'\bna gleba\b', 'no terreno'),
+    (r'\bà gleba\b', 'ao terreno'),
+    (r'\ba glebas\b', 'a terrenos'),
+    (r'\bglebas\b', 'terrenos'),
+    (r'\bgleba\b', 'terreno'),
 ]
 
 def revisar_texto_rigoroso(texto: str) -> str:

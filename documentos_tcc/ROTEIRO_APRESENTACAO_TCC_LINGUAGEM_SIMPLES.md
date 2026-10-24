@@ -66,12 +66,12 @@ Pronto! Compreendendo essa lógica elementar, você domina qualquer arguição d
 
 ---
 
-### 🟢 BLOCO 5: As Três Proposições de **Lege Ferenda** (Tempo: 2 minutos)
+### 🟢 BLOCO 5: As Três Proposições de ****Lege Ferenda**** (Tempo: 2 minutos)
 **O que falar:**
-> *"Para oferecer soluções concretas ao Poder Legislativo e ao Executivo Municipal de Curitiba, meu artigo formula três propostas de **lege ferenda**:  
+> *"Para oferecer soluções concretas ao Poder Legislativo e ao Executivo Municipal de Curitiba, meu artigo formula três propostas de ****lege ferenda****:  
 > 
 > 1. **Alíquota Transitória de Fomento à Construção Civil:** Inserir na LC n.º 40/2001 uma alíquota reduzida correspondente ao regime predial durante a vigência regular do Alvará de Construção, desonerando o empreendedor na fase em que o capital está imobilizado.  
-> 2. **Desdobro Fiscal Proporcional para Grandes Glebas:** Em terrenos logísticos e industriais extensos, permitir a incidência predial sobre a fração afetada à edificação e aos pátios funcionais, mantendo a tributação territorial tão somente sobre a área comprovadamente remanescente e ociosa.  
+> 2. **Desdobro Fiscal Proporcional para Grandes Terrenos:** Em terrenos logísticos e industriais extensos, permitir a incidência predial sobre a fração afetada à edificação e aos pátios funcionais, mantendo a tributação territorial tão somente sobre a área comprovadamente remanescente e ociosa.  
 > 3. **Eficácia Declaratória Imediata com Laudo Estrutural:** Permitir que o protocolo do CVCO, desde que instruído com Laudo Técnico Conclusivo e ART/RRT de engenharia, opere efeitos fazendários imediatos, resguardando o contribuinte de atrasos na vistoria administrativa."*
 
 ---
@@ -95,7 +95,7 @@ Pronto! Compreendendo essa lógica elementar, você domina qualquer arguição d
 ### Pergunta 2 da Banca:
 *"E se o proprietário solicitar o alvará apenas de modo simulado, para pagar menos imposto, sem edificar?"*
 * **Sua Resposta Direta:**  
-  *"Excelente indagação, professor. O entendimento consolidado pelo TJPR exige dois requisitos concomitantes: **alvará de construção válido E efetivo andamento contínuo das obras**. Constatada a paralisação injustificada ou a simulação, a presunção relativa (**juris tantum**) é afastada, incidindo a alíquota territorial máxima retroativa, acompanhada das penalidades legais cabíveis. A boa-fé produtiva é resguardada, mas a fraude é prontamente reprimida."*
+  *"Excelente indagação, professor. O entendimento consolidado pelo TJPR exige dois requisitos concomitantes: **alvará de construção válido E efetivo andamento contínuo das obras**. Constatada a paralisação injustificada ou a simulação, a presunção relativa (****juris tantum****) é afastada, incidindo a alíquota territorial máxima retroativa, acompanhada das penalidades legais cabíveis. A boa-fé produtiva é resguardada, mas a fraude é prontamente reprimida."*
 
 ### Pergunta 3 da Banca:
 *"Qual é a distinção dogmática entre alíquotas diferenciadas por uso e o IPTU progressivo no tempo?"*

@@ -383,7 +383,7 @@ export async function generateAcademicPptx(config: PresentationConfig): Promise<
     });
 
     s.addText(
-      "Com a nova Planta Genérica de Valores (LC 136/2022), glebas industriais atingiram valores venais milionários. A exigência contábil de que galpões atinjam 5% do valor total da terra nas fases iniciais impede o enquadramento predial, gerando tributação desproporcional.",
+      "Com a nova Planta Genérica de Valores (LC 136/2022), grandes terrenos industriais atingiram valores venais milionários. A exigência contábil de que galpões atinjam 5% do valor total da terra nas fases iniciais impede o enquadramento predial, gerando tributação desproporcional.",
       {
         x: 7.1, y: 4.5, w: 5.0, h: 1.8,
         fontSize: 11, fontFace: FONT_BODY, color: C_WHITE, lineSpacing: 17
@@ -527,7 +527,7 @@ export async function generateAcademicPptx(config: PresentationConfig): Promise<
         num: "PROPOSTA 2",
         tit: "Desdobro Fiscal Proporcional do Artigo 42",
         art: "Revisão da Regra dos 5%",
-        txt: "Permitir em grandes glebas (galpões, centros logísticos e retroáreas) a tributação mista: a fração de terreno afetada à atividade produtiva recebe alíquota predial, tributando-se como territorial apenas a área ociosa."
+        txt: "Permitir em grandes terrenos (galpões, centros logísticos e retroáreas) a tributação mista: a fração de terreno afetada à atividade produtiva recebe alíquota predial, tributando-se como territorial apenas a área ociosa."
       },
       {
         num: "PROPOSTA 3",
