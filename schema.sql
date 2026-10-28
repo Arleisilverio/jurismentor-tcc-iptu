@@ -105,3 +105,18 @@ CREATE POLICY "Dono ou admin - banca" ON banca_simulations
 
 -- Visitantes não logados (anon) não acessam nada.
 REVOKE ALL ON chat_messages, study_notes, banca_simulations FROM anon;
+
+-- ---------------------------------------------------------------------
+-- 6. KEEP-ALIVE (evita a pausa do plano gratuito após 7 dias sem uso)
+--    Chamada 1x/dia pelo Vercel Cron em /api/keepalive.
+--    Só devolve a hora do servidor — não lê nenhuma tabela do app.
+-- ---------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.keep_alive()
+RETURNS timestamptz
+LANGUAGE sql
+STABLE
+AS $$
+  SELECT now();
+$$;
+
+GRANT EXECUTE ON FUNCTION public.keep_alive() TO anon, authenticated;
