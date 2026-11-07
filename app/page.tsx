@@ -16,7 +16,7 @@ import { LoginScreen } from '@/components/LoginScreen';
 import { getSupabaseClient } from '@/lib/supabaseClient';
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<TabType>('chat');
+  const [activeTab, setActiveTab] = useState<TabType>('apresentacao');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPresentationGenOpen, setIsPresentationGenOpen] = useState(false);
   const [session, setSession] = useState<Session | null>(null);

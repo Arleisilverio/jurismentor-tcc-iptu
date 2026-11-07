@@ -22,13 +22,25 @@ export interface LegalDevice {
   }[];
 }
 
+export interface VoiceRadarItem {
+  rotulo: string;
+  termos: string[];
+}
+
 export interface PresentationSlide {
   slide: number;
   titulo: string;
+  subtitulo_telao?: string;
   tempo_sugerido: string;
+  imagem_url?: string;
+  destaque_telao?: string;
+  topicos_telao?: string[];
   objetivo: string;
+  fala_simples?: string;
   fala_sugerida: string;
   pontos_chave: string[];
+  radar_voz?: VoiceRadarItem[];
+  gatilhos_avanco?: string[];
   evitar: string;
 }
 

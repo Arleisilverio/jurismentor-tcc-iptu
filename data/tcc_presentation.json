@@ -1,100 +1,239 @@
 {
   "apresentacao": {
-    "tempo_total_minutos": "12 a 15 minutos",
+    "tempo_total_minutos": "10 a 12 minutos",
     "titulo": "A Tributação dos Imóveis Não Edificados no IPTU de Curitiba",
-    "subtitulo": "Critérios de Enquadramento, Obras em Andamento e a Função Social da Propriedade",
+    "subtitulo": "Critérios de Enquadramento, Transição em Obras e a Função Social da Propriedade Urbana",
     "slides": [
       {
         "slide": 1,
-        "titulo": "Abertura e Cumprimentos à Banca",
-        "tempo_sugerido": "1 minuto",
-        "objetivo": "Apresentar-se com segurança, agradecer ao orientador e aos membros da banca examinadora e enunciar o tema com precisão.",
-        "fala_sugerida": "Excelentíssima banca examinadora, caros professores, boa tarde. É uma honra submeter a este egrégio colegiado o meu Trabalho de Conclusão de Curso intitulado: 'A Tributação dos Imóveis Não Edificados no IPTU de Curitiba: critérios de enquadramento, transição em obras e a função social da propriedade urbana', sob a orientação do ilustre professor orientador.",
+        "titulo": "Abertura e Tema da Pesquisa",
+        "subtitulo_telao": "Direito Tributário Municipal & Direito Urbanístico • Curitiba/PR",
+        "tempo_sugerido": "1 min",
+        "imagem_url": "/slides/slide-1.png",
+        "destaque_telao": "Objeto Central: A colisão entre a ficção fiscal do art. 42 da LC Municipal n.º 40/2001 e a verdade material dos imóveis com obras ativas em Curitiba.",
+        "topicos_telao": [
+          "Autor: Arlei Silvério • 8.º Período de Direito",
+          "Foco: Tributação do IPTU durante a fase de obras lícitas",
+          "Conflito: Arrecadação formalista (SMFI) vs. Função Social e Capacidade Contributiva"
+        ],
+        "objetivo": "Apresentar-se com segurança, cumprimentar a banca examinadora e enunciar o tema e o problema central com clareza.",
+        "fala_simples": "Boa noite aos ilustres professores avaliadores, ao meu professor orientador e a todos os presentes. Meu nome é Arlei Silvério e hoje apresento o meu Artigo Científico intitulado: 'A Tributação dos Imóveis Não Edificados no IPTU de Curitiba: análise jurídica dos critérios de enquadramento, transição em obras e a função social da propriedade urbana'. O objetivo principal desta pesquisa é analisar uma distorção prática que onera gravemente o setor produtivo todos os anos na cobrança do IPTU em Curitiba para quem decide construir e investir em nossa cidade.",
+        "fala_sugerida": "Excelentíssima banca examinadora, caros professores, boa noite. É uma honra submeter a este egrégio colegiado o meu Trabalho de Conclusão de Curso intitulado: 'A Tributação dos Imóveis Não Edificados no IPTU de Curitiba: análise jurídica dos critérios de enquadramento, transição em obras e a função social da propriedade urbana', sob a orientação do ilustre professor orientador.",
         "pontos_chave": [
-          "Postura ereta e confiante",
-          "Mencionar o título exato sem hesitação",
-          "Agradecer a presença da banca"
+          "Cumprimentar a banca e o orientador com calma",
+          "Enunciar o título oficial do Artigo Científico",
+          "Destacar o impacto real para quem constrói e investe em Curitiba"
+        ],
+        "radar_voz": [
+          { "rotulo": "Cumprimento à Banca", "termos": ["banca", "professores", "avaliadores", "orientador", "boa noite", "boa tarde"] },
+          { "rotulo": "Título / IPTU de Curitiba", "termos": ["imóveis não edificados", "imoveis nao edificados", "iptu de curitiba", "função social"] },
+          { "rotulo": "Objetivo (Quem constrói na cidade)", "termos": ["setor produtivo", "construir", "investir", "nossa cidade", "distorção"] }
+        ],
+        "gatilhos_avanco": [
+          "investir em nossa cidade",
+          "construir e investir",
+          "orientador",
+          "próximo slide",
+          "passando para o problema"
         ],
         "evitar": "Falar rápido demais por nervosismo ou pedir desculpas antes de começar."
       },
       {
         "slide": 2,
-        "titulo": "O Problema de Pesquisa e a Realidade de Curitiba",
-        "tempo_sugerido": "2 minutos",
-        "objetivo": "Apresentar a contradição fática e jurídica que motivou o trabalho.",
-        "fala_sugerida": "O cerne deste estudo nasce de uma incoerência prática verificada na capital paranaense. O IPTU territorial em Curitiba possui alíquota significativamente mais pesada que a predial. A finalidade legítima dessa majoração é combater a especulação imobiliária da terra nua. Contudo, a Secretaria de Finanças de Curitiba vem tributando como 'não edificado' o imóvel que já possui Alvará de Construção e está com canteiro de obras a pleno vapor. Pergunta-se: pode o Fisco presumir especulação e cobrar alíquota territorial punitiva enquanto o contribuinte investe e constrói?",
-        "pontos_chave": [
-          "Dicotomia: terra nua especulativa vs. canteiro de obras ativo",
-          "Apresentação clara do problema de pesquisa",
-          "Impacto na atividade econômica e construção civil"
+        "titulo": "O Problema Prático na Realidade de Curitiba",
+        "subtitulo_telao": "Terra Nua Especulativa vs. Canteiro de Obras Ativo",
+        "tempo_sugerido": "2 min",
+        "imagem_url": "/slides/slide-2.png",
+        "destaque_telao": "Paradoxo Fazendário: A Prefeitura equipara o canteiro de obras com Alvará ativo (gerador de empregos) ao terreno baldio abandonado para especulação.",
+        "topicos_telao": [
+          "Alíquota Territorial (até 3,5%): finalidade legítima de coibir retenção ociosa do solo",
+          "Distorção Prática: contribuinte obtém Alvará, contrata operários e inicia fundações",
+          "Conduta da SMFI: mantém cobrança territorial máxima até a expedição final do Habite-se"
         ],
-        "evitar": "Achar que a alíquota territorial é errada em si; o problema é aplicá-la durante a obra."
+        "objetivo": "Apresentar a contradição fática e jurídica que motivou o trabalho: tratar obra ativa como lote abandonado.",
+        "fala_simples": "Para compreender a gravidade do problema, analisemos uma situação fática concreta: Imagine um contribuinte ou empresa que adquire um lote urbano em Curitiba. A alíquota do IPTU para terreno não edificado é extremamente elevada, alcançando até 3,5% sobre o valor venal, para evitar que o proprietário retenha o solo ocioso aguardando valorização. Até aí, a finalidade é legítima. No entanto, imagine que esse proprietário elabore projetos, obtenha o Alvará de Construção perante a Prefeitura, mobilize máquinas, contrate operários e inicie efetivamente as fundações. Qual é a conduta da Fazenda de Curitiba? Ela continua lançando o IPTU com alíquota territorial máxima de terreno vago! Em suma: o Fisco desconsidera a verdade material dos fatos e equipara um canteiro de obras ativo a um lote abandonado para especulação.",
+        "fala_sugerida": "O cerne deste estudo nasce de uma incoerência prática verificada na capital paranaense. O IPTU territorial em Curitiba possui alíquota significativamente mais pesada que a predial para combater a especulação imobiliária da terra nua. Contudo, a Secretaria de Finanças vem tributando como 'não edificado' o imóvel que já possui Alvará de Construção e está com canteiro de obras a pleno vapor. Pergunta-se: pode o Fisco presumir especulação e cobrar alíquota territorial punitiva enquanto o contribuinte investe e constrói?",
+        "pontos_chave": [
+          "Alíquota territorial máxima (até 3,5%) visa coibir especulação",
+          "Proprietário com Alvará válido, máquinas e operários em obra",
+          "Fisco ignora a obra e cobra imposto de terreno baldio"
+        ],
+        "radar_voz": [
+          { "rotulo": "Alíquota Territorial / Especulação", "termos": ["3,5%", "três e meio", "especulação", "solo ocioso", "valorização"] },
+          { "rotulo": "Alvará e Obra em Andamento", "termos": ["alvará", "alvara", "máquinas", "operários", "fundações", "canteiro"] },
+          { "rotulo": "Ficção Fiscal / Verdade Material", "termos": ["verdade material", "lote abandonado", "terreno vago", "ficção"] }
+        ],
+        "gatilhos_avanco": [
+          "abandonado para especulação",
+          "lote abandonado",
+          "investe e constrói",
+          "próximo slide"
+        ],
+        "evitar": "Achar que a alíquota territorial é errada em si; o erro é aplicá-la contra quem já está construindo."
       },
       {
         "slide": 3,
-        "titulo": "A Matriz Constitucional: Art. 156 vs. Art. 182 da CF/88",
-        "tempo_sugerido": "2 a 3 minutos",
-        "objetivo": "Demonstrar domínio dogmático profundo, distinguindo progressividade fiscal de extrafiscalidade punitiva.",
-        "fala_sugerida": "No Capítulo I, enfrentamos a distinção dogmática que é frequentemente ignorada na prática forense: a progressividade fiscal do art. 156, § 1º, que mede capacidade contributiva e admite alíquotas diferenciadas por uso e localização, versus a extrafiscalidade puramente sancionatória do art. 182, § 4º, II, que exige notificação prévia e cumprimento do Plano Diretor. Demonstrando ainda que o poder de tributar encontra limites intransponíveis no art. 150, IV (vedação ao confisco) e na capacidade contributiva real do art. 145, § 1º.",
-        "pontos_chave": [
-          "EC 29/2000 (alíquotas diferenciadas por uso/localização)",
-          "Art. 182, § 4º (exige notificação e Plano Diretor)",
-          "Não confisco e capacidade contributiva"
+        "titulo": "Matriz Constitucional: Art. 156 vs. Art. 182 da CF/88",
+        "subtitulo_telao": "Seletividade Fiscal Ordinária vs. Sanção Urbanística no Tempo",
+        "tempo_sugerido": "2 min",
+        "imagem_url": "/slides/slide-3.png",
+        "destaque_telao": "Limites Constitucionais ao Poder de Tributar: Capacidade Contributiva (Art. 145, § 1.º) e Vedação ao Efeito de Confisco (Art. 150, IV, CF/88).",
+        "topicos_telao": [
+          "Art. 156, § 1.º, I e II (EC 29/2000): progressividade fiscal por valor e diferenciação por uso/localização",
+          "Art. 182, § 4.º, II (Estatuto da Cidade): IPTU progressivo no tempo é sanção que exige Plano Diretor e notificação prévia",
+          "Desvio de Finalidade: usar alíquota territorial punitiva sem o devido processo legal urbanístico"
         ],
-        "evitar": "Confundir progressividade ordinária no tempo com alíquota diferenciada."
+        "objetivo": "Demonstrar domínio dogmático distinguindo a diferenciação fiscal (art. 156) da sanção urbanística (art. 182).",
+        "fala_simples": "No primeiro capítulo do artigo, traçamos a distinção constitucional essencial entre o artigo 156 e o artigo 182 da Constituição de 88. O artigo 156, parágrafo 1.º, após a Emenda 29 de 2000, permite alíquotas diferenciadas conforme o uso e a localização do imóvel, sempre respeitando a capacidade contributiva do artigo 145 e a vedação ao confisco do artigo 150, inciso IV. Já o IPTU progressivo no tempo do artigo 182, parágrafo 4.º, é uma sanção urbanística severa que exige lei específica do Plano Diretor, notificação prévia do proprietário e concessão de prazos para construir. O Município de Curitiba não pode transformar a alíquota ordinária em punição automática contra quem já está edificando e cumprindo a função social da propriedade.",
+        "fala_sugerida": "No Capítulo I, enfrentamos a distinção dogmática entre a progressividade fiscal do art. 156, § 1.º, que mede capacidade contributiva e admite alíquotas diferenciadas por uso e localização, versus a extrafiscalidade puramente sancionatória do art. 182, § 4.º, II, que exige notificação prévia e cumprimento do Plano Diretor, encontrando limites intransponíveis no art. 150, IV (vedação ao confisco) e no art. 145, § 1.º.",
+        "pontos_chave": [
+          "Art. 156, § 1.º (EC 29/2000): uso e localização",
+          "Art. 182, § 4.º, II: sanção que exige notificação e prazo",
+          "Art. 145, § 1.º (Capacidade Contributiva) e Art. 150, IV (Não Confisco)"
+        ],
+        "radar_voz": [
+          { "rotulo": "Art. 156 (Uso e Localização)", "termos": ["156", "emenda 29", "uso e localização", "uso e a localização"] },
+          { "rotulo": "Art. 182 (Sanção / Notificação)", "termos": ["182", "progressivo no tempo", "notificação", "plano diretor"] },
+          { "rotulo": "Capacidade Contributiva & Não Confisco", "termos": ["145", "150", "capacidade contributiva", "confisco"] }
+        ],
+        "gatilhos_avanco": [
+          "função social da propriedade",
+          "capacidade contributiva real",
+          "vedação ao confisco",
+          "próximo slide"
+        ],
+        "evitar": "Nunca confundir IPTU progressivo no tempo (art. 182) com alíquota diferenciada por uso (art. 156)."
       },
       {
         "slide": 4,
-        "titulo": "O Regime Local: Art. 42 da LC 40/2001 e a Ficção Fazendária",
-        "tempo_sugerido": "2 a 3 minutos",
-        "objetivo": "Expor com precisão a regra do CTM de Curitiba e sua distorção prática.",
-        "fala_sugerida": "No Capítulo II, analisamos o sistema da LC 40/2001 e a LC 136/2022. O art. 42 da LC 40/2001 comete dois graves excessos: primeiro, estabelece a ficção de que imóveis em construção são considerados 'não edificados'; segundo, cria a regra de que se o valor da construção for inferior a 1/20 (5%) do valor do terreno, o imóvel permanece territorial. Na prática, a Fazenda exige o Habite-se final (CVCO) para qualquer alteração, transferindo para o contribuinte o ônus da demora burocrática dos próprios fiscais da prefeitura.",
-        "pontos_chave": [
-          "Art. 42 da LC 40/2001: a regra dos 5% (1/20)",
-          "Ficção que iguala obra em andamento a terreno baldio",
-          "Condicionamento ao Habite-se gerando penalização pela burocracia"
+        "titulo": "As Duas Grandes Falhas da Lei de Curitiba (LC 40/2001)",
+        "subtitulo_telao": "A Regra da 20.ª Parte (5%) e o Dogma Burocrático do Habite-se (CVCO)",
+        "tempo_sugerido": "2 a 3 min",
+        "imagem_url": "/slides/slide-4.png",
+        "destaque_telao": "Art. 42 da LC n.º 40/2001: Exige que a construção supere 1/20 (5%) do valor venal do terreno E condiciona o IPTU predial à expedição formal do CVCO.",
+        "topicos_telao": [
+          "1.ª Falha — Regra dos 5% (1/20): Com a PGV da LC 136/2022, terrenos logísticos e industriais valem dezenas de milhões; galpões leves e pátios não atingem 5% na fase inicial",
+          "2.ª Falha — Dogma do Habite-se (CVCO): SMFI transfere ao contribuinte o ônus da própria demora administrativa na vistoria final",
+          "Violação à Súmula 160 do STJ e à razoabilidade tributária"
         ],
-        "evitar": "Errar a proporção: é 1/20 (um vigésimo, ou 5%), e não 10% ou 1/10."
+        "objetivo": "Expor as duas falhas capitais da legislação de Curitiba: a regra aritmética dos 5% (1/20) e a exigência burocrática do Habite-se.",
+        "fala_simples": "Na investigação prática, identifiquei duas falhas capitais no artigo 42 da Lei Complementar 40 de 2001 de Curitiba. A primeira falha é a Regra da Vigésima Parte, ou dos 5%: a lei diz que se o valor da construção não atingir 5% do valor venal do terreno, o imóvel continua sendo tributado como terreno vazio. Com a atualização da Planta Genérica pela LC 136 de 2022, grandes terrenos industriais e logísticos passaram a valer dezenas de milhões de reais. Em centros logísticos e galpões com amplos pátios de manobra, a construção inicial raramente atinge 5% do terreno, gerando cobrança confiscatória. A segunda falha é o Dogma do Habite-se, o CVCO: a Secretaria de Finanças só muda o IPTU para predial após a emissão formal do Habite-se, cuja vistoria pode demorar meses ou anos. O cidadão não pode pagar mais imposto pela demora burocrática da própria Prefeitura.",
+        "fala_sugerida": "No Capítulo II, analisamos o art. 42 da LC 40/2001 e a PGV da LC 136/2022. O dispositivo comete dois excessos: primeiro, cria a regra de que se o valor da construção for inferior a 1/20 (5%) do valor venal do terreno, o imóvel permanece territorial, penalizando grandes terrenos logísticos; segundo, equipara obras em andamento a lotes vagos até a expedição formal do CVCO (Habite-se), transferindo ao contribuinte o ônus da morosidade administrativa.",
+        "pontos_chave": [
+          "1.ª Falha: Regra da 20.ª parte (5% do valor do terreno no art. 42)",
+          "Impacto da PGV (LC 136/2022) em terrenos logísticos e galpões",
+          "2.ª Falha: Exigência do Habite-se (CVCO) penalizando o contribuinte pela demora da Prefeitura"
+        ],
+        "radar_voz": [
+          { "rotulo": "Art. 42 / Regra dos 5% (1/20)", "termos": ["artigo 42", "vigésima parte", "5%", "cinco por cento", "um vigésimo"] },
+          { "rotulo": "Grandes Terrenos / LC 136/2022", "termos": ["136", "planta genérica", "logísticos", "galpões", "milhões"] },
+          { "rotulo": "Dogma do Habite-se (CVCO)", "termos": ["habite-se", "cvco", "vistoria", "burocrática", "demora"] }
+        ],
+        "gatilhos_avanco": [
+          "própria prefeitura",
+          "administração pública",
+          "fiscais da prefeitura",
+          "morosidade administrativa",
+          "próximo slide"
+        ],
+        "evitar": "Errar a fração legal: é 1/20 (um vigésimo = 5%), nunca 10%."
       },
       {
         "slide": 5,
-        "titulo": "A Jurisprudência do TJPR: Prevalência da Verdade Material",
-        "tempo_sugerido": "3 minutos",
-        "objetivo": "Apresentar a sólida resposta do Judiciário paranaense aos desmandos do Fisco.",
-        "fala_sugerida": "No Capítulo III, investigamos as decisões das Câmaras Tributárias do TJPR (1ª, 2ª e 3ª Câmaras Cíveis). O Tribunal de Justiça é categórico: o princípio da verdade material prevalece sobre a inércia cadastral. Havendo Alvará de Construção hígido e comprovação fática das obras, cessa a presunção de desídia ou especulação. Destaco a Apelação Cível 0004521-88.2021.8.16.0004, de relatoria do Des. Rogério Kanayama, que descaracterizou a cobrança de alíquota territorial em Curitiba durante a fase de obras.",
-        "pontos_chave": [
-          "Prevalência da verdade material sobre o formalismo do Habite-se",
-          "TJPR: 1ª, 2ª e 3ª Câmaras Tributárias",
-          "Precedente Kanayama (Ap. Cível 0004521-88.2021.8.16.0004)",
-          "Afastamento da rigidez aritmética nos galpões e centros logísticos"
+        "titulo": "A Resposta dos Tribunais: TJPR e STF (Tema 1.455)",
+        "subtitulo_telao": "A Vitória da Verdade Material sobre o Formalismo Fazendário",
+        "tempo_sugerido": "3 min",
+        "imagem_url": "/slides/slide-5.png",
+        "destaque_telao": "Jurisprudência Consolidada: Alvará de Construção válido + efetivo andamento das obras afastam a alíquota territorial punitiva (TJPR, Rel. Des. Rogério Kanayama).",
+        "topicos_telao": [
+          "TJPR (Ap. Cível 0004521-88.2021.8.16.0004 — Rel. Des. Rogério Kanayama): obra ativa descaracteriza especulação imobiliária",
+          "Art. 118 do CTN (Verdade Material): o Habite-se (CVCO) tem efeito meramente declaratório, e não constitutivo",
+          "STF — Tema 1.455 (ARE 1.593.784/SC, Rel. Min. Dias Toffoli, 2026): é inconstitucional fixar alíquota de IPTU em razão da área ou proporção métrica do imóvel"
         ],
-        "evitar": "Citar outros estados (TJSP, TJSC) sem enfatizar que Curitiba e o TJPR têm padrão consolidado próprio."
+        "objetivo": "Apresentar os três pilares jurisprudenciais imbatíveis: Precedente Kanayama no TJPR, Art. 118 do CTN e Tema 1.455 do STF.",
+        "fala_simples": "Frente a essa cobrança desproporcional, qual é a resposta do Poder Judiciário? Ao examinar as Câmaras de Direito Tributário do Tribunal de Justiça do Paraná, constatei três pilares decisivos a favor do contribuinte. Primeiro: o precedente paradigmático do Desembargador Rogério Kanayama, na Apelação Cível 0004521-88.2021.8.16.0004, onde a 2.ª Câmara Cível do TJPR pacificou que a existência de Alvará de Construção válido e o efetivo andamento das obras afastam por completo a presunção de especulação imobiliária. Segundo: o princípio da Verdade Material, no artigo 118 do CTN, confirmando que o Habite-se tem natureza meramente declaratória, e não constitutiva. E terceiro: a recentíssima tese vinculante do STF no Tema 1.455, relatado pelo Ministro Dias Toffoli em agosto de 2026, que declarou inconstitucional fixar alíquota de IPTU em razão da área do imóvel, fulminando subterfúgios aritméticos como a regra dos 5% de Curitiba.",
+        "fala_sugerida": "No Capítulo III, demonstramos a resposta do Poder Judiciário em três eixos: 1.º) A jurisprudência das Câmaras Tributárias do TJPR, destacando a Apelação Cível 0004521-88.2021.8.16.0004 (Rel. Des. Rogério Kanayama), segundo a qual alvará válido e obras em andamento afastam a alíquota territorial; 2.º) A primazia da verdade material (art. 118 do CTN) e a natureza declaratória do Habite-se; 3.º) A tese vinculante do STF no Tema 1.455 (ARE 1.593.784/SC, Rel. Min. Dias Toffoli, julgado em 06/08/2026), que veda alíquotas baseadas em área ou frações aritméticas.",
+        "pontos_chave": [
+          "1. TJPR (Des. Rogério Kanayama): Alvará + obra ativa afastam especulação",
+          "2. Verdade Material (art. 118 CTN): Habite-se é declaratório",
+          "3. STF Tema 1.455 (Min. Dias Toffoli, 2026): inconstitucionalidade de critérios de área/fração"
+        ],
+        "radar_voz": [
+          { "rotulo": "Precedente Des. Kanayama (TJPR)", "termos": ["kanayama", "0004521", "tjpr", "segunda câmara", "2ª câmara"] },
+          { "rotulo": "Verdade Material (Art. 118 CTN)", "termos": ["118", "verdade material", "declaratória", "declaratório"] },
+          { "rotulo": "STF Tema 1.455 (Toffoli)", "termos": ["1455", "1.455", "toffoli", "supremo", "stf"] }
+        ],
+        "gatilhos_avanco": [
+          "regra dos 5% de curitiba",
+          "subterfúgios aritméticos",
+          "frações aritméticas",
+          "próximo slide"
+        ],
+        "evitar": "Esquecer de mencionar que no TJPR são exigidos dois requisitos juntos: alvará válido E obra efetivamente em andamento."
       },
       {
         "slide": 6,
-        "titulo": "Propostas de Lege Ferenda para Curitiba",
-        "tempo_sugerido": "2 minutos",
-        "objetivo": "Mostrar maturidade propositiva: não apenas criticar, mas apresentar soluções normativas viáveis.",
-        "fala_sugerida": "Para não permanecer apenas no campo da crítica doutrinária, este trabalho formula três propostas concretas de lege ferenda: 1ª) Criação da Alíquota Transitória de Fomento à Construção na LC 40/2001, aplicando alíquota predial não residencial durante o alvará ativo; 2ª) Flexibilização e desdobro fiscal da regra dos 5% do art. 42, permitindo tributação mista em grandes terrenos produtivos; 3ª) Eficácia declaratória do Habite-se provisório mediante laudo e ART/RRT de engenharia, impedindo que a morosidade administrativa prejudique o contribuinte.",
-        "pontos_chave": [
-          "1. Alíquota transitória durante o alvará ativo",
-          "2. Desdobro fiscal proporcional da regra dos 5%",
-          "3. Efeito declaratório do Habite-se via decreto com ART/RRT"
+        "titulo": "As Três Propostas de Lege Ferenda para Curitiba",
+        "subtitulo_telao": "Soluções Legislativas para Harmonizar Arrecadação e Desenvolvimento Urbano",
+        "tempo_sugerido": "2 min",
+        "imagem_url": "/slides/slide-6.png",
+        "destaque_telao": "Contribuição Propositiva do TCC: Reforma pontual do art. 42 da LC n.º 40/2001 para alinhar o Código Tributário de Curitiba ao TJPR e ao STF.",
+        "topicos_telao": [
+          "1. Alíquota Transitória de Fomento à Construção Civil: aplicação da alíquota predial durante a vigência regular do Alvará de Construção ativo",
+          "2. Desdobro Fiscal Proporcional em Grandes Terrenos: tributação predial sobre a área operacional/galpão e territorial apenas sobre a fração ociosa",
+          "3. Eficácia Declaratória Imediata do protocolo de CVCO instruído com Laudo Técnico e ART/RRT de engenharia"
         ],
-        "evitar": "Apresentar as propostas como 'isenção fiscal irrestrita'. Elas são medidas de justiça e modulação tributária."
+        "objetivo": "Apresentar as 3 soluções legislativas concretas (lege ferenda) propostas pelo seu artigo.",
+        "fala_simples": "Para oferecer soluções concretas ao Legislativo e ao Executivo de Curitiba, meu artigo formula três propostas de alteração legislativa, de lege ferenda: Primeira: criar na LC 40 de 2001 a Alíquota Transitória de Fomento à Construção Civil, aplicando o patamar predial durante a vigência regular do Alvará de Construção ativo. Segunda: o Desdobro Fiscal Proporcional para Grandes Terrenos logísticos e industriais, cobrando IPTU predial sobre a área construída e pátios funcionais, e mantendo a alíquota territorial apenas sobre eventual área realmente ociosa. Terceira: conferir Eficácia Declaratória Imediata ao protocolo do Habite-se quando acompanhado de Laudo Técnico Conclusivo e ART ou RRT de engenharia, protegendo o contribuinte contra atrasos de vistoria.",
+        "fala_sugerida": "No campo propositivo, o trabalho formula três propostas de lege ferenda para Curitiba: 1.ª) Instituição da Alíquota Transitória de Fomento à Construção na LC 40/2001 durante o alvará ativo; 2.ª) Desdobro fiscal proporcional da regra dos 5% do art. 42 em grandes terrenos produtivos; 3.ª) Eficácia fazendária declaratória imediata ao protocolo do CVCO instruído com laudo conclusivo e ART/RRT de engenharia.",
+        "pontos_chave": [
+          "1. Alíquota Transitória de Fomento durante o Alvará ativo",
+          "2. Desdobro Fiscal Proporcional para grandes terrenos logísticos",
+          "3. Eficácia Declaratória Imediata do protocolo de Habite-se com ART/RRT"
+        ],
+        "radar_voz": [
+          { "rotulo": "1. Alíquota Transitória no Alvará", "termos": ["transitória", "fomento", "vigência regular", "alvará ativo"] },
+          { "rotulo": "2. Desdobro Proporcional", "termos": ["desdobro", "proporcional", "grandes terrenos", "pátios"] },
+          { "rotulo": "3. Laudo Técnico + ART/RRT", "termos": ["declaratória imediata", "laudo", "art", "rrt", "engenharia"] }
+        ],
+        "gatilhos_avanco": [
+          "atrasos de vistoria",
+          "vistoria administrativa",
+          "prejudique o contribuinte",
+          "próximo slide"
+        ],
+        "evitar": "Apresentar as propostas como renúncia fiscal; explique que elas evitam derrotas judiciais e sucumbência para o próprio Município."
       },
       {
         "slide": 7,
-        "titulo": "Conclusão e Fechamento da Apresentação",
-        "tempo_sugerido": "1 minuto",
-        "objetivo": "Arrematar a apresentação com uma frase de impacto e abrir a palavra para a banca.",
-        "fala_sugerida": "Em conclusão: a repressão à especulação imobiliária não pode ser confundida com a asfixia fiscal de quem gera empregos e edifica a cidade. Ao harmonizar a legislação curitibana com a verdade material e os princípios constitucionais, Curitiba preservará sua arrecadação justa e prestigiará a verdadeira função social da propriedade urbana. Agradeço a atenção de todos e coloco-me à inteira disposição da ilustre banca examinadora para responder às arguições.",
-        "pontos_chave": [
-          "Frase final forte e inspiradora",
-          "Agradecer e se colocar à disposição",
-          "Manter a calma e aguardar as perguntas"
+        "titulo": "Conclusão e Fechamento",
+        "subtitulo_telao": "Justiça Fiscal, Segurança Jurídica e Função Social da Propriedade em Curitiba",
+        "tempo_sugerido": "1 min",
+        "imagem_url": "/slides/slide-7.png",
+        "destaque_telao": "\"Quem edifica, gera empregos e movimenta a cidade não pratica especulação imobiliária — cumpre em grau máximo a função social da propriedade urbana (art. 182 da CF/88).\"",
+        "topicos_telao": [
+          "Síntese: O combate à especulação não pode se converter em confisco contra quem produz",
+          "Pacificação Judicial: TJPR e STF (Tema 1.455) já consagraram a primazia da verdade material",
+          "Agradecimento à Banca Examinadora e abertura para arguição"
         ],
-        "evitar": "Demonstrar alívio exagerado ou pedir que 'sejam bonzinhos'."
+        "objetivo": "Encerrar com firmeza acadêmica, agradecer à banca e abrir para as perguntas.",
+        "fala_simples": "Para concluir: a função social da propriedade urbana consagrada no artigo 182 da Constituição da República não pode ser desvirtuada para legitimar cobranças confiscatórias. Quem edifica e investe cumpre ativamente a função social da propriedade e impulsiona o desenvolvimento de Curitiba. O Tribunal de Justiça do Paraná e o Supremo Tribunal Federal já restabeleceram a primazia da verdade material; resta agora à legislação municipal se modernizar para garantir segurança jurídica e justiça fiscal. Agradeço a atenção da ilustre banca examinadora e coloco-me à inteira disposição dos professores para os questionamentos. Muito obrigado!",
+        "fala_sugerida": "Em conclusão: a repressão à especulação imobiliária não pode ser confundida com a asfixia fiscal de quem gera empregos e edifica a cidade. Ao harmonizar a legislação curitibana com a verdade material e os princípios constitucionais, Curitiba preservará sua arrecadação justa e prestigiará a verdadeira função social da propriedade urbana. Agradeço a atenção de todos e coloco-me à disposição da ilustre banca examinadora. Muito obrigado!",
+        "pontos_chave": [
+          "Quem constrói cumpre a função social da propriedade (art. 182 CF)",
+          "TJPR e STF já garantem a verdade material",
+          "Agradecer à banca e aguardar as perguntas com tranquilidade"
+        ],
+        "radar_voz": [
+          { "rotulo": "Função Social (Art. 182 CF)", "termos": ["função social", "182", "desenvolvimento de curitiba"] },
+          { "rotulo": "Verdade Material / Justiça Fiscal", "termos": ["verdade material", "segurança jurídica", "justiça fiscal"] },
+          { "rotulo": "Agradecimento à Banca", "termos": ["agradeço", "disposição", "muito obrigado"] }
+        ],
+        "gatilhos_avanco": [
+          "muito obrigado",
+          "inteira disposição"
+        ],
+        "evitar": "Demonstrar pressa para sair ou esquecer de agradecer à banca."
       }
     ]
   }

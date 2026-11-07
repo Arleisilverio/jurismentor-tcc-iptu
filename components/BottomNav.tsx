@@ -10,9 +10,9 @@ interface BottomNavProps {
 
 export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
   const tabs = [
-    { id: 'chat' as TabType, label: 'Mentor', icon: MessageSquare, badge: 'TUTOR' },
+    { id: 'apresentacao' as TabType, label: 'Defesa', icon: Timer, badge: 'AO VIVO' },
     { id: 'banca' as TabType, label: 'Banca', icon: Swords, badge: 'BOSS' },
-    { id: 'apresentacao' as TabType, label: 'Ensaio', icon: Timer, badge: 'RUN' },
+    { id: 'chat' as TabType, label: 'Mentor', icon: MessageSquare, badge: 'TUTOR' },
     { id: 'tese' as TabType, label: 'Artigo', icon: ScrollText, badge: 'ABNT' },
   ];
 
