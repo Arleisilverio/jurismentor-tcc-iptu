@@ -154,7 +154,7 @@ export default function TelaoPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent" />
             <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs font-bold text-slate-300">
               <span className="px-3 py-1 rounded-lg bg-slate-950/80 border border-amber-500/30 text-amber-300">
-                Arlei Silvério • TCC Direito 2026
+                Curitiba/PR • Direito Tributário & Urbanístico
               </span>
               <span className="px-2.5 py-1 rounded-lg bg-slate-950/80 border border-slate-700 text-slate-400 font-mono">
                 LC 40/2001 • TJPR • STF Tema 1.455

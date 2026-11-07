@@ -5,7 +5,7 @@ export const runtime = 'nodejs';
 export async function POST(req: Request) {
   try {
     const { slideTitle, slideSubtitle } = await req.json();
-    const prompt = `Editorial academic presentation illustration (16:9), deep dark navy slate background (#090D16) with warm gold (#F59E0B) and cyan (#06B6D4) lighting accents, modern legal and urban architecture infographic style (like The Economist / NotebookLM). Topic: ${slideTitle} - ${slideSubtitle || 'Direito Tributário e IPTU de Curitiba'}. Strictly NO text, NO words, NO letters inside the image.`;
+    const prompt = `Hand-drawn Brazilian comic book / graphic novel ("gibi / HQ") cartoon illustration (16:9), expressive black ink linework, warm vibrant flat comic book coloring, charming illustrated characters and architecture, featuring iconic landmarks and symbols of Curitiba, Paraná, Brazil (Araucária trees, Jardim Botânico glasshouse, Museu Oscar Niemeyer Eye Museum, iconic tube bus station "estação-tubo", petit-pavé pine nut sidewalk). Topic: ${slideTitle} - ${slideSubtitle || 'Direito Tributário e IPTU de Curitiba'}. Strictly NO text, NO words, NO speech bubbles inside the image, NO generic 3D AI glow.`;
 
     // 1. Tenta Nano Banana (Gemini 2.5 Flash Image) se GEMINI_API_KEY estiver configurada
     const geminiKey = process.env.GEMINI_API_KEY;

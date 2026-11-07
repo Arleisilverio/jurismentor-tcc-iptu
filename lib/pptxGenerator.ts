@@ -14,7 +14,7 @@ export interface PresentationConfig {
 export async function generateAcademicPptx(config: PresentationConfig): Promise<Blob> {
   const pptx = new pptxgen();
   pptx.layout = 'LAYOUT_16x9';
-  pptx.author = config.autor || 'Arlei Silvério - 8º Período de Direito';
+  pptx.author = config.autor || 'TCC Direito Tributário - Curitiba/PR';
   pptx.company = config.instituicao || 'Orientador Fiscal Curitiba';
   pptx.title = config.tema || MONOGRAFIA.titulo;
 

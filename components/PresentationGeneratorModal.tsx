@@ -16,7 +16,7 @@ export const PresentationGeneratorModal: React.FC<PresentationGeneratorModalProp
   const [quantidade, setQuantidade] = useState<5 | 10 | 15 | 20>(10);
   const [profundidade, setProfundidade] = useState<'sintese' | 'intermediario' | 'aprofundado'>('intermediario');
   const [estiloVisual, setEstiloVisual] = useState<'editorial' | 'infografico' | 'executivo'>('editorial');
-  const [autor, setAutor] = useState('Arlei Silvério - 8º Período de Direito');
+  const [autor, setAutor] = useState('Bacharelando em Direito • Curitiba/PR');
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [generationStep, setGenerationStep] = useState(0);
