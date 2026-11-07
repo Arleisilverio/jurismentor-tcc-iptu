@@ -14,7 +14,11 @@ RETURNS boolean
 LANGUAGE sql
 STABLE
 AS $$
-  SELECT lower(coalesce(auth.jwt() ->> 'email', '')) = 'arleisilveiro41@gmail.com';
+  SELECT lower(coalesce(auth.jwt() ->> 'email', '')) IN (
+    'arleisilverio41@gmail.com',
+    'arleisilveiro41@gmail.com',
+    'arlei85@hotmail.com'
+  );
 $$;
 
 GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;

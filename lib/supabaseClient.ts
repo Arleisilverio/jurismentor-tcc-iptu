@@ -17,7 +17,12 @@ export const getSupabaseClient = (): SupabaseClient | null => {
 
   try {
     browserClient = createClient(url, key, {
-      auth: { persistSession: true, autoRefreshToken: true },
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        // Evita deadlock do navigator.locks no @supabase/auth-js após dias sem abrir o app
+        lock: async (_name: string, _acquireTimeout: number, fn: () => Promise<any>) => await fn(),
+      },
     });
     return browserClient;
   } catch (error) {
