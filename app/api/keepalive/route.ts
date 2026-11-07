@@ -38,18 +38,21 @@ export async function GET(req: Request) {
       return NextResponse.json({ ok: true, via: 'rpc', db_time: await rpc.json() });
     }
 
-    // 2) Fallback: consulta leve numa tabela. Mesmo que o RLS negue acesso
-    //    ao anon, a requisição chega ao Postgres e conta como atividade.
-    const fallback = await fetch(`${url}/rest/v1/study_notes?select=id&limit=1`, {
-      headers,
-      cache: 'no-store',
-    });
+    // 2) Fallback: OpenAPI schema do PostgREST (/rest/v1/) que consulta pg_catalog com 200 OK
+    //    mesmo quando todas as tabelas têm REVOKE ALL FROM anon, além de /auth/v1/health.
+    const [restRoot, fallbackTable, authHealth] = await Promise.all([
+      fetch(`${url}/rest/v1/`, { headers, cache: 'no-store' }),
+      fetch(`${url}/rest/v1/study_notes?select=id&limit=1`, { headers, cache: 'no-store' }),
+      fetch(`${url}/auth/v1/health`, { headers: { apikey: key }, cache: 'no-store' }),
+    ]);
 
     return NextResponse.json({
       ok: true,
       via: 'fallback',
       rpc_status: rpc.status,
-      fallback_status: fallback.status,
+      rest_root_status: restRoot.status,
+      fallback_status: fallbackTable.status,
+      auth_health_status: authHealth.status,
     });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);

@@ -22,19 +22,92 @@ export default function Home() {
   const [session, setSession] = useState<Session | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [supabaseOffline, setSupabaseOffline] = useState(false);
 
-  // Sessão de login (Supabase Auth)
+  const activateLocalMode = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('JURIS_LOCAL_MODE', 'true');
+    }
+    setSupabaseOffline(true);
+    setIsAdmin(true);
+    setSession({
+      access_token: 'local-mode',
+      refresh_token: '',
+      expires_in: 86400,
+      token_type: 'bearer',
+      user: {
+        id: 'local-arlei',
+        aud: 'authenticated',
+        role: 'authenticated',
+        email: 'arleisilveiro41@gmail.com',
+        app_metadata: {},
+        user_metadata: { name: 'Arlei Silvério (Modo Local)' },
+        created_at: new Date().toISOString(),
+      },
+    } as Session);
+    setAuthLoading(false);
+  };
+
+  // Sessão de login (Supabase Auth) com proteção contra travamento se o banco estiver pausado
   useEffect(() => {
+    if (typeof window !== 'undefined' && sessionStorage.getItem('JURIS_LOCAL_MODE') === 'true') {
+      activateLocalMode();
+      return;
+    }
+
     const supabase = getSupabaseClient();
     if (!supabase) {
       setAuthLoading(false);
       return;
     }
 
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setAuthLoading(false);
-    });
+    let finished = false;
+    const clearStuckSupabaseTokens = () => {
+      if (typeof window === 'undefined') return;
+      try {
+        Object.keys(localStorage).forEach((k) => {
+          if (k.startsWith('sb-') && k.endsWith('-auth-token')) {
+            localStorage.removeItem(k);
+          }
+        });
+      } catch {
+        // ignore storage errors
+      }
+    };
+
+    // Timeout de segurança (3s): impede loading infinito quando o projeto Supabase Free está pausado
+    const timeoutId = setTimeout(() => {
+      if (!finished) {
+        finished = true;
+        console.warn('Supabase demorou para responder (possivelmente pausado). Liberando tela.');
+        clearStuckSupabaseTokens();
+        setSupabaseOffline(true);
+        setAuthLoading(false);
+      }
+    }, 3000);
+
+    supabase.auth
+      .getSession()
+      .then(({ data, error }) => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timeoutId);
+        if (error) {
+          clearStuckSupabaseTokens();
+          setSupabaseOffline(true);
+        } else {
+          setSession(data.session);
+        }
+        setAuthLoading(false);
+      })
+      .catch(() => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timeoutId);
+        clearStuckSupabaseTokens();
+        setSupabaseOffline(true);
+        setAuthLoading(false);
+      });
 
     const { data: listener } = supabase.auth.onAuthStateChange(async (event, newSession) => {
       setSession(newSession);
@@ -49,24 +122,44 @@ export default function Home() {
       }
     });
 
-    return () => listener.subscription.unsubscribe();
+    return () => {
+      clearTimeout(timeoutId);
+      listener.subscription.unsubscribe();
+    };
   }, []);
 
   // Papel do usuário: o admin é definido no banco (função is_admin() do schema.sql)
   useEffect(() => {
+    if (session?.access_token === 'local-mode') {
+      setIsAdmin(true);
+      return;
+    }
     const supabase = getSupabaseClient();
     if (!supabase || !session) {
       setIsAdmin(false);
       return;
     }
-    supabase.rpc('is_admin').then(({ data, error }) => {
-      setIsAdmin(!error && data === true);
-    });
+    Promise.resolve(supabase.rpc('is_admin'))
+      .then(({ data, error }) => {
+        setIsAdmin(!error && data === true);
+      })
+      .catch(() => setIsAdmin(false));
   }, [session]);
 
   const handleLogout = async () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('JURIS_LOCAL_MODE');
+    }
     const supabase = getSupabaseClient();
-    await supabase?.auth.signOut();
+    try {
+      await Promise.race([
+        supabase?.auth.signOut(),
+        new Promise((r) => setTimeout(r, 1500)),
+      ]);
+    } catch {
+      // ignore signOut network error if offline
+    }
+    setSession(null);
     setIsSettingsOpen(false);
     setActiveTab('chat');
   };
@@ -83,7 +176,10 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 relative font-sans">
         <CyberCanvas />
-        <LoginScreen />
+        <LoginScreen
+          onEnterLocalMode={activateLocalMode}
+          supabaseOffline={supabaseOffline}
+        />
       </div>
     );
   }
@@ -97,7 +193,7 @@ export default function Home() {
       <Navbar
         onOpenSettings={() => setIsSettingsOpen(true)}
         onOpenPresentationGenerator={() => setIsPresentationGenOpen(true)}
-        supabaseConnected={true}
+        supabaseConnected={!supabaseOffline && session.access_token !== 'local-mode'}
         isAdmin={isAdmin}
         activeMode={
           activeTab === 'chat'

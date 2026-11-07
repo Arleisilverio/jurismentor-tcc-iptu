@@ -63,14 +63,17 @@ export const ChatTab: React.FC<ChatTabProps> = ({ userId }) => {
     }
 
     // 2) Sincroniza com o Supabase (fonte oficial entre dispositivos)
+    if (userId === 'local-arlei') return;
     const client = getSupabaseClient();
     if (!client) return;
-    client
-      .from('chat_messages')
-      .select('id, sender, content, mode, created_at')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: true })
-      .limit(500)
+    Promise.resolve(
+      client
+        .from('chat_messages')
+        .select('id, sender, content, mode, created_at')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: true })
+        .limit(500)
+    )
       .then(({ data, error }) => {
         if (error) {
           console.warn('Supabase: não foi possível carregar o histórico:', error.message);
@@ -82,6 +85,9 @@ export const ChatTab: React.FC<ChatTabProps> = ({ userId }) => {
             ...data.map((m: any) => ({ id: m.id, sender: m.sender, content: m.content, mode: m.mode || undefined })),
           ]);
         }
+      })
+      .catch(() => {
+        // Ignora erro de rede se o banco estiver pausado
       });
   }, [storageKey, userId]);
 
@@ -199,10 +205,19 @@ export const ChatTab: React.FC<ChatTabProps> = ({ userId }) => {
       let botResponseText = '';
       let provider = '';
       const client = getSupabaseClient();
+      const isLocalUser = userId === 'local-arlei';
 
       try {
-        const { data: sessionData } = (await client?.auth.getSession()) || { data: { session: null } };
-        const token = sessionData.session?.access_token;
+        let token = 'local-mode';
+        if (!isLocalUser && client) {
+          const sessionRes = await Promise.race([
+            client.auth.getSession(),
+            new Promise<{ data: { session: null } }>((r) =>
+              setTimeout(() => r({ data: { session: null } }), 1500)
+            ),
+          ]);
+          token = sessionRes?.data?.session?.access_token || 'local-mode';
+        }
 
         const res = await fetch('/api/chat', {
           method: 'POST',
@@ -239,12 +254,16 @@ export const ChatTab: React.FC<ChatTabProps> = ({ userId }) => {
 
       setMessages((prev) => [...prev, botMsg]);
 
-      if (client) {
-        const { error: syncErr } = await client.from('chat_messages').insert([
-          { user_id: userId, sender: 'user', content: text.trim(), mode: activeMode },
-          { user_id: userId, sender: 'assistant', content: botResponseText, mode: activeMode },
-        ]);
-        if (syncErr) console.warn('Supabase sync notice:', syncErr.message);
+      if (client && !isLocalUser) {
+        try {
+          const { error: syncErr } = await client.from('chat_messages').insert([
+            { user_id: userId, sender: 'user', content: text.trim(), mode: activeMode },
+            { user_id: userId, sender: 'assistant', content: botResponseText, mode: activeMode },
+          ]);
+          if (syncErr) console.warn('Supabase sync notice:', syncErr.message);
+        } catch {
+          // Ignora falha de sincronização se o banco estiver offline
+        }
       }
 
     } catch (err) {

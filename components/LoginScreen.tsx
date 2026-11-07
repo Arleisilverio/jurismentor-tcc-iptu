@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, Mail, Lock, LogIn, Loader2, AlertCircle, CheckCircle2, KeyRound } from 'lucide-react';
+import { Shield, Mail, Lock, LogIn, Loader2, AlertCircle, CheckCircle2, KeyRound, Zap } from 'lucide-react';
 import { getSupabaseClient } from '@/lib/supabaseClient';
 
 const translateAuthError = (msg: string): string => {
@@ -7,11 +7,21 @@ const translateAuthError = (msg: string): string => {
   if (m.includes('invalid login credentials')) return 'E-mail ou senha incorretos.';
   if (m.includes('email not confirmed')) return 'E-mail ainda não confirmado. Verifique sua caixa de entrada.';
   if (m.includes('rate limit') || m.includes('too many')) return 'Muitas tentativas. Aguarde alguns minutos.';
-  if (m.includes('network') || m.includes('fetch')) return 'Falha de conexão com o servidor. Verifique sua internet.';
+  if (m.includes('network') || m.includes('fetch') || m.includes('timeout')) {
+    return 'O banco do Supabase parece estar pausado ou sem resposta. Use o botão "Entrar em Modo Local" abaixo para abrir o app normalmente.';
+  }
   return msg;
 };
 
-export const LoginScreen: React.FC = () => {
+interface LoginScreenProps {
+  onEnterLocalMode?: () => void;
+  supabaseOffline?: boolean;
+}
+
+export const LoginScreen: React.FC<LoginScreenProps> = ({
+  onEnterLocalMode,
+  supabaseOffline = false,
+}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -22,16 +32,28 @@ export const LoginScreen: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!supabase) return;
+    if (!supabase) {
+      onEnterLocalMode?.();
+      return;
+    }
     setError('');
     setInfo('');
     setIsLoading(true);
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
-    if (authError) setError(translateAuthError(authError.message));
-    setIsLoading(false);
+    try {
+      const loginPromise = supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
+      const timeoutPromise = new Promise<{ error: { message: string } }>((resolve) =>
+        setTimeout(() => resolve({ error: { message: 'timeout fetch' } }), 5000)
+      );
+      const { error: authError } = await Promise.race([loginPromise, timeoutPromise]);
+      if (authError) setError(translateAuthError(authError.message));
+    } catch (err: any) {
+      setError(translateAuthError(err?.message || 'fetch error'));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleResetPassword = async () => {
@@ -65,13 +87,36 @@ export const LoginScreen: React.FC = () => {
           <p className="text-sm text-slate-300 mt-1">Acesso restrito • TCC Imóveis Não Edificados</p>
         </div>
 
+        {supabaseOffline && (
+          <div className="mb-4 p-3.5 rounded-xl bg-amber-500/15 border border-amber-400/40 text-amber-200 text-xs sm:text-sm space-y-2">
+            <div className="flex items-start space-x-2">
+              <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+              <span>
+                <strong>Banco Supabase pausado ou offline:</strong> Você pode usar todas as funções do TCC agora mesmo ativando o <strong>Modo Local</strong> abaixo, ou reativar o projeto em <em>supabase.com/dashboard</em>.
+              </span>
+            </div>
+          </div>
+        )}
+
         {!supabase ? (
-          <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/40 text-rose-300 text-sm flex items-start space-x-2">
-            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-            <span>
-              Supabase não configurado. Defina <code>NEXT_PUBLIC_SUPABASE_URL</code> e{' '}
-              <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> no <code>.env.local</code> (ou na Vercel).
-            </span>
+          <div className="space-y-4">
+            <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/40 text-rose-300 text-sm flex items-start space-x-2">
+              <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+              <span>
+                Supabase não configurado. Defina <code>NEXT_PUBLIC_SUPABASE_URL</code> e{' '}
+                <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> no <code>.env.local</code> (ou na Vercel).
+              </span>
+            </div>
+            {onEnterLocalMode && (
+              <button
+                type="button"
+                onClick={onEnterLocalMode}
+                className="w-full flex items-center justify-center space-x-2 px-5 py-3.5 rounded-xl text-sm font-black bg-gradient-to-r from-cyan-500 to-blue-600 text-white transition active:scale-95 shadow-lg hover:brightness-110"
+              >
+                <Zap className="w-4 h-4" />
+                <span>Entrar em Modo Local (Sem Banco)</span>
+              </button>
+            )}
           </div>
         ) : (
           <form onSubmit={handleLogin} className="space-y-4">
@@ -131,6 +176,18 @@ export const LoginScreen: React.FC = () => {
               {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <LogIn className="w-5 h-5" />}
               <span>{isLoading ? 'Entrando...' : 'Entrar'}</span>
             </button>
+
+            {onEnterLocalMode && (
+              <button
+                id="login-local-mode"
+                type="button"
+                onClick={onEnterLocalMode}
+                className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl text-xs sm:text-sm font-bold bg-slate-800/90 hover:bg-slate-800 text-amber-300 border border-amber-500/40 transition active:scale-95"
+              >
+                <Zap className="w-4 h-4 text-amber-400" />
+                <span>Entrar em Modo Local (Usar App Sem Banco)</span>
+              </button>
+            )}
 
             <button
               id="login-reset-password"
