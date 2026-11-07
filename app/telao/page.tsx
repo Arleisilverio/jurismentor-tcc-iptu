@@ -3,33 +3,53 @@
 import React, { useState, useEffect } from 'react';
 import { Shield, ChevronLeft, ChevronRight, Maximize2, Scale, CheckCircle2, Radio } from 'lucide-react';
 import { SLIDES, MONOGRAFIA } from '@/lib/tccData';
-import { subscribeToSlideChanges } from '@/lib/liveSlideSync';
+import { broadcastSlideChange, subscribeToSlideChanges } from '@/lib/liveSlideSync';
 
 export default function TelaoPage() {
   const [slideIndex, setSlideIndex] = useState(0);
   const [customImages, setCustomImages] = useState<{ [idx: number]: string }>({});
   const [syncPulse, setSyncPulse] = useState(false);
+  const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
+
+  const changeTelaoSlide = (newIndex: number) => {
+    const clamped = Math.max(0, Math.min(SLIDES.length - 1, newIndex));
+    setSlideIndex(clamped);
+    broadcastSlideChange(clamped, customImages[clamped]);
+  };
 
   useEffect(() => {
-    const unsubscribe = subscribeToSlideChanges((state) => {
-      if (state.slideIndex >= 0 && state.slideIndex < SLIDES.length) {
-        setSlideIndex(state.slideIndex);
-        if (state.customImage) {
-          setCustomImages((prev) => ({ ...prev, [state.slideIndex]: state.customImage! }));
+    const unsubscribe = subscribeToSlideChanges(
+      (state) => {
+        if (state.slideIndex >= 0 && state.slideIndex < SLIDES.length) {
+          setSlideIndex(state.slideIndex);
+          if (state.customImage) {
+            setCustomImages((prev) => ({ ...prev, [state.slideIndex]: state.customImage! }));
+          }
+          setSyncPulse(true);
+          setTimeout(() => setSyncPulse(false), 1200);
         }
-        setSyncPulse(true);
-        setTimeout(() => setSyncPulse(false), 1200);
+      },
+      (connected) => {
+        setIsRealtimeConnected(connected);
       }
-    });
+    );
     return unsubscribe;
   }, []);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-        setSlideIndex((i) => Math.min(SLIDES.length - 1, i + 1));
+        setSlideIndex((i) => {
+          const next = Math.min(SLIDES.length - 1, i + 1);
+          broadcastSlideChange(next);
+          return next;
+        });
       } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-        setSlideIndex((i) => Math.max(0, i - 1));
+        setSlideIndex((i) => {
+          const prev = Math.max(0, i - 1);
+          broadcastSlideChange(prev);
+          return prev;
+        });
       } else if (e.key.toLowerCase() === 'f') {
         if (!document.fullscreenElement) {
           document.documentElement.requestFullscreen().catch(() => {});
@@ -73,12 +93,14 @@ export default function TelaoPage() {
               <span
                 className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold border transition ${
                   syncPulse
-                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-400/50'
+                    ? 'bg-emerald-500/30 text-emerald-200 border-emerald-400 scale-105'
+                    : isRealtimeConnected
+                    ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
                     : 'bg-slate-900 text-slate-400 border-slate-800'
                 }`}
               >
-                <Radio className="w-3 h-3 text-emerald-400" />
-                <span>COPILOTO SINCRONIZADO</span>
+                <Radio className={`w-3 h-3 ${isRealtimeConnected ? 'text-emerald-400 animate-pulse' : 'text-amber-400'}`} />
+                <span>{isRealtimeConnected ? 'PC ⇄ CELULAR SINCRONIZADO' : 'CONECTANDO AO CELULAR...'}</span>
               </span>
             </div>
             <h1 className="text-sm sm:text-base font-bold text-slate-200 truncate max-w-3xl">
@@ -170,7 +192,7 @@ export default function TelaoPage() {
           {SLIDES.map((s, idx) => (
             <button
               key={s.slide}
-              onClick={() => setSlideIndex(idx)}
+              onClick={() => changeTelaoSlide(idx)}
               className={`h-2.5 rounded-full transition-all ${
                 idx === slideIndex
                   ? 'w-12 bg-amber-400 shadow-[0_0_10px_#f59e0b]'
@@ -185,14 +207,14 @@ export default function TelaoPage() {
 
         <div className="flex items-center space-x-2">
           <button
-            onClick={() => setSlideIndex((i) => Math.max(0, i - 1))}
+            onClick={() => changeTelaoSlide(slideIndex - 1)}
             disabled={slideIndex === 0}
             className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-30 text-slate-300 border border-slate-800"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
-            onClick={() => setSlideIndex((i) => Math.min(SLIDES.length - 1, i + 1))}
+            onClick={() => changeTelaoSlide(slideIndex + 1)}
             disabled={slideIndex === SLIDES.length - 1}
             className="p-2 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-30 text-slate-300 border border-slate-800"
           >

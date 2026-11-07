@@ -72,6 +72,7 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
   // Imagens personalizadas geradas via Nano Banana / IA
   const [customImages, setCustomImages] = useState<{ [idx: number]: string }>({});
   const [isGeneratingImg, setIsGeneratingImg] = useState(false);
+  const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
 
   // Estado do Ponto Eletrônico da Banca (GPT em Tempo Real + Fone Opcional)
   const [bancaQuestion, setBancaQuestion] = useState('');
@@ -101,11 +102,19 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
 
   // Recebe mudanças caso o usuário mude lá no Telão
   useEffect(() => {
-    const unsubscribe = subscribeToSlideChanges((state) => {
-      if (state.slideIndex >= 0 && state.slideIndex < SLIDES.length) {
-        setCurrentSlideIndex(state.slideIndex);
+    const unsubscribe = subscribeToSlideChanges(
+      (state) => {
+        if (state.slideIndex >= 0 && state.slideIndex < SLIDES.length) {
+          setCurrentSlideIndex(state.slideIndex);
+          if (state.customImage) {
+            setCustomImages((prev) => ({ ...prev, [state.slideIndex]: state.customImage! }));
+          }
+        }
+      },
+      (connected) => {
+        setIsRealtimeConnected(connected);
       }
-    });
+    );
     return unsubscribe;
   }, []);
 
@@ -530,9 +539,15 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
                 </label>
               </div>
 
-              <span className="text-[11px] font-mono text-slate-400 flex items-center gap-1">
-                <Radio className="w-3.5 h-3.5 text-emerald-400" />
-                Sincronizado com /telao
+              <span
+                className={`text-[11px] font-mono flex items-center gap-1.5 px-2.5 py-1 rounded-lg border ${
+                  isRealtimeConnected
+                    ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
+                    : 'bg-slate-950 text-slate-400 border-slate-800'
+                }`}
+              >
+                <Radio className={`w-3.5 h-3.5 ${isRealtimeConnected ? 'text-emerald-400 animate-pulse' : 'text-amber-400'}`} />
+                {isRealtimeConnected ? 'PC ⇄ Celular Conectado (/telao)' : 'Conectando PC ⇄ Celular...'}
               </span>
             </div>
 
