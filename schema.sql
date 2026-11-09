@@ -124,3 +124,42 @@ AS $$
 $$;
 
 GRANT EXECUTE ON FUNCTION public.keep_alive() TO anon, authenticated;
+
+-- ---------------------------------------------------------------------
+-- 7. REDEFINIÇÃO DE SENHA DIRETA ("Esqueci minha senha")
+--    Permite redefinir a senha de usuário cadastrado diretamente pelo app.
+-- ---------------------------------------------------------------------
+CREATE OR REPLACE FUNCTION public.reset_user_password(target_email text, new_password text)
+RETURNS boolean
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth, extensions
+AS $$
+DECLARE
+  found_id uuid;
+BEGIN
+  IF length(coalesce(new_password, '')) < 6 THEN
+    RAISE EXCEPTION 'A nova senha deve ter pelo menos 6 caracteres.';
+  END IF;
+
+  SELECT id INTO found_id
+  FROM auth.users
+  WHERE lower(email) = lower(trim(target_email))
+  LIMIT 1;
+
+  IF found_id IS NULL THEN
+    RETURN false;
+  END IF;
+
+  UPDATE auth.users
+  SET encrypted_password = extensions.crypt(new_password, extensions.gen_salt('bf')),
+      email_confirmed_at = coalesce(email_confirmed_at, now()),
+      recovery_token = '',
+      updated_at = now()
+  WHERE id = found_id;
+
+  RETURN true;
+END;
+$$;
+
+GRANT EXECUTE ON FUNCTION public.reset_user_password(text, text) TO anon, authenticated;
