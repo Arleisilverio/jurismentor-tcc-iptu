@@ -30,8 +30,36 @@ import {
   Users,
 } from 'lucide-react';
 import { SLIDES, PresentationSlide } from '@/lib/tccData';
-import { broadcastSlideChange, subscribeToSlideChanges } from '@/lib/liveSlideSync';
+import { broadcastSlideChange, broadcastVoiceAudio, subscribeToSlideChanges } from '@/lib/liveSlideSync';
 import { LiveShareQrModal } from '@/components/LiveShareQrModal';
+
+const ARLEI_VOICE_PRESETS = [
+  {
+    id: 'abertura-original',
+    label: '🎙️ Saudação Oficial (Voz Original + Prof.ª Ana Cristina)',
+    command: 'Arlei, faça a abertura oficial e cumprimente a Prof.ª Ana Cristina',
+  },
+  {
+    id: 'lc-40-2001',
+    label: '📜 "Arlei, fale sobre a LC 40/2001"',
+    command: 'Arlei, fale sobre a LC 40/2001 e a regra dos 5%',
+  },
+  {
+    id: 'cf-156-182',
+    label: '⚖️ "Arlei, fale sobre o Art. 156 e 182 da CF"',
+    command: 'Arlei, fale sobre o artigo 156 e 182 da Constituição',
+  },
+  {
+    id: 'tjpr-stf',
+    label: '🏛️ "Arlei, fale sobre o TJPR e o Tema 1.455 STF"',
+    command: 'Arlei, fale sobre a jurisprudência do TJPR e o Tema 1455 do STF',
+  },
+  {
+    id: 'propostas-lege-ferenda',
+    label: '💡 "Arlei, fale sobre as propostas para Curitiba"',
+    command: 'Arlei, fale sobre as propostas de alteração da LC 40/2001',
+  },
+];
 
 interface PresentationTabProps {
   onOpenPresentationGenerator?: () => void;
@@ -87,10 +115,23 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
   const [bancaAnswer, setBancaAnswer] = useState<BancaLiveAnswer | null>(null);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
+  // Estado da Voz Clonada do Arlei ("Arlei, fale sobre...") transmitida ao Telão e Grupo
+  const [arleiVoiceCommand, setArleiVoiceCommand] = useState('');
+  const [isGeneratingArleiVoice, setIsGeneratingArleiVoice] = useState(false);
+  const [activeArleiVoice, setActiveArleiVoice] = useState<{
+    id: string;
+    title: string;
+    text: string;
+    provider?: string;
+  } | null>(null);
+  const [isPlayingArleiVoice, setIsPlayingArleiVoice] = useState(false);
+
   const slideRecognitionRef = useRef<any>(null);
   const bancaRecognitionRef = useRef<any>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
+  const arleiVoiceAudioRef = useRef<HTMLAudioElement | null>(null);
   const lastAdvanceTimeRef = useRef<number>(0);
+  const lastVoiceCommandTimeRef = useRef<number>(0);
 
   const currentSlide: PresentationSlide = SLIDES[currentSlideIndex] || SLIDES[0];
   const progressPercent = Math.min(100, (seconds / 720) * 100); // Meta ideal: 12 min (720s)
@@ -141,12 +182,120 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  // Analisa o texto falado pelo Arlei para marcar o Checklist e avançar o slide
+  // Para o áudio da voz clonada do Arlei localmente e no Telão/Celulares
+  const stopArleiVoice = useCallback((broadcastStop = true) => {
+    if (arleiVoiceAudioRef.current) {
+      arleiVoiceAudioRef.current.pause();
+      arleiVoiceAudioRef.current = null;
+    }
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    setIsPlayingArleiVoice(false);
+    setActiveArleiVoice(null);
+    if (broadcastStop) {
+      broadcastVoiceAudio({
+        id: `stop-${Date.now()}`,
+        title: '',
+        text: '',
+        action: 'stop',
+      });
+    }
+  }, []);
+
+  // Aciona a Voz Clonada do Arlei ("Arlei, fale sobre...") e transmite para o Telão e Celulares do Grupo
+  const handleTriggerArleiVoice = useCallback(
+    async (opts: { presetId?: string; command?: string }) => {
+      if (isGeneratingArleiVoice) return;
+      stopArleiVoice(false);
+      setIsGeneratingArleiVoice(true);
+
+      try {
+        const res = await fetch('/api/arlei-voice', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            presetId: opts.presetId,
+            command: opts.command ?? arleiVoiceCommand,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data) return;
+
+        const playId = `${data.id || 'arlei'}-${Date.now()}`;
+        setActiveArleiVoice({
+          id: playId,
+          title: data.title || 'Fala do Arlei',
+          text: data.text || '',
+          provider: data.provider,
+        });
+
+        // 1) Transmite em Tempo Real para o Telão (/telao) e para os Celulares do Grupo (/telao?plateia=1)
+        broadcastVoiceAudio({
+          id: playId,
+          title: data.title || 'Fala do Arlei',
+          text: data.text || '',
+          audioUrl: data.audioUrl || undefined,
+          audioBase64: data.audioBase64 || undefined,
+          action: 'play',
+        });
+
+        // 2) Toca também localmente no PC/Celular do apresentador
+        const src = data.audioUrl
+          ? data.audioUrl
+          : data.audioBase64
+          ? `data:audio/mp3;base64,${data.audioBase64}`
+          : null;
+
+        if (src) {
+          const audio = new Audio(src);
+          arleiVoiceAudioRef.current = audio;
+          setIsPlayingArleiVoice(true);
+          audio.onended = () => setIsPlayingArleiVoice(false);
+          audio.onerror = () => setIsPlayingArleiVoice(false);
+          audio.play().catch(() => setIsPlayingArleiVoice(false));
+        } else if (typeof window !== 'undefined' && 'speechSynthesis' in window && data.text) {
+          window.speechSynthesis.cancel();
+          const utter = new SpeechSynthesisUtterance(data.text);
+          utter.lang = 'pt-BR';
+          utter.rate = 1.03;
+          utter.onend = () => setIsPlayingArleiVoice(false);
+          utter.onerror = () => setIsPlayingArleiVoice(false);
+          setIsPlayingArleiVoice(true);
+          window.speechSynthesis.speak(utter);
+        }
+      } catch (err) {
+        console.error('Erro ao acionar voz do Arlei:', err);
+      } finally {
+        setIsGeneratingArleiVoice(false);
+      }
+    },
+    [arleiVoiceCommand, isGeneratingArleiVoice, stopArleiVoice]
+  );
+
+  // Analisa o texto falado pelo Arlei para marcar o Checklist, acionar "Arlei, fale sobre..." e avançar o slide
   const processSlideSpeech = useCallback(
     (transcriptText: string) => {
       const norm = transcriptText.toLowerCase();
       const slide = SLIDES[currentSlideIndex];
       if (!slide) return;
+
+      // 0) Detecta comando de voz ao vivo: "Arlei, fale sobre..." / "Arlei explique..."
+      if (
+        norm.includes('arlei fale sobre') ||
+        norm.includes('arlei, fale sobre') ||
+        norm.includes('arlei fala sobre') ||
+        norm.includes('arlei explique')
+      ) {
+        const now = Date.now();
+        if (now - lastVoiceCommandTimeRef.current > 10000) {
+          lastVoiceCommandTimeRef.current = now;
+          setAutoAdvanceNotice(`🗣️ Comando detectado ("${transcriptText}") → Soltando sua voz clonada no Telão!`);
+          handleTriggerArleiVoice({ command: transcriptText });
+          setTimeout(() => setAutoAdvanceNotice(null), 4000);
+          return;
+        }
+      }
 
       // 1) Verifica os itens do Radar de Voz deste slide
       if (slide.radar_voz && slide.radar_voz.length > 0) {
@@ -184,7 +333,7 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
         }
       }
     },
-    [autoAdvanceSlide, changeSlide, currentSlideIndex]
+    [autoAdvanceSlide, changeSlide, currentSlideIndex, handleTriggerArleiVoice]
   );
 
   // Mantém a referência atualizada da função de processamento de fala
@@ -526,6 +675,94 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
           <Headphones className="w-4 h-4 text-cyan-400 shrink-0" />
           <span>2. Responder Professor (IA + Fone)</span>
         </button>
+      </div>
+
+      {/* Painel Ao Vivo: IA com Voz Clonada do Arlei ("Arlei, fale sobre...") -> Toca no PC, no Telão e nos Celulares */}
+      <div className="bg-slate-900/95 rounded-2xl p-4 border border-amber-400/40 shadow-[0_0_25px_rgba(245,158,11,0.15)] space-y-3">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center space-x-2">
+            <Volume2 className="w-5 h-5 text-amber-400 animate-pulse" />
+            <div>
+              <h4 className="text-xs sm:text-sm font-black text-white uppercase tracking-wide">
+                🗣️ IA com Sua Voz Clonada: &ldquo;Arlei, fale sobre...&rdquo; (Telão + Celulares do Grupo)
+              </h4>
+              <p className="text-[11px] text-slate-300">
+                Clique em um tema abaixo ou diga ao microfone <strong>&ldquo;Arlei, fale sobre a LC 40/2001&rdquo;</strong> para soltar sua voz no Telão!
+              </p>
+            </div>
+          </div>
+
+          {(isPlayingArleiVoice || activeArleiVoice) && (
+            <button
+              type="button"
+              onClick={() => stopArleiVoice(true)}
+              className="px-3 py-1.5 rounded-xl bg-rose-500 hover:bg-rose-600 text-white text-xs font-black flex items-center space-x-1.5 shadow-lg"
+            >
+              <VolumeX className="w-4 h-4" />
+              <span>Parar Áudio no Telão</span>
+            </button>
+          )}
+        </div>
+
+        {/* Botões Rápidos de 1 Clique com a Voz do Arlei */}
+        <div className="flex flex-wrap gap-2">
+          {ARLEI_VOICE_PRESETS.map((preset) => (
+            <button
+              key={preset.id}
+              type="button"
+              disabled={isGeneratingArleiVoice}
+              onClick={() => handleTriggerArleiVoice({ presetId: preset.id, command: preset.command })}
+              className="px-3 py-2 rounded-xl bg-slate-950 hover:bg-amber-500/20 border border-amber-500/40 text-amber-200 hover:text-white text-xs font-bold transition flex items-center space-x-1.5 active:scale-95 disabled:opacity-40"
+            >
+              <Volume2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>{preset.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Campo para pedir qualquer tema em tempo real ("Arlei, fale sobre...") */}
+        <div className="flex items-center gap-2">
+          <input
+            type="text"
+            value={arleiVoiceCommand}
+            onChange={(e) => setArleiVoiceCommand(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && arleiVoiceCommand.trim()) {
+                e.preventDefault();
+                handleTriggerArleiVoice({ command: arleiVoiceCommand });
+              }
+            }}
+            placeholder='Digite ou fale: "Arlei, fale sobre a LC 40/2001" ou qualquer tema do TCC...'
+            className="flex-1 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs sm:text-sm focus:outline-none focus:border-amber-400"
+          />
+          <button
+            type="button"
+            disabled={!arleiVoiceCommand.trim() || isGeneratingArleiVoice}
+            onClick={() => handleTriggerArleiVoice({ command: arleiVoiceCommand })}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 text-slate-950 font-black text-xs sm:text-sm flex items-center space-x-1.5 disabled:opacity-40 hover:brightness-110"
+          >
+            {isGeneratingArleiVoice ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <Send className="w-4 h-4" />
+            )}
+            <span>Soltar Voz</span>
+          </button>
+        </div>
+
+        {activeArleiVoice && (
+          <div className="p-3 rounded-xl bg-emerald-950/35 border border-emerald-500/40 text-xs text-emerald-200 space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="font-black uppercase tracking-wider text-emerald-400">
+                🔊 Tocando Agora no Telão e nos Celulares: {activeArleiVoice.title}
+              </span>
+              {activeArleiVoice.provider && (
+                <span className="text-[10px] font-mono text-slate-400">{activeArleiVoice.provider}</span>
+              )}
+            </div>
+            <p className="text-slate-100 italic">&ldquo;{activeArleiVoice.text}&rdquo;</p>
+          </div>
+        )}
       </div>
 
       {/* =====================================================================

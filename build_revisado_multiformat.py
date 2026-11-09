@@ -21,7 +21,8 @@ os.makedirs(PUBLIC_DIR, exist_ok=True)
 # 1. TEXTO REVISADO EM MARKDOWN / FORMATO BASE
 TEXTO_REVISADO_MD = """# A TRIBUTAÇÃO DOS IMÓVEIS NÃO EDIFICADOS NO IPTU DE CURITIBA: ANÁLISE JURÍDICA DOS CRITÉRIOS DE ENQUADRAMENTO, TRANSIÇÃO EM OBRAS E A FUNÇÃO SOCIAL DA PROPRIEDADE URBANA
 
-**Arlei Silvério**¹
+**Arlei Silvério**¹  
+**Ana Cristina Zadra Valadares**² (Orientadora)
 
 ---
 
@@ -206,7 +207,8 @@ PAULSEN, Leandro. **Curso de Direito Tributário Completo**. 12. ed. São Paulo:
 SABBAG, Eduardo. **Manual de Direito Tributário**. 13. ed. São Paulo: Saraiva Educação, 2021.
 
 ---
-¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito. Pesquisador em Direito Tributário e Urbanístico Municipal. E-mail: arlei.silverio@direito.exemplo.br.
+¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito do Centro Universitário UniDomBosco (Curitiba/PR). Pesquisador em Direito Tributário e Urbanístico Municipal. E-mail: arleisilverio41@gmail.com.
+² Professora Orientadora. Docente da disciplina de Direito Tributário do Curso de Direito do Centro Universitário UniDomBosco (Curitiba/PR).
 """
 
 def generate_txt():
@@ -256,12 +258,19 @@ def generate_docx():
     run_title.font.size = Pt(14)
     p_title.paragraph_format.space_after = Pt(14)
     
-    # Autor
+    # Autor e Orientadora
     p_author = doc.add_paragraph()
     p_author.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    run_author = p_author.add_run("Arlei Silvério¹")
+    run_author = p_author.add_run("Arlei Silvério¹\nProf.ª Ana Cristina Zadra Valadares² (Orientadora)")
     run_author.bold = True
-    p_author.paragraph_format.space_after = Pt(18)
+    p_author.paragraph_format.space_after = Pt(8)
+
+    p_cred = doc.add_paragraph()
+    p_cred.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    run_cred = p_cred.add_run("¹ Acadêmico do Curso de Direito do Centro Universitário UniDomBosco (Curitiba/PR).\n² Professora Orientadora e Docente de Direito Tributário do Centro Universitário UniDomBosco (Curitiba/PR).")
+    run_cred.italic = True
+    run_cred.font.size = Pt(9.5)
+    p_cred.paragraph_format.space_after = Pt(16)
     
     def add_p(text, bold=False, italic=False, space_after=6, line_spacing=1.5, first_line_indent=Inches(0.49), align=WD_ALIGN_PARAGRAPH.JUSTIFY):
         p = doc.add_paragraph()
@@ -609,7 +618,8 @@ def generate_html_and_pdf():
 <h1 class="title">A TRIBUTAÇÃO DOS IMÓVEIS NÃO EDIFICADOS NO IPTU DE CURITIBA: ANÁLISE JURÍDICA DOS CRITÉRIOS DE ENQUADRAMENTO, TRANSIÇÃO EM OBRAS E A FUNÇÃO SOCIAL DA PROPRIEDADE URBANA</h1>
 
 <div class="author">
-  Arlei Silvério¹
+  Arlei Silvério¹<br>
+  Prof.ª Ana Cristina Zadra Valadares² (Orientadora)
 </div>
 
 <div class="resumo-box">
@@ -776,7 +786,8 @@ APELAÇÃO CÍVEL. TRIBUTÁRIO. EMBARGOS À EXECUÇÃO FISCAL. IPTU. MUNICÍPIO 
 </div>
 
 <div class="footnote-author">
-  ¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito. Pesquisador em Direito Tributário e Urbanístico Municipal.
+  ¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito do Centro Universitário UniDomBosco (Curitiba/PR). Pesquisador em Direito Tributário e Urbanístico Municipal.<br>
+  ² Professora Orientadora. Docente da disciplina de Direito Tributário do Curso de Direito do Centro Universitário UniDomBosco (Curitiba/PR).
 </div>
 
 </div>

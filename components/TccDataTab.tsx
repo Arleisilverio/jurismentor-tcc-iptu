@@ -47,11 +47,14 @@ export const TccDataTab: React.FC = () => {
       {/* Monograph Header Card */}
       <div className="bg-slate-900/95 rounded-2xl p-5 sm:p-6 border border-amber-500/30 shadow-[0_0_20px_rgba(0,0,0,0.5)] space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center space-x-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="px-3 py-1 rounded-lg text-xs font-black bg-amber-400/15 text-amber-300 border border-amber-400/30 uppercase tracking-widest">
-              Artigo Científico • TCC
+              Artigo Científico • TCC UniDomBosco
             </span>
-            <span className="text-xs sm:text-sm text-slate-300">• 8º Período de Direito</span>
+            <span className="text-xs sm:text-sm text-slate-300">
+              • Autor: <strong className="text-white">Arlei Silvério</strong> • Orientadora:{' '}
+              <strong className="text-amber-300">Prof.ª Ana Cristina Zadra Valadares</strong>
+            </span>
           </div>
           <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/30">
             Normas ABNT NBR 6022 & 6023
@@ -221,11 +224,16 @@ export const TccDataTab: React.FC = () => {
                 A Tributação dos Imóveis Não Edificados no IPTU de Curitiba: Análise Jurídica dos Critérios de Enquadramento, Transição em Obras e a Função Social da Propriedade Urbana
               </h1>
               <p className="text-sm font-bold text-amber-400">
-                Arlei Silvério¹
+                Arlei Silvério¹ • Prof.ª Ana Cristina Zadra Valadares² (Orientadora)
               </p>
-              <p className="text-xs text-slate-400 italic">
-                ¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito. Pesquisador em Direito Tributário e Urbanístico Municipal.
-              </p>
+              <div className="text-xs text-slate-400 italic space-y-0.5">
+                <p>
+                  ¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito do Centro Universitário UniDomBosco (Curitiba/PR).
+                </p>
+                <p>
+                  ² Professora Orientadora. Docente de Direito Tributário do Curso de Direito do Centro Universitário UniDomBosco (Curitiba/PR).
+                </p>
+              </div>
             </div>
 
             {/* Resumo */}

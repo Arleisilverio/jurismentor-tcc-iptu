@@ -7,8 +7,19 @@ export interface LiveSlideState {
   customImage?: string;
 }
 
+export interface LiveVoiceState {
+  id: string;
+  title: string;
+  text: string;
+  audioUrl?: string;
+  audioBase64?: string;
+  action: 'play' | 'stop';
+  updatedAt: number;
+}
+
 const CHANNEL_NAME = 'tcc-live-slides';
 const STORAGE_KEY = 'JURIS_LIVE_SLIDE_STATE';
+const VOICE_STORAGE_KEY = 'JURIS_LIVE_VOICE_STATE';
 
 export const PUBLIC_PRODUCTION_ORIGIN = 'https://jurismentor-tcc-iptu.vercel.app';
 
@@ -24,9 +35,11 @@ export function getPublicAudienceUrl(): string {
 }
 
 type SlideListener = (state: LiveSlideState) => void;
+type VoiceListener = (state: LiveVoiceState) => void;
 type StatusListener = (connected: boolean, viewerCount: number) => void;
 
 const slideListeners = new Set<SlideListener>();
+const voiceListeners = new Set<VoiceListener>();
 const statusListeners = new Set<StatusListener>();
 
 let sharedChannel: RealtimeChannel | null = null;
@@ -42,6 +55,16 @@ function notifySlideListeners(state: LiveSlideState) {
       fn(state);
     } catch {
       // ignore listener error
+    }
+  });
+}
+
+function notifyVoiceListeners(state: LiveVoiceState) {
+  voiceListeners.forEach((fn) => {
+    try {
+      fn(state);
+    } catch {
+      // ignore
     }
   });
 }
@@ -97,9 +120,12 @@ function ensureRealtimeChannel(): RealtimeChannel | null {
         notifySlideListeners(state);
       }
     })
+    .on('broadcast', { event: 'voice-broadcast' }, ({ payload }) => {
+      if (payload && payload.action) {
+        notifyVoiceListeners(payload as LiveVoiceState);
+      }
+    })
     .on('broadcast', { event: 'request-current-slide' }, () => {
-      // Se um colega do grupo acabou de abrir o link no celular e pediu o slide atual,
-      // responde com o último estado conhecido
       const stateToSend = latestKnownState || getSavedLocalState();
       if (stateToSend && isChannelSubscribed && sharedChannel) {
         sharedChannel
@@ -127,7 +153,6 @@ function ensureRealtimeChannel(): RealtimeChannel | null {
 
         channel.track({ online_at: new Date().toISOString() }).catch(() => {});
 
-        // Se havia um envio pendente antes de terminar de conectar, envia agora
         if (pendingBroadcast) {
           const toSend = pendingBroadcast;
           pendingBroadcast = null;
@@ -139,7 +164,6 @@ function ensureRealtimeChannel(): RealtimeChannel | null {
             })
             .catch(() => {});
         } else {
-          // Pede para o apresentador informar em qual slide está neste momento
           channel
             .send({
               type: 'broadcast',
@@ -193,7 +217,7 @@ export function broadcastSlideChange(slideIndex: number, customImage?: string) {
     if ('BroadcastChannel' in window) {
       try {
         const bc = new BroadcastChannel(CHANNEL_NAME);
-        bc.postMessage(payload);
+        bc.postMessage({ type: 'slide-change', payload });
         bc.close();
       } catch {
         // ignore BroadcastChannel errors
@@ -217,14 +241,56 @@ export function broadcastSlideChange(slideIndex: number, customImage?: string) {
   }
 }
 
+export function broadcastVoiceAudio(voiceState: Omit<LiveVoiceState, 'updatedAt'>) {
+  const payload: LiveVoiceState = {
+    ...voiceState,
+    updatedAt: Date.now(),
+  };
+
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(VOICE_STORAGE_KEY, JSON.stringify(payload));
+    } catch {
+      // ignore
+    }
+
+    if ('BroadcastChannel' in window) {
+      try {
+        const bc = new BroadcastChannel(CHANNEL_NAME);
+        bc.postMessage({ type: 'voice-broadcast', payload });
+        bc.close();
+      } catch {
+        // ignore
+      }
+    }
+  }
+
+  const channel = ensureRealtimeChannel();
+  if (channel && isChannelSubscribed) {
+    channel
+      .send({
+        type: 'broadcast',
+        event: 'voice-broadcast',
+        payload,
+      })
+      .catch(() => {});
+  }
+}
+
 export function subscribeToSlideChanges(
   onUpdate: (state: LiveSlideState) => void,
-  onStatusChange?: (connected: boolean, viewerCount: number) => void
+  onStatusChange?: (connected: boolean, viewerCount: number) => void,
+  onVoiceBroadcast?: (voiceState: LiveVoiceState) => void
 ): () => void {
   const cleanups: (() => void)[] = [];
 
   slideListeners.add(onUpdate);
   cleanups.push(() => slideListeners.delete(onUpdate));
+
+  if (onVoiceBroadcast) {
+    voiceListeners.add(onVoiceBroadcast);
+    cleanups.push(() => voiceListeners.delete(onVoiceBroadcast));
+  }
 
   if (onStatusChange) {
     statusListeners.add(onStatusChange);
@@ -250,6 +316,15 @@ export function subscribeToSlideChanges(
         } catch {
           // ignore
         }
+      } else if (e.key === VOICE_STORAGE_KEY && e.newValue && onVoiceBroadcast) {
+        try {
+          const parsed = JSON.parse(e.newValue) as LiveVoiceState;
+          if (parsed?.action) {
+            onVoiceBroadcast(parsed);
+          }
+        } catch {
+          // ignore
+        }
       }
     };
     window.addEventListener('storage', onStorage);
@@ -259,7 +334,13 @@ export function subscribeToSlideChanges(
       try {
         const bc = new BroadcastChannel(CHANNEL_NAME);
         bc.onmessage = (ev) => {
-          if (ev?.data && typeof ev.data.slideIndex === 'number') {
+          if (ev?.data?.type === 'slide-change' && typeof ev.data.payload?.slideIndex === 'number') {
+            const state = ev.data.payload as LiveSlideState;
+            latestKnownState = state;
+            onUpdate(state);
+          } else if (ev?.data?.type === 'voice-broadcast' && ev.data.payload && onVoiceBroadcast) {
+            onVoiceBroadcast(ev.data.payload as LiveVoiceState);
+          } else if (ev?.data && typeof ev.data.slideIndex === 'number') {
             const state = ev.data as LiveSlideState;
             latestKnownState = state;
             onUpdate(state);

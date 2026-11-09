@@ -1,6 +1,7 @@
 # A TRIBUTAÇÃO DOS IMÓVEIS NÃO EDIFICADOS NO IPTU DE CURITIBA: ANÁLISE JURÍDICA DOS CRITÉRIOS DE ENQUADRAMENTO, TRANSIÇÃO EM OBRAS E A FUNÇÃO SOCIAL DA PROPRIEDADE URBANA
 
-**Arlei Silvério**¹
+**Arlei Silvério**¹  
+**Ana Cristina Zadra Valadares**² (Orientadora)
 
 ---
 
@@ -185,4 +186,5 @@ PAULSEN, Leandro. **Curso de Direito Tributário Completo**. 12. ed. São Paulo:
 SABBAG, Eduardo. **Manual de Direito Tributário**. 13. ed. São Paulo: Saraiva Educação, 2021.
 
 ---
-¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito. Pesquisador em Direito Tributário e Urbanístico Municipal. E-mail: arlei.silverio@direito.exemplo.br.
+¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito do Centro Universitário UniDomBosco (Curitiba/PR). Pesquisador em Direito Tributário e Urbanístico Municipal. E-mail: arleisilverio41@gmail.com.
+² Professora Orientadora. Docente da disciplina de Direito Tributário do Curso de Direito do Centro Universitário UniDomBosco (Curitiba/PR).

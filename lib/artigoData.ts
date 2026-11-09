@@ -1,6 +1,7 @@
 export const ARTIGO_COMPLETO_MD = `# A TRIBUTAÇÃO DOS IMÓVEIS NÃO EDIFICADOS NO IPTU DE CURITIBA: ANÁLISE JURÍDICA DOS CRITÉRIOS DE ENQUADRAMENTO, TRANSIÇÃO EM OBRAS E A FUNÇÃO SOCIAL DA PROPRIEDADE URBANA
 
 **Arlei Silvério**¹  
+**Ana Cristina Zadra Valadares**² (Orientadora)  
 
 ---
 
@@ -253,5 +254,6 @@ SABBAG, Eduardo. **Manual de Direito Tributário**. 13. ed. São Paulo: Saraiva 
 
 ---
 
-¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito. Pesquisador em Direito Tributário e Urbanístico Municipal.
+¹ Acadêmico do 8.º Período do Curso de Bacharelado em Direito do Centro Universitário UniDomBosco (Curitiba/PR). Pesquisador em Direito Tributário e Urbanístico Municipal.  
+² Professora Orientadora. Docente da disciplina de Direito Tributário do Curso de Direito do Centro Universitário UniDomBosco (Curitiba/PR).
 `;

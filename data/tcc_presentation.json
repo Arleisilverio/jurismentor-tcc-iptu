@@ -7,36 +7,36 @@
       {
         "slide": 1,
         "titulo": "Abertura e Tema da Pesquisa",
-        "subtitulo_telao": "Direito Tributário Municipal & Direito Urbanístico • Curitiba/PR",
+        "subtitulo_telao": "Centro Universitário UniDomBosco • Direito Tributário • Curitiba/PR",
         "tempo_sugerido": "1 min",
         "imagem_url": "/slides/slide-1.png",
-        "destaque_telao": "Objeto Central: A colisão entre a ficção fiscal do art. 42 da LC Municipal n.º 40/2001 e a verdade material dos imóveis com obras ativas em Curitiba.",
+        "destaque_telao": "Autor: Arlei Silvério • Orientadora: Prof.ª Ana Cristina Zadra Valadares (Direito Tributário — UniDomBosco Curitiba). Objeto: A colisão entre o art. 42 da LC n.º 40/2001 e a verdade material dos imóveis em obras.",
         "topicos_telao": [
-          "Pesquisa: Direito Tributário Municipal e Urbanístico (Curitiba/PR)",
-          "Foco: Tributação do IPTU durante a fase de obras lícitas",
+          "Orientação Acadêmica: Prof.ª Ana Cristina Zadra Valadares (Centro Universitário UniDomBosco — Curitiba/PR)",
+          "Foco: Tributação do IPTU durante a fase de obras lícitas (LC n.º 40/2001 e LC n.º 136/2022)",
           "Conflito: Arrecadação formalista (SMFI) vs. Função Social e Capacidade Contributiva"
         ],
-        "objetivo": "Apresentar-se com segurança, cumprimentar a banca examinadora e enunciar o tema e o problema central com clareza.",
-        "fala_simples": "Boa noite aos ilustres professores avaliadores, ao meu professor orientador e a todos os presentes. Hoje apresento o Artigo Científico intitulado: 'A Tributação dos Imóveis Não Edificados no IPTU de Curitiba: análise jurídica dos critérios de enquadramento, transição em obras e a função social da propriedade urbana'. O objetivo principal desta pesquisa é analisar uma distorção prática que onera gravemente o setor produtivo todos os anos na cobrança do IPTU em Curitiba para quem decide construir e investir em nossa cidade.",
-        "fala_sugerida": "Excelentíssima banca examinadora, caros professores, boa noite. É uma honra submeter a este egrégio colegiado o meu Trabalho de Conclusão de Curso intitulado: 'A Tributação dos Imóveis Não Edificados no IPTU de Curitiba: análise jurídica dos critérios de enquadramento, transição em obras e a função social da propriedade urbana', sob a orientação do ilustre professor orientador.",
+        "objetivo": "Apresentar-se com segurança, cumprimentar a banca examinadora e a professora orientadora Ana Cristina Zadra Valadares, e enunciar o tema central.",
+        "fala_simples": "Boa noite aos ilustres professores avaliadores da banca examinadora, à minha querida professora orientadora, Professora Ana Cristina Zadra Valadares, docente de Direito Tributário aqui do Centro Universitário UniDomBosco, a quem agradeço imensamente pela brilhante orientação, e a todos os presentes. Hoje apresento o Artigo Científico intitulado: 'A Tributação dos Imóveis Não Edificados no IPTU de Curitiba: análise jurídica dos critérios de enquadramento, transição em obras e a função social da propriedade urbana'. O objetivo principal desta pesquisa é analisar uma distorção prática que onera gravemente o setor produtivo todos os anos na cobrança do IPTU em Curitiba para quem decide construir e investir em nossa cidade.",
+        "fala_sugerida": "Excelentíssima banca examinadora, caros professores do Centro Universitário UniDomBosco, boa noite. Cumprimento de forma muito especial a minha ilustre professora orientadora, Professora Ana Cristina Zadra Valadares, titular de Direito Tributário desta instituição, cuja orientação rigorosa foi fundamental para esta pesquisa. Submeto a este colegiado o meu Trabalho de Conclusão de Curso intitulado: 'A Tributação dos Imóveis Não Edificados no IPTU de Curitiba: análise jurídica dos critérios de enquadramento, transição em obras e a função social da propriedade urbana'.",
         "pontos_chave": [
-          "Cumprimentar a banca e o orientador com calma",
+          "Cumprimentar a banca e agradecer nominalmente à orientadora Prof.ª Ana Cristina Zadra Valadares (UniDomBosco)",
           "Enunciar o título oficial do Artigo Científico",
           "Destacar o impacto real para quem constrói e investe em Curitiba"
         ],
         "radar_voz": [
-          { "rotulo": "Cumprimento à Banca", "termos": ["banca", "professores", "avaliadores", "orientador", "boa noite", "boa tarde"] },
+          { "rotulo": "Cumprimento à Banca & Orientadora Ana Cristina", "termos": ["ana cristina", "valadares", "orientadora", "unidombosco", "banca", "professores"] },
           { "rotulo": "Título / IPTU de Curitiba", "termos": ["imóveis não edificados", "imoveis nao edificados", "iptu de curitiba", "função social"] },
           { "rotulo": "Objetivo (Quem constrói na cidade)", "termos": ["setor produtivo", "construir", "investir", "nossa cidade", "distorção"] }
         ],
         "gatilhos_avanco": [
           "investir em nossa cidade",
           "construir e investir",
-          "orientador",
+          "função social da propriedade urbana",
           "próximo slide",
           "passando para o problema"
         ],
-        "evitar": "Falar rápido demais por nervosismo ou pedir desculpas antes de começar."
+        "evitar": "Falar rápido demais por nervosismo ou esquecer de cumprimentar a orientadora Prof.ª Ana Cristina Zadra Valadares."
       },
       {
         "slide": 2,
@@ -214,11 +214,11 @@
         "topicos_telao": [
           "Síntese: O combate à especulação não pode se converter em confisco contra quem produz",
           "Pacificação Judicial: TJPR e STF (Tema 1.455) já consagraram a primazia da verdade material",
-          "Agradecimento à Banca Examinadora e abertura para arguição"
+          "Agradecimento especial à Orientadora Prof.ª Ana Cristina Zadra Valadares e à Banca do UniDomBosco"
         ],
-        "objetivo": "Encerrar com firmeza acadêmica, agradecer à banca e abrir para as perguntas.",
-        "fala_simples": "Para concluir: a função social da propriedade urbana consagrada no artigo 182 da Constituição da República não pode ser desvirtuada para legitimar cobranças confiscatórias. Quem edifica e investe cumpre ativamente a função social da propriedade e impulsiona o desenvolvimento de Curitiba. O Tribunal de Justiça do Paraná e o Supremo Tribunal Federal já restabeleceram a primazia da verdade material; resta agora à legislação municipal se modernizar para garantir segurança jurídica e justiça fiscal. Agradeço a atenção da ilustre banca examinadora e coloco-me à inteira disposição dos professores para os questionamentos. Muito obrigado!",
-        "fala_sugerida": "Em conclusão: a repressão à especulação imobiliária não pode ser confundida com a asfixia fiscal de quem gera empregos e edifica a cidade. Ao harmonizar a legislação curitibana com a verdade material e os princípios constitucionais, Curitiba preservará sua arrecadação justa e prestigiará a verdadeira função social da propriedade urbana. Agradeço a atenção de todos e coloco-me à disposição da ilustre banca examinadora. Muito obrigado!",
+        "objetivo": "Encerrar com firmeza acadêmica, agradecer à orientadora Prof.ª Ana Cristina Zadra Valadares e à banca, e abrir para perguntas.",
+        "fala_simples": "Para concluir: a função social da propriedade urbana consagrada no artigo 182 da Constituição da República não pode ser desvirtuada para legitimar cobranças confiscatórias. Quem edifica e investe cumpre ativamente a função social da propriedade e impulsiona o desenvolvimento de Curitiba. O Tribunal de Justiça do Paraná e o Supremo Tribunal Federal já restabeleceram a primazia da verdade material; resta agora à legislação municipal se modernizar para garantir segurança jurídica e justiça fiscal. Renovo meu agradecimento especial à minha orientadora, Professora Ana Cristina Zadra Valadares, e a todos os professores da banca examinadora do UniDomBosco, colocando-me à inteira disposição para os questionamentos. Muito obrigado!",
+        "fala_sugerida": "Em conclusão: a repressão à especulação imobiliária não pode ser confundida com a asfixia fiscal de quem gera empregos e edifica a cidade. Ao harmonizar a legislação curitibana com a verdade material e os princípios constitucionais, Curitiba preservará sua arrecadação justa e prestigiará a verdadeira função social da propriedade urbana. Registro minha profunda gratidão à minha orientadora, Professora Ana Cristina Zadra Valadares, pelo brilhante magistério em Direito Tributário no UniDomBosco, e coloco-me à disposição da ilustre banca examinadora. Muito obrigado!",
         "pontos_chave": [
           "Quem constrói cumpre a função social da propriedade (art. 182 CF)",
           "TJPR e STF já garantem a verdade material",

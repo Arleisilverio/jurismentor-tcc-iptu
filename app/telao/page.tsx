@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Shield,
   ChevronLeft,
@@ -11,9 +11,11 @@ import {
   Radio,
   QrCode,
   Users,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 import { SLIDES, MONOGRAFIA } from '@/lib/tccData';
-import { broadcastSlideChange, subscribeToSlideChanges } from '@/lib/liveSlideSync';
+import { broadcastSlideChange, subscribeToSlideChanges, LiveVoiceState } from '@/lib/liveSlideSync';
 import { LiveShareQrModal } from '@/components/LiveShareQrModal';
 
 export default function TelaoPage() {
@@ -24,6 +26,8 @@ export default function TelaoPage() {
   const [viewerCount, setViewerCount] = useState(1);
   const [isAudienceMode, setIsAudienceMode] = useState(false);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
+  const [activeVoiceState, setActiveVoiceState] = useState<LiveVoiceState | null>(null);
+  const telaoAudioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -33,6 +37,55 @@ export default function TelaoPage() {
       }
     }
   }, []);
+
+  const stopTelaoAudio = () => {
+    if (telaoAudioRef.current) {
+      telaoAudioRef.current.pause();
+      telaoAudioRef.current = null;
+    }
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    setActiveVoiceState(null);
+  };
+
+  const playVoiceOnTelao = (voiceState: LiveVoiceState) => {
+    stopTelaoAudio();
+    if (voiceState.action === 'stop') return;
+
+    setActiveVoiceState(voiceState);
+
+    const src = voiceState.audioUrl
+      ? voiceState.audioUrl
+      : voiceState.audioBase64
+      ? `data:audio/mp3;base64,${voiceState.audioBase64}`
+      : null;
+
+    if (src) {
+      try {
+        const audio = new Audio(src);
+        telaoAudioRef.current = audio;
+        audio.onended = () => setActiveVoiceState(null);
+        audio.onerror = () => setActiveVoiceState(null);
+        audio.play().catch(() => {
+          // Caso o navegador exija clique prévio para tocar áudio, mantém o banner na tela com botão de ouvir
+        });
+        return;
+      } catch {
+        // fallback speechSynthesis
+      }
+    }
+
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window && voiceState.text) {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(voiceState.text);
+      utter.lang = 'pt-BR';
+      utter.rate = 1.03;
+      utter.onend = () => setActiveVoiceState(null);
+      utter.onerror = () => setActiveVoiceState(null);
+      window.speechSynthesis.speak(utter);
+    }
+  };
 
   const changeTelaoSlide = (newIndex: number) => {
     if (isAudienceMode) return;
@@ -56,9 +109,13 @@ export default function TelaoPage() {
       (connected, count) => {
         setIsRealtimeConnected(connected);
         setViewerCount(count);
+      },
+      (voiceState) => {
+        playVoiceOnTelao(voiceState);
       }
     );
     return unsubscribe;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -113,8 +170,8 @@ export default function TelaoPage() {
           </div>
           <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.15em] text-amber-400">
-                Defesa de TCC • Direito Tributário
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-[0.12em] text-amber-400">
+                UniDomBosco Curitiba • Autor: Arlei Silvério • Orientadora: Prof.ª Ana Cristina Zadra Valadares
               </span>
               <span
                 className={`inline-flex items-center space-x-1 px-2 py-0.5 rounded-full text-[10px] font-bold border transition ${
@@ -133,8 +190,8 @@ export default function TelaoPage() {
                 <span>
                   {isAudienceMode
                     ? isRealtimeConnected
-                      ? 'AO VIVO • SINCRONIZADO COM APRESENTADOR'
-                      : 'CONECTANDO À APRESENTAÇÃO...'
+                      ? 'AO VIVO • SINCRONIZADO'
+                      : 'CONECTANDO...'
                     : isRealtimeConnected
                     ? 'PC ⇄ CELULAR SINCRONIZADO'
                     : 'CONECTANDO...'}
@@ -178,6 +235,39 @@ export default function TelaoPage() {
         </div>
       </header>
 
+      {/* Banner de Voz Ao Vivo do Arlei IA quando acionado */}
+      {activeVoiceState && (
+        <div className="relative z-20 mx-4 sm:mx-8 lg:mx-14 mt-4 p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-amber-500/25 via-slate-900/95 to-emerald-500/20 border-2 border-amber-400 shadow-[0_0_35px_rgba(245,158,11,0.35)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2 text-xs font-black uppercase tracking-wider text-amber-300">
+              <Volume2 className="w-4 h-4 text-amber-400 animate-bounce" />
+              <span>🔊 Voz Arlei IA Ao Vivo • {activeVoiceState.title}</span>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-100 leading-relaxed">
+              &ldquo;{activeVoiceState.text}&rdquo;
+            </p>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              type="button"
+              onClick={() => playVoiceOnTelao(activeVoiceState)}
+              className="px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 font-black text-xs flex items-center gap-1"
+            >
+              <Volume2 className="w-3.5 h-3.5" />
+              <span>Ouvir</span>
+            </button>
+            <button
+              type="button"
+              onClick={stopTelaoAudio}
+              className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center gap-1"
+            >
+              <VolumeX className="w-3.5 h-3.5" />
+              <span>Parar</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Main Responsive Slide Content (Mobile-First for Audience + 16:9 for Projector) */}
       <main className="relative z-10 flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center px-4 sm:px-8 lg:px-14 py-5 sm:py-6 max-w-[1600px] w-full mx-auto">
         {/* Right Column on Desktop, Top on Mobile Audience: Editorial Visual Illustration */}
@@ -192,7 +282,7 @@ export default function TelaoPage() {
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent" />
             <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-[10px] sm:text-xs font-bold text-slate-300">
               <span className="px-2.5 py-1 rounded-lg bg-slate-950/80 border border-amber-500/30 text-amber-300">
-                Curitiba/PR • Direito Tributário
+                UniDomBosco Curitiba/PR • Direito Tributário
               </span>
               <span className="px-2 py-1 rounded-lg bg-slate-950/80 border border-slate-700 text-slate-400 font-mono">
                 LC 40/2001 • TJPR • STF
@@ -264,7 +354,7 @@ export default function TelaoPage() {
         {isAudienceMode ? (
           <div className="text-[11px] sm:text-xs font-bold text-emerald-300 flex items-center space-x-1.5">
             <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-            <span>Modo Plateia • Os slides mudam sozinhos conforme o apresentador avança</span>
+            <span>Modo Plateia • Orientadora: Prof.ª Ana Cristina Zadra Valadares (UniDomBosco)</span>
           </div>
         ) : (
           <div className="flex items-center space-x-2">

@@ -116,23 +116,27 @@ export async function generateAcademicPptx(config: PresentationConfig): Promise<
 
     // Metadata Footer
     s.addText([
-      { text: "Orientando: ", options: { bold: true, color: C_GOLD } },
-      { text: `${config.autor || 'Bacharelando em Direito - 8º Período'}\n`, options: { color: C_WHITE } },
+      { text: "Autor (Orientando): ", options: { bold: true, color: C_GOLD } },
+      { text: `${config.autor || 'Arlei Silvério — Bacharelando em Direito (UniDomBosco)'}\n`, options: { color: C_WHITE } },
+      { text: "Professora Orientadora: ", options: { bold: true, color: C_GOLD } },
+      { text: "Prof.ª Ana Cristina Zadra Valadares (Direito Tributário — UniDomBosco Curitiba)\n", options: { color: C_WHITE } },
       { text: "Área de Concentração: ", options: { bold: true, color: C_GOLD } },
       { text: "Direito Municipal, Tributário e Urbanístico • Curitiba/PR", options: { color: C_WHITE } }
     ], {
-      x: 1.3, y: 4.6, w: 6.5, h: 1.2,
-      fontSize: 12, fontFace: FONT_BODY, lineSpacing: 18
+      x: 1.3, y: 4.5, w: 6.8, h: 1.5,
+      fontSize: 11, fontFace: FONT_BODY, lineSpacing: 17
     });
 
     s.addText([
+      { text: "Instituição: ", options: { bold: true, color: C_CYAN } },
+      { text: "Centro Universitário UniDomBosco (Curitiba/PR)\n", options: { color: C_WHITE } },
       { text: "Objetivo: ", options: { bold: true, color: C_CYAN } },
       { text: `${config.objetivo === 'defesa' ? 'Defesa Perante Banca Examinadora' : 'Seminário de Pesquisa Acadêmica'}\n`, options: { color: C_WHITE } },
       { text: "Ano de Apresentação: ", options: { bold: true, color: C_CYAN } },
       { text: "2026", options: { color: C_WHITE } }
     ], {
-      x: 8.0, y: 4.6, w: 4.0, h: 1.2,
-      fontSize: 12, fontFace: FONT_BODY, lineSpacing: 18
+      x: 8.2, y: 4.5, w: 3.9, h: 1.5,
+      fontSize: 11, fontFace: FONT_BODY, lineSpacing: 17
     });
   }
 
