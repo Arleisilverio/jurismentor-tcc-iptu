@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Shield,
   ChevronLeft,
@@ -13,9 +13,17 @@ import {
   Users,
   Volume2,
   VolumeX,
+  Play,
+  Pause,
+  FileText,
 } from 'lucide-react';
 import { SLIDES, MONOGRAFIA } from '@/lib/tccData';
-import { broadcastSlideChange, subscribeToSlideChanges, LiveVoiceState } from '@/lib/liveSlideSync';
+import {
+  broadcastSlideChange,
+  broadcastVoiceAudio,
+  subscribeToSlideChanges,
+  LiveVoiceState,
+} from '@/lib/liveSlideSync';
 import { LiveShareQrModal } from '@/components/LiveShareQrModal';
 
 export default function TelaoPage() {
@@ -27,7 +35,12 @@ export default function TelaoPage() {
   const [isAudienceMode, setIsAudienceMode] = useState(false);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [activeVoiceState, setActiveVoiceState] = useState<LiveVoiceState | null>(null);
+  const [showTeleprompter, setShowTeleprompter] = useState(true);
+  const [teleprompterStyle, setTeleprompterStyle] = useState<'simples' | 'formal'>('simples');
+  const [isAutoNarratingAll, setIsAutoNarratingAll] = useState(false);
+  const [isPlayingSlideAudio, setIsPlayingSlideAudio] = useState(false);
   const telaoAudioRef = useRef<HTMLAudioElement | null>(null);
+  const autoNarrateRef = useRef<boolean>(false);
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -38,7 +51,11 @@ export default function TelaoPage() {
     }
   }, []);
 
-  const stopTelaoAudio = () => {
+  const stopTelaoAudio = useCallback((stopAutoMode = true) => {
+    if (stopAutoMode) {
+      autoNarrateRef.current = false;
+      setIsAutoNarratingAll(false);
+    }
     if (telaoAudioRef.current) {
       telaoAudioRef.current.pause();
       telaoAudioRef.current = null;
@@ -46,14 +63,82 @@ export default function TelaoPage() {
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
+    setIsPlayingSlideAudio(false);
     setActiveVoiceState(null);
-  };
+  }, []);
+
+  const narrateSlideByIndex = useCallback(
+    (targetIdx: number, continueAll: boolean) => {
+      const clamped = Math.max(0, Math.min(SLIDES.length - 1, targetIdx));
+      const targetSlide = SLIDES[clamped] || SLIDES[0];
+
+      stopTelaoAudio(false);
+      autoNarrateRef.current = continueAll;
+      setIsAutoNarratingAll(continueAll);
+      setSlideIndex(clamped);
+
+      if (!isAudienceMode) {
+        broadcastSlideChange(clamped, customImages[clamped]);
+      }
+
+      const audioSrc = targetSlide.audio_url || `/audio/arlei/slide-${targetSlide.slide}.mp3?v=2`;
+      const scriptText =
+        teleprompterStyle === 'simples' && targetSlide.fala_simples
+          ? targetSlide.fala_simples
+          : targetSlide.fala_sugerida;
+
+      const voicePayload: LiveVoiceState = {
+        id: `telao-slide-${targetSlide.slide}-${Date.now()}`,
+        title: `Slide ${targetSlide.slide}: ${targetSlide.titulo}`,
+        text: scriptText,
+        audioUrl: audioSrc,
+        action: 'play',
+        updatedAt: Date.now(),
+      };
+
+      setActiveVoiceState(voicePayload);
+      setIsPlayingSlideAudio(true);
+
+      const handleSlideFinished = () => {
+        setIsPlayingSlideAudio(false);
+        if (autoNarrateRef.current && clamped < SLIDES.length - 1) {
+          setTimeout(() => {
+            if (autoNarrateRef.current) {
+              narrateSlideByIndex(clamped + 1, true);
+            }
+          }, 1200);
+        } else {
+          autoNarrateRef.current = false;
+          setIsAutoNarratingAll(false);
+          setActiveVoiceState(null);
+        }
+      };
+
+      try {
+        const audio = new Audio(audioSrc);
+        telaoAudioRef.current = audio;
+        audio.onended = handleSlideFinished;
+        audio.onerror = () => {
+          setIsPlayingSlideAudio(false);
+          autoNarrateRef.current = false;
+          setIsAutoNarratingAll(false);
+        };
+        audio.play().catch(() => {
+          setIsPlayingSlideAudio(false);
+        });
+      } catch {
+        setIsPlayingSlideAudio(false);
+      }
+    },
+    [customImages, isAudienceMode, stopTelaoAudio, teleprompterStyle]
+  );
 
   const playVoiceOnTelao = (voiceState: LiveVoiceState) => {
-    stopTelaoAudio();
+    stopTelaoAudio(true);
     if (voiceState.action === 'stop') return;
 
     setActiveVoiceState(voiceState);
+    setIsPlayingSlideAudio(true);
 
     const src = voiceState.audioUrl
       ? voiceState.audioUrl
@@ -65,8 +150,14 @@ export default function TelaoPage() {
       try {
         const audio = new Audio(src);
         telaoAudioRef.current = audio;
-        audio.onended = () => setActiveVoiceState(null);
-        audio.onerror = () => setActiveVoiceState(null);
+        audio.onended = () => {
+          setIsPlayingSlideAudio(false);
+          setActiveVoiceState(null);
+        };
+        audio.onerror = () => {
+          setIsPlayingSlideAudio(false);
+          setActiveVoiceState(null);
+        };
         audio.play().catch(() => {
           // Caso o navegador exija clique prévio para tocar áudio, mantém o banner na tela com botão de ouvir
         });
@@ -81,8 +172,14 @@ export default function TelaoPage() {
       const utter = new SpeechSynthesisUtterance(voiceState.text);
       utter.lang = 'pt-BR';
       utter.rate = 1.03;
-      utter.onend = () => setActiveVoiceState(null);
-      utter.onerror = () => setActiveVoiceState(null);
+      utter.onend = () => {
+        setIsPlayingSlideAudio(false);
+        setActiveVoiceState(null);
+      };
+      utter.onerror = () => {
+        setIsPlayingSlideAudio(false);
+        setActiveVoiceState(null);
+      };
       window.speechSynthesis.speak(utter);
     }
   };
@@ -208,7 +305,69 @@ export default function TelaoPage() {
           </div>
         </div>
 
-        <div className="flex items-center space-x-2 sm:space-x-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
+          {/* Botão: Narrar Slide Atual com a Voz Clonada do Arlei */}
+          <button
+            type="button"
+            onClick={() =>
+              isPlayingSlideAudio && !isAutoNarratingAll
+                ? stopTelaoAudio(true)
+                : narrateSlideByIndex(slideIndex, false)
+            }
+            className={`px-3 py-1.5 rounded-xl text-xs font-black flex items-center space-x-1.5 border transition ${
+              isPlayingSlideAudio && !isAutoNarratingAll
+                ? 'bg-rose-500 text-white border-rose-400 animate-pulse'
+                : 'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-400/50'
+            }`}
+            title="Ouvir este slide com a voz clonada do Arlei"
+          >
+            {isPlayingSlideAudio && !isAutoNarratingAll ? (
+              <VolumeX className="w-4 h-4" />
+            ) : (
+              <Volume2 className="w-4 h-4 text-emerald-400" />
+            )}
+            <span>
+              {isPlayingSlideAudio && !isAutoNarratingAll
+                ? 'Parar Slide'
+                : `🔊 Narrar Slide ${slide.slide}`}
+            </span>
+          </button>
+
+          {/* Botão: Apresentação Completa Automática (Slide 1 -> 7 com Voz do Arlei) */}
+          <button
+            type="button"
+            onClick={() =>
+              isAutoNarratingAll ? stopTelaoAudio(true) : narrateSlideByIndex(slideIndex, true)
+            }
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center space-x-1.5 transition shadow-lg ${
+              isAutoNarratingAll
+                ? 'bg-rose-500 text-white animate-pulse'
+                : 'bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 hover:brightness-110'
+            }`}
+            title="Narrar automaticamente todos os slides até a conclusão com a voz do Arlei"
+          >
+            {isAutoNarratingAll ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            <span>
+              {isAutoNarratingAll
+                ? '⏹️ Parar Apresentação'
+                : '▶️ Apresentar Tudo c/ Voz (1→7)'}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowTeleprompter((v) => !v)}
+            className={`px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1 border transition ${
+              showTeleprompter
+                ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400/50'
+                : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
+            }`}
+            title="Mostrar ou ocultar o quadro do Teleprompter (Roteiro de Fala)"
+          >
+            <FileText className="w-3.5 h-3.5" />
+            <span className="hidden md:inline">Teleprompter</span>
+          </button>
+
           {!isAudienceMode && (
             <button
               type="button"
@@ -217,7 +376,7 @@ export default function TelaoPage() {
               title="Gerar QR Code e Link para o grupo acompanhar no celular"
             >
               <QrCode className="w-4 h-4" />
-              <span className="hidden sm:inline">QR Code / Grupo</span>
+              <span className="hidden sm:inline">QR Code</span>
             </button>
           )}
 
@@ -241,7 +400,11 @@ export default function TelaoPage() {
           <div className="space-y-1">
             <div className="flex items-center space-x-2 text-xs font-black uppercase tracking-wider text-amber-300">
               <Volume2 className="w-4 h-4 text-amber-400 animate-bounce" />
-              <span>🔊 Voz Arlei IA Ao Vivo • {activeVoiceState.title}</span>
+              <span>
+                {isAutoNarratingAll
+                  ? `🎙️ Apresentação Automática Narrada (Slide ${slide.slide} de ${SLIDES.length}) • ${activeVoiceState.title}`
+                  : `🔊 Voz Arlei IA Ao Vivo • ${activeVoiceState.title}`}
+              </span>
             </div>
             <p className="text-xs sm:text-sm text-slate-100 leading-relaxed">
               &ldquo;{activeVoiceState.text}&rdquo;
@@ -254,11 +417,11 @@ export default function TelaoPage() {
               className="px-3 py-1.5 rounded-xl bg-amber-400 text-slate-950 font-black text-xs flex items-center gap-1"
             >
               <Volume2 className="w-3.5 h-3.5" />
-              <span>Ouvir</span>
+              <span>Repetir</span>
             </button>
             <button
               type="button"
-              onClick={stopTelaoAudio}
+              onClick={() => stopTelaoAudio(true)}
               className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-rose-300 border border-rose-500/30 font-bold text-xs flex items-center gap-1"
             >
               <VolumeX className="w-3.5 h-3.5" />
@@ -329,6 +492,89 @@ export default function TelaoPage() {
             ))}
           </div>
         </div>
+
+        {/* Quadro do Teleprompter & Narração com a Voz Clonada do Arlei (12 cols) */}
+        {showTeleprompter && (
+          <div className="lg:col-span-12 lg:order-3 p-4 sm:p-5 rounded-2xl bg-slate-900/95 border-2 border-emerald-500/35 shadow-2xl space-y-3">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center space-x-2">
+                <Volume2 className="w-5 h-5 text-emerald-400" />
+                <span className="text-xs sm:text-sm font-black uppercase tracking-wider text-emerald-400">
+                  🎙️ Roteiro da Defesa / Teleprompter do Slide {slide.slide} (Com Sua Voz Clonada):
+                </span>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex items-center space-x-1 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                  <button
+                    type="button"
+                    onClick={() => setTeleprompterStyle('simples')}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-black transition ${
+                      teleprompterStyle === 'simples'
+                        ? 'bg-amber-400 text-slate-950'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Fala Natural
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setTeleprompterStyle('formal')}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-black transition ${
+                      teleprompterStyle === 'formal'
+                        ? 'bg-amber-400 text-slate-950'
+                        : 'text-slate-400 hover:text-white'
+                    }`}
+                  >
+                    Fala Formal
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    isPlayingSlideAudio && !isAutoNarratingAll
+                      ? stopTelaoAudio(true)
+                      : narrateSlideByIndex(slideIndex, false)
+                  }
+                  className="px-3.5 py-1.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs flex items-center space-x-1.5 shadow-md"
+                >
+                  <Volume2 className="w-4 h-4" />
+                  <span>
+                    {isPlayingSlideAudio && !isAutoNarratingAll
+                      ? 'Parar Áudio'
+                      : `Ouvir Voz do Arlei (Slide ${slide.slide})`}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    isAutoNarratingAll
+                      ? stopTelaoAudio(true)
+                      : narrateSlideByIndex(0, true)
+                  }
+                  className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:brightness-110 text-slate-950 font-black text-xs flex items-center space-x-1.5 shadow-md"
+                >
+                  {isAutoNarratingAll ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                  <span>
+                    {isAutoNarratingAll
+                      ? 'Parar Apresentação Completa'
+                      : 'Apresentar do Slide 1 ao 7 c/ Minha Voz'}
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div className="p-4 sm:p-5 rounded-xl bg-slate-950 border border-emerald-500/30 text-sm sm:text-lg text-slate-100 leading-relaxed font-medium">
+              &ldquo;
+              {teleprompterStyle === 'simples' && slide.fala_simples
+                ? slide.fala_simples
+                : slide.fala_sugerida}
+              &rdquo;
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Bottom Progress Bar & Discreet Controls */}

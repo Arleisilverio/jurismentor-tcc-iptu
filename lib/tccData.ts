@@ -33,6 +33,7 @@ export interface PresentationSlide {
   subtitulo_telao?: string;
   tempo_sugerido: string;
   imagem_url?: string;
+  audio_url?: string;
   destaque_telao?: string;
   topicos_telao?: string[];
   objetivo: string;

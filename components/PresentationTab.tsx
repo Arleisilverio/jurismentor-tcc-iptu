@@ -125,11 +125,13 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
     provider?: string;
   } | null>(null);
   const [isPlayingArleiVoice, setIsPlayingArleiVoice] = useState(false);
+  const [isAutoNarratingAllSlides, setIsAutoNarratingAllSlides] = useState(false);
 
   const slideRecognitionRef = useRef<any>(null);
   const bancaRecognitionRef = useRef<any>(null);
   const audioPlayerRef = useRef<HTMLAudioElement | null>(null);
   const arleiVoiceAudioRef = useRef<HTMLAudioElement | null>(null);
+  const autoNarrateAllRef = useRef<boolean>(false);
   const lastAdvanceTimeRef = useRef<number>(0);
   const lastVoiceCommandTimeRef = useRef<number>(0);
 
@@ -183,7 +185,11 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
   };
 
   // Para o áudio da voz clonada do Arlei localmente e no Telão/Celulares
-  const stopArleiVoice = useCallback((broadcastStop = true) => {
+  const stopArleiVoice = useCallback((broadcastStop = true, stopAutoMode = true) => {
+    if (stopAutoMode) {
+      autoNarrateAllRef.current = false;
+      setIsAutoNarratingAllSlides(false);
+    }
     if (arleiVoiceAudioRef.current) {
       arleiVoiceAudioRef.current.pause();
       arleiVoiceAudioRef.current = null;
@@ -202,6 +208,86 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
       });
     }
   }, []);
+
+  // Narra o Teleprompter de um Slide específico (ou de todos em sequência até o Slide 7) com a Voz Clonada do Arlei
+  const narrateSlideWithArleiVoice = useCallback(
+    (targetIdx: number, continueAll: boolean) => {
+      const clamped = Math.max(0, Math.min(SLIDES.length - 1, targetIdx));
+      const targetSlide = SLIDES[clamped] || SLIDES[0];
+
+      stopArleiVoice(false, false);
+      autoNarrateAllRef.current = continueAll;
+      setIsAutoNarratingAllSlides(continueAll);
+      changeSlide(clamped);
+      if (!isTimerActive) setIsTimerActive(true);
+
+      const audioSrc = targetSlide.audio_url || `/audio/arlei/slide-${targetSlide.slide}.mp3?v=2`;
+      const scriptText =
+        scriptStyle === 'simples' && targetSlide.fala_simples
+          ? targetSlide.fala_simples
+          : targetSlide.fala_sugerida;
+
+      const playId = `slide-narration-${targetSlide.slide}-${Date.now()}`;
+      setActiveArleiVoice({
+        id: playId,
+        title: `Slide ${targetSlide.slide}: ${targetSlide.titulo}`,
+        text: scriptText,
+        provider: 'Clone de Voz do Arlei (Teleprompter)',
+      });
+
+      // Transmite para o Telão (/telao) e Celulares (/telao?plateia=1)
+      broadcastVoiceAudio({
+        id: playId,
+        title: `Slide ${targetSlide.slide}: ${targetSlide.titulo}`,
+        text: scriptText,
+        audioUrl: audioSrc,
+        action: 'play',
+      });
+
+      const handleEnded = () => {
+        setIsPlayingArleiVoice(false);
+        // Marca todos os itens do checklist deste slide como concluídos
+        if (targetSlide.radar_voz && targetSlide.radar_voz.length > 0) {
+          const allDone: { [k: number]: boolean } = {};
+          targetSlide.radar_voz.forEach((_, idx) => {
+            allDone[idx] = true;
+          });
+          setSpokenRadar((prev) => ({ ...prev, [clamped]: allDone }));
+        }
+
+        if (autoNarrateAllRef.current && clamped < SLIDES.length - 1) {
+          setAutoAdvanceNotice(
+            `🎙️ Slide ${targetSlide.slide} concluído → Avançando automaticamente para o Slide ${targetSlide.slide + 1}...`
+          );
+          setTimeout(() => {
+            setAutoAdvanceNotice(null);
+            if (autoNarrateAllRef.current) {
+              narrateSlideWithArleiVoice(clamped + 1, true);
+            }
+          }, 1200);
+        } else {
+          autoNarrateAllRef.current = false;
+          setIsAutoNarratingAllSlides(false);
+        }
+      };
+
+      try {
+        const audio = new Audio(audioSrc);
+        arleiVoiceAudioRef.current = audio;
+        setIsPlayingArleiVoice(true);
+        audio.onended = handleEnded;
+        audio.onerror = () => {
+          setIsPlayingArleiVoice(false);
+          autoNarrateAllRef.current = false;
+          setIsAutoNarratingAllSlides(false);
+        };
+        audio.play().catch(() => setIsPlayingArleiVoice(false));
+      } catch {
+        setIsPlayingArleiVoice(false);
+      }
+    },
+    [changeSlide, isTimerActive, scriptStyle, stopArleiVoice]
+  );
 
   // Aciona a Voz Clonada do Arlei ("Arlei, fale sobre...") e transmite para o Telão e Celulares do Grupo
   const handleTriggerArleiVoice = useCallback(
@@ -958,37 +1044,91 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
               </div>
             )}
 
-            {/* Teleprompter (Roteiro de Fala em Letras Grandes) */}
-            <div className="space-y-2.5">
+            {/* Teleprompter (Roteiro de Fala em Letras Grandes + Narração com Voz Clonada) */}
+            <div className="space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <span className="text-sm font-black text-emerald-400 uppercase tracking-wider flex items-center space-x-2">
                   <Volume2 className="w-5 h-5" />
                   <span>Seu Teleprompter (O que falar neste slide):</span>
                 </span>
 
-                <div className="flex items-center space-x-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* Botão: Ouvir Este Slide com a Voz Clonada do Arlei */}
                   <button
                     type="button"
-                    onClick={() => setScriptStyle('simples')}
-                    className={`px-3 py-1 rounded-lg text-xs font-black transition ${
-                      scriptStyle === 'simples'
-                        ? 'bg-amber-400 text-slate-950'
-                        : 'text-slate-400 hover:text-white'
+                    onClick={() =>
+                      isPlayingArleiVoice && !isAutoNarratingAllSlides
+                        ? stopArleiVoice(true, true)
+                        : narrateSlideWithArleiVoice(currentSlideIndex, false)
+                    }
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center space-x-1.5 transition shadow-md ${
+                      isPlayingArleiVoice && !isAutoNarratingAllSlides
+                        ? 'bg-rose-500 text-white animate-pulse'
+                        : 'bg-emerald-500 hover:bg-emerald-400 text-slate-950'
                     }`}
                   >
-                    Fala Natural (Simples)
+                    {isPlayingArleiVoice && !isAutoNarratingAllSlides ? (
+                      <VolumeX className="w-4 h-4" />
+                    ) : (
+                      <Volume2 className="w-4 h-4" />
+                    )}
+                    <span>
+                      {isPlayingArleiVoice && !isAutoNarratingAllSlides
+                        ? 'Parar Narração do Slide'
+                        : `🔊 Narrar Slide ${currentSlide.slide} c/ Minha Voz`}
+                    </span>
                   </button>
+
+                  {/* Botão: Apresentação Automática Completa (Slide 1 -> 7 com Voz do Arlei) */}
                   <button
                     type="button"
-                    onClick={() => setScriptStyle('formal')}
-                    className={`px-3 py-1 rounded-lg text-xs font-black transition ${
-                      scriptStyle === 'formal'
-                        ? 'bg-amber-400 text-slate-950'
-                        : 'text-slate-400 hover:text-white'
+                    onClick={() =>
+                      isAutoNarratingAllSlides
+                        ? stopArleiVoice(true, true)
+                        : narrateSlideWithArleiVoice(currentSlideIndex, true)
+                    }
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center space-x-1.5 transition shadow-md ${
+                      isAutoNarratingAllSlides
+                        ? 'bg-rose-500 text-white animate-pulse'
+                        : 'bg-gradient-to-r from-amber-400 to-yellow-500 hover:brightness-110 text-slate-950'
                     }`}
                   >
-                    Fala Formal
+                    {isAutoNarratingAllSlides ? (
+                      <Pause className="w-4 h-4" />
+                    ) : (
+                      <Play className="w-4 h-4" />
+                    )}
+                    <span>
+                      {isAutoNarratingAllSlides
+                        ? '⏹️ Parar Apresentação'
+                        : '▶️ Apresentar Tudo c/ Voz (Até Slide 7)'}
+                    </span>
                   </button>
+
+                  <div className="flex items-center space-x-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setScriptStyle('simples')}
+                      className={`px-3 py-1 rounded-lg text-xs font-black transition ${
+                        scriptStyle === 'simples'
+                          ? 'bg-amber-400 text-slate-950'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      Fala Natural (Simples)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setScriptStyle('formal')}
+                      className={`px-3 py-1 rounded-lg text-xs font-black transition ${
+                        scriptStyle === 'formal'
+                          ? 'bg-amber-400 text-slate-950'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      Fala Formal
+                    </button>
+                  </div>
                 </div>
               </div>
 

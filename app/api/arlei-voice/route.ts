@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { SLIDES } from '@/lib/tccData';
 
 export const runtime = 'nodejs';
 
@@ -12,7 +13,16 @@ interface PresetVoiceTopic {
   keywords: string[];
 }
 
+const SLIDE_PRESET_VOICES: PresetVoiceTopic[] = SLIDES.map((s) => ({
+  id: `slide-${s.slide}`,
+  title: `Slide ${s.slide}: ${s.titulo}`,
+  audioUrl: s.audio_url || `/audio/arlei/slide-${s.slide}.mp3?v=2`,
+  text: s.fala_simples || s.fala_sugerida,
+  keywords: [`slide ${s.slide}`, `slide 0${s.slide}`],
+}));
+
 const ARLEI_PRESET_VOICES: PresetVoiceTopic[] = [
+  ...SLIDE_PRESET_VOICES,
   {
     id: 'abertura-original',
     title: 'Abertura Oficial e Homenagem à Orientadora Prof.ª Ana Cristina Zadra Valadares',
