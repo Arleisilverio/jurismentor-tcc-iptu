@@ -177,7 +177,7 @@ export default function Home() {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 relative font-sans">
         <CyberCanvas />
-        <LoginScreen />
+        <LoginScreen onPasswordRecoverySession={() => setIsPasswordRecoveryOpen(true)} />
       </div>
     );
   }

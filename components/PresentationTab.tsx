@@ -26,9 +26,12 @@ import {
   Image as ImageIcon,
   Loader2,
   Radio,
+  QrCode,
+  Users,
 } from 'lucide-react';
 import { SLIDES, PresentationSlide } from '@/lib/tccData';
 import { broadcastSlideChange, subscribeToSlideChanges } from '@/lib/liveSlideSync';
+import { LiveShareQrModal } from '@/components/LiveShareQrModal';
 
 interface PresentationTabProps {
   onOpenPresentationGenerator?: () => void;
@@ -73,6 +76,8 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
   const [customImages, setCustomImages] = useState<{ [idx: number]: string }>({});
   const [isGeneratingImg, setIsGeneratingImg] = useState(false);
   const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
+  const [viewerCount, setViewerCount] = useState(1);
+  const [isQrModalOpen, setIsQrModalOpen] = useState(false);
 
   // Estado do Ponto Eletrônico da Banca (GPT em Tempo Real + Fone Opcional)
   const [bancaQuestion, setBancaQuestion] = useState('');
@@ -111,8 +116,9 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
           }
         }
       },
-      (connected) => {
+      (connected, count) => {
         setIsRealtimeConnected(connected);
+        setViewerCount(count);
       }
     );
     return unsubscribe;
@@ -409,14 +415,31 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
       {/* Top Action Bar: Telão 16:9 + Gerador PPTX + Cronômetro */}
       <div className="bg-slate-900/95 rounded-2xl p-4 border border-amber-500/35 shadow-[0_0_25px_rgba(0,0,0,0.6)] space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          {/* Botões de Projeção e Exportação */}
+          {/* Botões de Projeção, QR Code para Grupo e Exportação */}
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={openProjectorWindow}
               className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 font-black text-xs sm:text-sm shadow-[0_0_15px_rgba(245,158,11,0.35)] hover:brightness-110 active:scale-95 transition flex items-center space-x-2"
             >
               <Monitor className="w-4 h-4" />
-              <span>Abrir Telão (Projetor 16:9)</span>
+              <span>Abrir Telão (16:9)</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                broadcastSlideChange(currentSlideIndex, customImages[currentSlideIndex]);
+                setIsQrModalOpen(true);
+              }}
+              className="px-3.5 py-2.5 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border border-emerald-400/50 font-black text-xs sm:text-sm transition flex items-center space-x-1.5 shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+            >
+              <QrCode className="w-4 h-4 text-emerald-400" />
+              <span>QR Code / Enviar no Grupo</span>
+              {viewerCount > 1 && (
+                <span className="ml-1 px-1.5 py-0.5 rounded-full bg-emerald-400 text-slate-950 text-[10px] font-black">
+                  {viewerCount}
+                </span>
+              )}
             </button>
 
             {onOpenPresentationGenerator && (
@@ -539,16 +562,26 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
                 </label>
               </div>
 
-              <span
-                className={`text-[11px] font-mono flex items-center gap-1.5 px-2.5 py-1 rounded-lg border ${
-                  isRealtimeConnected
-                    ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
-                    : 'bg-slate-950 text-slate-400 border-slate-800'
-                }`}
-              >
-                <Radio className={`w-3.5 h-3.5 ${isRealtimeConnected ? 'text-emerald-400 animate-pulse' : 'text-amber-400'}`} />
-                {isRealtimeConnected ? 'PC ⇄ Celular Conectado (/telao)' : 'Conectando PC ⇄ Celular...'}
-              </span>
+              <div className="flex items-center gap-2">
+                <span
+                  className={`text-[11px] font-mono flex items-center gap-1.5 px-2.5 py-1 rounded-lg border ${
+                    isRealtimeConnected
+                      ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/40'
+                      : 'bg-slate-950 text-slate-400 border-slate-800'
+                  }`}
+                >
+                  <Radio
+                    className={`w-3.5 h-3.5 ${
+                      isRealtimeConnected ? 'text-emerald-400 animate-pulse' : 'text-amber-400'
+                    }`}
+                  />
+                  {isRealtimeConnected ? 'Ao Vivo (PC ⇄ Celular / Grupo)' : 'Conectando...'}
+                </span>
+                <span className="text-[11px] font-mono flex items-center gap-1 px-2 py-1 rounded-lg bg-slate-950 text-cyan-300 border border-cyan-500/30">
+                  <Users className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>{viewerCount} online</span>
+                </span>
+              </div>
             </div>
 
             {isListeningSlide && (
@@ -972,6 +1005,14 @@ export const PresentationTab: React.FC<PresentationTabProps> = ({ onOpenPresenta
           )}
         </div>
       )}
+
+      {/* Modal QR Code e Compartilhamento Ao Vivo para o Grupo */}
+      <LiveShareQrModal
+        isOpen={isQrModalOpen}
+        onClose={() => setIsQrModalOpen(false)}
+        viewerCount={viewerCount}
+        isRealtimeConnected={isRealtimeConnected}
+      />
     </div>
   );
 };

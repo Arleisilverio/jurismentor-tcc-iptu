@@ -13,6 +13,7 @@ import {
   ArrowLeft,
   Send,
   Crown,
+  Link2,
 } from 'lucide-react';
 import { getSupabaseClient } from '@/lib/supabaseClient';
 
@@ -21,30 +22,36 @@ const ADMIN_DEFAULT_EMAIL = 'arleisilverio41@gmail.com';
 const translateAuthError = (msg: string): string => {
   const m = msg.toLowerCase();
   if (m.includes('invalid login credentials')) {
-    return 'E-mail ou senha incorretos. Se não lembrar a senha, clique em "Esqueci minha senha" abaixo.';
+    return 'E-mail ou senha incorretos. Se não lembrar a senha, clique em "Esqueci minha senha".';
   }
   if (m.includes('email not confirmed')) {
-    return 'E-mail ainda não confirmado. Use "Esqueci minha senha" para ativar e definir sua senha.';
+    return 'E-mail ainda não confirmado. Verifique sua caixa de entrada.';
   }
-  if (m.includes('rate limit') || m.includes('too many')) {
-    return 'Limite de envio de e-mails atingido. Use a redefinição direta de senha na tela abaixo.';
+  if (m.includes('rate limit') || m.includes('too many') || m.includes('security purposes')) {
+    return 'Por segurança, aguarde 60 segundos antes de solicitar outro e-mail de recuperação.';
+  }
+  if (m.includes('otp_expired') || m.includes('expired') || m.includes('invalid token')) {
+    return 'O link ou código do e-mail expirou. Solicite um novo e-mail de recuperação.';
   }
   if (m.includes('network') || m.includes('fetch') || m.includes('timeout')) {
-    return 'Falha de conexão com o servidor de autenticação. Verifique sua internet e tente novamente.';
+    return 'Falha de conexão com o servidor de autenticação. Verifique sua internet.';
   }
   return msg;
 };
 
-export const LoginScreen: React.FC = () => {
+interface LoginScreenProps {
+  onPasswordRecoverySession?: () => void;
+}
+
+export const LoginScreen: React.FC<LoginScreenProps> = ({ onPasswordRecoverySession }) => {
   const [viewMode, setViewMode] = useState<'login' | 'forgot'>('login');
   const [email, setEmail] = useState(ADMIN_DEFAULT_EMAIL);
   const [password, setPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [showNewPassword, setShowNewPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
+  const [pastedRecoveryInput, setPastedRecoveryInput] = useState('');
+  const [showPasteBox, setShowPasteBox] = useState(false);
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
 
@@ -74,90 +81,110 @@ export const LoginScreen: React.FC = () => {
     }
   };
 
-  // Redefine a senha diretamente no Supabase Auth e já faz o login automático
-  const handleDirectPasswordReset = async (e: React.FormEvent) => {
+  // Envia exclusivamente o link oficial de recuperação para o e-mail cadastrado
+  const handleSendResetEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!supabase) return;
     setError('');
     setInfo('');
-
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail) {
-      setError('Informe o seu e-mail cadastrado.');
-      return;
-    }
-    if (newPassword.length < 6) {
-      setError('A nova senha deve ter pelo menos 6 caracteres.');
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      setError('A confirmação de senha não confere com a nova senha digitada.');
+      setError('Digite seu e-mail cadastrado para receber o link de redefinição.');
       return;
     }
 
     setIsLoading(true);
     try {
-      const { data: updated, error: rpcError } = await supabase.rpc('reset_user_password', {
-        target_email: cleanEmail,
-        new_password: newPassword,
+      const redirectUrl =
+        typeof window !== 'undefined' ? `${window.location.origin}/` : undefined;
+
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
+        redirectTo: redirectUrl,
       });
 
-      if (rpcError) {
-        setError(translateAuthError(rpcError.message));
-        setIsLoading(false);
-        return;
-      }
-
-      if (!updated) {
-        setError('Este e-mail não foi encontrado na lista de usuários cadastrados.');
-        setIsLoading(false);
-        return;
-      }
-
-      // Senha redefinida no banco! Agora autentica automaticamente com a nova senha
-      const { error: loginError } = await supabase.auth.signInWithPassword({
-        email: cleanEmail,
-        password: newPassword,
-      });
-
-      if (loginError) {
-        setInfo('Senha redefinida com sucesso! Agora basta clicar em Entrar.');
-        setPassword(newPassword);
-        setViewMode('login');
+      if (resetError) {
+        setError(translateAuthError(resetError.message));
+      } else {
+        setEmailSent(true);
+        setInfo(
+          `Enviamos um link seguro de redefinição de senha para ${cleanEmail}. Abra seu e-mail (verifique também a caixa de Spam/Promoções) e clique no link recebido.`
+        );
       }
     } catch (err: any) {
-      setError(translateAuthError(err?.message || 'Erro ao redefinir a senha.'));
+      setError(translateAuthError(err?.message || 'Erro ao enviar e-mail de recuperação.'));
     } finally {
       setIsLoading(false);
     }
   };
 
-  // Opção adicional: envia também o link de recuperação para o e-mail
-  const handleSendResetEmail = async () => {
-    if (!supabase) return;
+  // Caso o usuário tenha recebido o link no e-mail mas o redirecionamento tenha apontado
+  // para localhost no celular, permite validar o link/código oficial recebido no e-mail
+  const handleVerifyEmailTokenOrLink = async () => {
+    if (!supabase || !pastedRecoveryInput.trim()) return;
     setError('');
     setInfo('');
+    setIsLoading(true);
+
+    const raw = pastedRecoveryInput.trim();
     const cleanEmail = email.trim().toLowerCase();
-    if (!cleanEmail) {
-      setError('Digite seu e-mail acima para receber o link de redefinição.');
-      return;
-    }
-    setIsSendingEmail(true);
+
     try {
-      const { error: resetError } = await supabase.auth.resetPasswordForEmail(cleanEmail, {
-        redirectTo: typeof window !== 'undefined' ? window.location.origin : undefined,
+      // 1) Se colou a URL com #access_token=...&refresh_token=...
+      if (raw.includes('access_token=')) {
+        const hashPart = raw.includes('#') ? raw.split('#')[1] : raw.split('?')[1] || raw;
+        const params = new URLSearchParams(hashPart);
+        const accessToken = params.get('access_token');
+        const refreshToken = params.get('refresh_token') || '';
+        if (accessToken) {
+          const { error: sessionErr } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+          if (sessionErr) {
+            setError(translateAuthError(sessionErr.message));
+          } else {
+            onPasswordRecoverySession?.();
+          }
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // 2) Se colou a URL do e-mail com ?token=...&type=recovery
+      if (raw.includes('token=')) {
+        const queryPart = raw.includes('?') ? raw.split('?')[1] : raw;
+        const params = new URLSearchParams(queryPart);
+        const tokenHash = params.get('token_hash') || params.get('token');
+        if (tokenHash) {
+          const { error: otpErr } = await supabase.auth.verifyOtp({
+            token_hash: tokenHash,
+            type: 'recovery',
+          });
+          if (otpErr) {
+            setError(translateAuthError(otpErr.message));
+          } else {
+            onPasswordRecoverySession?.();
+          }
+          setIsLoading(false);
+          return;
+        }
+      }
+
+      // 3) Se digitou o código numérico (OTP de 6 dígitos do e-mail)
+      const { error: codeErr } = await supabase.auth.verifyOtp({
+        email: cleanEmail,
+        token: raw,
+        type: 'recovery',
       });
-      if (resetError) {
-        setError(translateAuthError(resetError.message));
+      if (codeErr) {
+        setError(translateAuthError(codeErr.message));
       } else {
-        setInfo(
-          `Link de recuperação enviado para ${cleanEmail}. Você também pode redefinir sua nova senha diretamente nos campos abaixo!`
-        );
+        onPasswordRecoverySession?.();
       }
     } catch (err: any) {
-      setError(translateAuthError(err?.message || 'Erro ao enviar e-mail.'));
+      setError(translateAuthError(err?.message || 'Link ou código inválido.'));
     } finally {
-      setIsSendingEmail(false);
+      setIsLoading(false);
     }
   };
 
@@ -174,8 +201,8 @@ export const LoginScreen: React.FC = () => {
           </h1>
           <p className="text-xs sm:text-sm text-slate-300 mt-1">
             {viewMode === 'login'
-              ? 'Acesso Autenticado • TCC Imóveis Não Edificados'
-              : 'Recuperação e Redefinição de Senha'}
+              ? 'Acesso Restrito • TCC Imóveis Não Edificados'
+              : 'Recuperação Segura por E-mail'}
           </p>
         </div>
 
@@ -274,47 +301,39 @@ export const LoginScreen: React.FC = () => {
               className="w-full flex items-center justify-center space-x-2 px-5 py-3.5 rounded-xl text-base font-black bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 transition active:scale-95 shadow-[0_0_15px_rgba(245,158,11,0.35)] hover:brightness-110 disabled:opacity-50"
             >
               {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <LogIn className="w-5 h-5" />}
-              <span>{isLoading ? 'Autenticando...' : 'Entrar no Sistema'}</span>
+              <span>{isLoading ? 'Autenticando...' : 'Entrar'}</span>
             </button>
 
-            <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs text-slate-400">
-              <button
-                type="button"
-                onClick={() => setEmail(ADMIN_DEFAULT_EMAIL)}
-                className="hover:text-amber-300 transition underline underline-offset-2"
-              >
-                Usar e-mail ADM ({ADMIN_DEFAULT_EMAIL})
-              </button>
-              <button
-                id="login-reset-password"
-                type="button"
-                onClick={() => {
-                  setError('');
-                  setInfo('');
-                  setViewMode('forgot');
-                }}
-                className="font-bold text-slate-300 hover:text-amber-300 transition"
-              >
-                Redefinir senha →
-              </button>
-            </div>
+            <button
+              id="login-reset-password"
+              type="button"
+              onClick={() => {
+                setError('');
+                setInfo('');
+                setViewMode('forgot');
+              }}
+              className="w-full flex items-center justify-center space-x-1.5 text-xs sm:text-sm text-slate-400 hover:text-amber-300 transition pt-1"
+            >
+              <KeyRound className="w-4 h-4" />
+              <span>Esqueci minha senha (recuperar por e-mail)</span>
+            </button>
           </form>
         )}
 
         {/* =========================================================
-            MODO 2: ESQUECI MINHA SENHA / REDEFINIÇÃO COMPLETA
+            MODO 2: RECUPERAÇÃO DE SENHA EXCLUSIVAMENTE POR E-MAIL
            ========================================================= */}
         {viewMode === 'forgot' && (
-          <form onSubmit={handleDirectPasswordReset} className="space-y-4">
-            <div className="p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 leading-relaxed">
-              Defina sua nova senha abaixo para a conta <strong>{email || ADMIN_DEFAULT_EMAIL}</strong> (ou envie um
-              link de recuperação para o seu e-mail).
+          <form onSubmit={handleSendResetEmail} className="space-y-4">
+            <div className="p-3.5 rounded-xl bg-slate-950/90 border border-amber-500/30 text-xs text-slate-300 leading-relaxed">
+              🔒 <strong>Segurança por E-mail:</strong> Enviaremos um link exclusivo de recuperação para o seu e-mail.
+              Somente quem tiver acesso à caixa de entrada poderá definir uma nova senha.
             </div>
 
             <div className="space-y-1.5">
               <label htmlFor="reset-email" className="text-sm font-bold text-slate-200 flex items-center space-x-1.5">
                 <Mail className="w-4 h-4 text-amber-400" />
-                <span>E-mail da Conta</span>
+                <span>Seu E-mail Cadastrado</span>
               </label>
               <input
                 id="reset-email"
@@ -324,57 +343,6 @@ export const LoginScreen: React.FC = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="arleisilverio41@gmail.com"
-                className="w-full px-4 py-3 text-base rounded-xl bg-slate-950/90 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 select-text"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label
-                htmlFor="reset-new-password"
-                className="text-sm font-bold text-slate-200 flex items-center space-x-1.5"
-              >
-                <KeyRound className="w-4 h-4 text-amber-400" />
-                <span>Nova Senha (mínimo 6 caracteres)</span>
-              </label>
-              <div className="relative">
-                <input
-                  id="reset-new-password"
-                  type={showNewPassword ? 'text' : 'password'}
-                  autoComplete="new-password"
-                  required
-                  minLength={6}
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  placeholder="Digite sua nova senha"
-                  className="w-full pl-4 pr-11 py-3 text-base rounded-xl bg-slate-950/90 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 select-text"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-amber-400 transition"
-                >
-                  {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label
-                htmlFor="reset-confirm-password"
-                className="text-sm font-bold text-slate-200 flex items-center space-x-1.5"
-              >
-                <Lock className="w-4 h-4 text-amber-400" />
-                <span>Confirmar Nova Senha</span>
-              </label>
-              <input
-                id="reset-confirm-password"
-                type={showNewPassword ? 'text' : 'password'}
-                autoComplete="new-password"
-                required
-                minLength={6}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Repita a nova senha"
                 className="w-full px-4 py-3 text-base rounded-xl bg-slate-950/90 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 select-text"
               />
             </div>
@@ -397,19 +365,48 @@ export const LoginScreen: React.FC = () => {
               disabled={isLoading}
               className="w-full flex items-center justify-center space-x-2 px-5 py-3.5 rounded-xl text-sm sm:text-base font-black bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 transition active:scale-95 shadow-[0_0_15px_rgba(245,158,11,0.35)] hover:brightness-110 disabled:opacity-50"
             >
-              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <CheckCircle2 className="w-5 h-5" />}
-              <span>{isLoading ? 'Salvando e Entrando...' : 'Salvar Nova Senha e Entrar'}</span>
+              {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+              <span>{emailSent ? 'Reenviar Link para o Meu E-mail' : 'Enviar Link de Recuperação por E-mail'}</span>
             </button>
 
-            <button
-              type="button"
-              onClick={handleSendResetEmail}
-              disabled={isSendingEmail || isLoading}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition disabled:opacity-50"
-            >
-              {isSendingEmail ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4 text-amber-400" />}
-              <span>{isSendingEmail ? 'Enviando e-mail...' : 'Enviar também link para o meu e-mail'}</span>
-            </button>
+            {/* Auxiliar caso o link do e-mail tenha aberto localhost no celular */}
+            <div className="pt-2 border-t border-slate-800 space-y-2">
+              <button
+                type="button"
+                onClick={() => setShowPasteBox(!showPasteBox)}
+                className="w-full text-left text-[11px] text-slate-400 hover:text-amber-300 flex items-center justify-between transition"
+              >
+                <span className="flex items-center gap-1.5">
+                  <Link2 className="w-3.5 h-3.5 text-amber-400" />
+                  <span>Recebeu o e-mail no celular? Cole o link recebido aqui</span>
+                </span>
+                <span>{showPasteBox ? '▲' : '▼'}</span>
+              </button>
+
+              {showPasteBox && (
+                <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 space-y-2">
+                  <p className="text-[11px] text-slate-400 leading-snug">
+                    Se o botão do e-mail abrir uma página <code>localhost</code> no celular, segure o dedo sobre o botão{' '}
+                    <strong>&ldquo;Reset Password&rdquo;</strong> no seu e-mail, copie o endereço do link e cole abaixo:
+                  </p>
+                  <input
+                    type="text"
+                    value={pastedRecoveryInput}
+                    onChange={(e) => setPastedRecoveryInput(e.target.value)}
+                    placeholder="Cole aqui o link copiado do seu e-mail..."
+                    className="w-full px-3 py-2 text-xs rounded-lg bg-slate-900 border border-slate-700 text-white"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleVerifyEmailTokenOrLink}
+                    disabled={isLoading || !pastedRecoveryInput.trim()}
+                    className="w-full py-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-bold transition disabled:opacity-40"
+                  >
+                    Validar Link do E-mail e Criar Nova Senha
+                  </button>
+                </div>
+              )}
+            </div>
 
             <button
               type="button"
@@ -421,7 +418,7 @@ export const LoginScreen: React.FC = () => {
               className="w-full flex items-center justify-center space-x-1.5 pt-1 text-xs sm:text-sm font-bold text-slate-400 hover:text-white transition"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Voltar para a tela de Login</span>
+              <span>Voltar para o Login</span>
             </button>
           </form>
         )}

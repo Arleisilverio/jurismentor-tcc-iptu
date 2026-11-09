@@ -10,14 +10,28 @@ export interface LiveSlideState {
 const CHANNEL_NAME = 'tcc-live-slides';
 const STORAGE_KEY = 'JURIS_LIVE_SLIDE_STATE';
 
+export const PUBLIC_PRODUCTION_ORIGIN = 'https://jurismentor-tcc-iptu.vercel.app';
+
+export function getPublicAudienceUrl(): string {
+  if (typeof window === 'undefined') {
+    return `${PUBLIC_PRODUCTION_ORIGIN}/telao?plateia=1`;
+  }
+  const host = window.location.hostname;
+  if (host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.')) {
+    return `${PUBLIC_PRODUCTION_ORIGIN}/telao?plateia=1`;
+  }
+  return `${window.location.origin}/telao?plateia=1`;
+}
+
 type SlideListener = (state: LiveSlideState) => void;
-type StatusListener = (connected: boolean) => void;
+type StatusListener = (connected: boolean, viewerCount: number) => void;
 
 const slideListeners = new Set<SlideListener>();
 const statusListeners = new Set<StatusListener>();
 
 let sharedChannel: RealtimeChannel | null = null;
 let isChannelSubscribed = false;
+let currentViewerCount = 1;
 let pendingBroadcast: LiveSlideState | null = null;
 let latestKnownState: LiveSlideState | null = null;
 
@@ -32,14 +46,25 @@ function notifySlideListeners(state: LiveSlideState) {
   });
 }
 
-function notifyStatusListeners(connected: boolean) {
+function notifyStatusListeners() {
   statusListeners.forEach((fn) => {
     try {
-      fn(connected);
+      fn(isChannelSubscribed, currentViewerCount);
     } catch {
       // ignore
     }
   });
+}
+
+function updatePresenceCount(channel: RealtimeChannel) {
+  try {
+    const state = channel.presenceState();
+    const count = Object.keys(state).length;
+    currentViewerCount = Math.max(1, count);
+    notifyStatusListeners();
+  } catch {
+    // ignore
+  }
 }
 
 function ensureRealtimeChannel(): RealtimeChannel | null {
@@ -51,9 +76,12 @@ function ensureRealtimeChannel(): RealtimeChannel | null {
     return sharedChannel;
   }
 
+  const clientKey = `viewer-${Math.random().toString(36).slice(2, 10)}`;
+
   const channel = supabase.channel(CHANNEL_NAME, {
     config: {
       broadcast: { self: false, ack: true },
+      presence: { key: clientKey },
     },
   });
 
@@ -70,8 +98,8 @@ function ensureRealtimeChannel(): RealtimeChannel | null {
       }
     })
     .on('broadcast', { event: 'request-current-slide' }, () => {
-      // Se outro dispositivo (ex: Telão no PC) acabou de abrir e pediu o slide atual,
-      // responde com o último estado conhecido deste dispositivo
+      // Se um colega do grupo acabou de abrir o link no celular e pediu o slide atual,
+      // responde com o último estado conhecido
       const stateToSend = latestKnownState || getSavedLocalState();
       if (stateToSend && isChannelSubscribed && sharedChannel) {
         sharedChannel
@@ -83,10 +111,21 @@ function ensureRealtimeChannel(): RealtimeChannel | null {
           .catch(() => {});
       }
     })
+    .on('presence', { event: 'sync' }, () => {
+      updatePresenceCount(channel);
+    })
+    .on('presence', { event: 'join' }, () => {
+      updatePresenceCount(channel);
+    })
+    .on('presence', { event: 'leave' }, () => {
+      updatePresenceCount(channel);
+    })
     .subscribe((status) => {
       if (status === 'SUBSCRIBED') {
         isChannelSubscribed = true;
-        notifyStatusListeners(true);
+        notifyStatusListeners();
+
+        channel.track({ online_at: new Date().toISOString() }).catch(() => {});
 
         // Se havia um envio pendente antes de terminar de conectar, envia agora
         if (pendingBroadcast) {
@@ -100,7 +139,7 @@ function ensureRealtimeChannel(): RealtimeChannel | null {
             })
             .catch(() => {});
         } else {
-          // Pede para qualquer outro aparelho já aberto informar em qual slide está
+          // Pede para o apresentador informar em qual slide está neste momento
           channel
             .send({
               type: 'broadcast',
@@ -111,7 +150,7 @@ function ensureRealtimeChannel(): RealtimeChannel | null {
         }
       } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
         isChannelSubscribed = false;
-        notifyStatusListeners(false);
+        notifyStatusListeners();
       }
     });
 
@@ -180,7 +219,7 @@ export function broadcastSlideChange(slideIndex: number, customImage?: string) {
 
 export function subscribeToSlideChanges(
   onUpdate: (state: LiveSlideState) => void,
-  onStatusChange?: (connected: boolean) => void
+  onStatusChange?: (connected: boolean, viewerCount: number) => void
 ): () => void {
   const cleanups: (() => void)[] = [];
 
@@ -189,7 +228,7 @@ export function subscribeToSlideChanges(
 
   if (onStatusChange) {
     statusListeners.add(onStatusChange);
-    onStatusChange(isChannelSubscribed);
+    onStatusChange(isChannelSubscribed, currentViewerCount);
     cleanups.push(() => statusListeners.delete(onStatusChange));
   }
 
