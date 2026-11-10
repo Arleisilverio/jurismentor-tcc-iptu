@@ -1,9 +1,10 @@
 import React from 'react';
-import { Shield, Settings, Zap, Database, Terminal, Presentation, Crown } from 'lucide-react';
+import { Shield, Settings, Zap, Database, Presentation, Crown, GraduationCap, Lock } from 'lucide-react';
 
 interface NavbarProps {
   onOpenSettings: () => void;
   onOpenPresentationGenerator: () => void;
+  onRequestAdminLogin?: () => void;
   supabaseConnected: boolean;
   activeMode: string;
   isAdmin?: boolean;
@@ -12,6 +13,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   onOpenSettings,
   onOpenPresentationGenerator,
+  onRequestAdminLogin,
   supabaseConnected,
   activeMode,
   isAdmin = false,
@@ -36,13 +38,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="px-2 py-0.5 rounded text-xs font-black bg-cyan-500/15 text-cyan-300 border border-cyan-500/30 tracking-widest uppercase">
                 LVL 8
               </span>
-              {isAdmin && (
+              {isAdmin ? (
                 <span
                   title="Administrador: acesso total ao app e ao banco"
                   className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-black bg-amber-400/20 text-amber-300 border border-amber-400/50 tracking-widest uppercase shadow-[0_0_8px_rgba(245,158,11,0.3)]"
                 >
                   <Crown className="w-3 h-3" />
                   ADM
+                </span>
+              ) : (
+                <span
+                  title="Modo Aluno / Pesquisador: acesso livre ao Mentor IA e ao Artigo ABNT"
+                  className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 tracking-widest uppercase"
+                >
+                  <GraduationCap className="w-3.5 h-3.5" />
+                  ALUNO
                 </span>
               )}
             </div>
@@ -60,15 +70,27 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>{activeMode}</span>
           </div>
 
-          {/* Gerar PPTX Action Button */}
-          <button
-            onClick={onOpenPresentationGenerator}
-            className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 text-amber-300 hover:text-amber-200 transition-all border border-amber-500/40 active:scale-95 shadow-[0_0_12px_rgba(245,158,11,0.2)] text-xs font-bold cursor-pointer"
-            title="Gerar Apresentação de Slides (PowerPoint / NotebookLM)"
-          >
-            <Presentation className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden sm:inline">Gerar PPTX</span>
-          </button>
+          {isAdmin ? (
+            <button
+              onClick={onOpenPresentationGenerator}
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 via-yellow-500/20 to-amber-600/20 hover:from-amber-500/30 hover:to-amber-600/30 text-amber-300 hover:text-amber-200 transition-all border border-amber-500/40 active:scale-95 shadow-[0_0_12px_rgba(245,158,11,0.2)] text-xs font-bold cursor-pointer"
+              title="Gerar Apresentação de Slides (PowerPoint / NotebookLM)"
+            >
+              <Presentation className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden sm:inline">Gerar PPTX</span>
+            </button>
+          ) : (
+            onRequestAdminLogin && (
+              <button
+                onClick={onRequestAdminLogin}
+                className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 border border-amber-500/40 text-xs font-bold transition active:scale-95"
+                title="Área Restrita do Autor (Arlei Silvério): Desbloquear Defesa & Banca"
+              >
+                <Lock className="w-3.5 h-3.5 text-amber-400" />
+                <span>Login Autor</span>
+              </button>
+            )
+          )}
 
           {/* Supabase Status */}
           <div

@@ -26,12 +26,13 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [loadingAiStatus, setLoadingAiStatus] = useState(false);
 
   useEffect(() => {
-    if (!isOpen || !session) return;
+    if (!isOpen) return;
     setLoadingAiStatus(true);
+    const token = session?.access_token || 'local-mode';
     fetch('/api/chat', {
       method: 'GET',
       headers: {
-        Authorization: `Bearer ${session.access_token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((res) => (res.ok ? res.json() : null))
@@ -76,17 +77,19 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           {/* User Profile Card */}
           <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
             <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-              Usuário Autenticado
+              Perfil de Acesso
             </div>
             <div className="text-sm font-bold text-white flex items-center gap-2">
-              <span className="truncate">{session?.user?.email}</span>
+              <span className="truncate">
+                {session?.user?.email || 'Aluno / Pesquisador (Acesso Aberto UniDomBosco)'}
+              </span>
             </div>
             <div className="text-xs text-slate-400 flex items-center gap-1.5 pt-1">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span>
                 {isAdmin
-                  ? 'Acesso Total (Administrador / Orientando Arlei)'
-                  : 'Acesso Pessoal (Histórico isolado por RLS)'}
+                  ? 'Acesso Total (Administrador / Autor Arlei Silvério — Defesa & Banca Liberadas)'
+                  : 'Modo Aluno: Mentor IA & Artigo ABNT Liberados (Defesa e Banca exclusivas do Autor)'}
               </span>
             </div>
           </div>

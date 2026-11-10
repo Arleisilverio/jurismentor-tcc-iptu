@@ -18,12 +18,13 @@ import { getSupabaseClient } from '@/lib/supabaseClient';
 const ADMIN_EMAILS = ['arleisilverio41@gmail.com', 'arleisilveiro41@gmail.com', 'arlei85@hotmail.com'];
 
 export default function Home() {
-  const [activeTab, setActiveTab] = useState<TabType>('apresentacao');
+  const [activeTab, setActiveTab] = useState<TabType>('chat');
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isPresentationGenOpen, setIsPresentationGenOpen] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isStudentMode, setIsStudentMode] = useState(false);
 
   // Modal de redefinição quando o usuário clica no link recebido por e-mail (PASSWORD_RECOVERY)
   const [isPasswordRecoveryOpen, setIsPasswordRecoveryOpen] = useState(false);
@@ -36,6 +37,9 @@ export default function Home() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem('JURIS_LOCAL_MODE');
+      if (sessionStorage.getItem('JURIS_STUDENT_MODE') === '1') {
+        setIsStudentMode(true);
+      }
       if (window.location.hash && window.location.hash.includes('type=recovery')) {
         setIsPasswordRecoveryOpen(true);
       }
@@ -96,6 +100,8 @@ export default function Home() {
     const userEmail = (session.user.email || '').trim().toLowerCase();
     if (ADMIN_EMAILS.includes(userEmail)) {
       setIsAdmin(true);
+      setIsStudentMode(false);
+      setActiveTab('apresentacao');
     }
 
     const supabase = getSupabaseClient();
@@ -104,13 +110,48 @@ export default function Home() {
     Promise.resolve(supabase.rpc('is_admin'))
       .then(({ data, error }) => {
         if (!error && typeof data === 'boolean') {
-          setIsAdmin(data || ADMIN_EMAILS.includes(userEmail));
+          const adminFlag = data || ADMIN_EMAILS.includes(userEmail);
+          setIsAdmin(adminFlag);
+          if (adminFlag) {
+            setIsStudentMode(false);
+          }
         }
       })
       .catch(() => {
         // mantém o resultado por e-mail
       });
   }, [session]);
+
+  // Garante que usuários não-administradores (Modo Aluno) nunca acessem Defesa ou Banca
+  useEffect(() => {
+    if (!isAdmin && (activeTab === 'apresentacao' || activeTab === 'banca')) {
+      setActiveTab('chat');
+    }
+  }, [isAdmin, activeTab]);
+
+  const handleEnterStudentMode = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('JURIS_STUDENT_MODE', '1');
+    }
+    setIsStudentMode(true);
+    setActiveTab('chat');
+  };
+
+  const handleRequestAdminLogin = async () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('JURIS_STUDENT_MODE');
+    }
+    setIsStudentMode(false);
+    if (session && !isAdmin) {
+      const supabase = getSupabaseClient();
+      try {
+        await supabase?.auth.signOut();
+      } catch {
+        // ignore
+      }
+      setSession(null);
+    }
+  };
 
   const handleSaveRecoveryPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -151,6 +192,9 @@ export default function Home() {
   };
 
   const handleLogout = async () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('JURIS_STUDENT_MODE');
+    }
     const supabase = getSupabaseClient();
     try {
       await Promise.race([
@@ -161,6 +205,7 @@ export default function Home() {
       // ignore signOut network error if offline
     }
     setSession(null);
+    setIsStudentMode(false);
     setIsSettingsOpen(false);
     setActiveTab('chat');
   };
@@ -173,11 +218,14 @@ export default function Home() {
     );
   }
 
-  if (!session) {
+  if (!session && !isStudentMode) {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 relative font-sans">
         <CyberCanvas />
-        <LoginScreen onPasswordRecoverySession={() => setIsPasswordRecoveryOpen(true)} />
+        <LoginScreen
+          onPasswordRecoverySession={() => setIsPasswordRecoveryOpen(true)}
+          onEnterStudentMode={handleEnterStudentMode}
+        />
       </div>
     );
   }
@@ -190,15 +238,18 @@ export default function Home() {
       {/* Top Gamer HUD Navbar */}
       <Navbar
         onOpenSettings={() => setIsSettingsOpen(true)}
-        onOpenPresentationGenerator={() => setIsPresentationGenOpen(true)}
-        supabaseConnected={true}
+        onOpenPresentationGenerator={() => {
+          if (isAdmin) setIsPresentationGenOpen(true);
+        }}
+        onRequestAdminLogin={handleRequestAdminLogin}
+        supabaseConnected={!!session}
         isAdmin={isAdmin}
         activeMode={
           activeTab === 'chat'
             ? 'Modo Sábio // Mentor'
-            : activeTab === 'banca'
+            : activeTab === 'banca' && isAdmin
             ? 'Arena // Boss Fight'
-            : activeTab === 'apresentacao'
+            : activeTab === 'apresentacao' && isAdmin
             ? 'Speedrun // 15 Min'
             : 'Artigo Científico // ABNT'
         }
@@ -206,16 +257,24 @@ export default function Home() {
 
       {/* Main Interactive Screen with relative z-index over canvas */}
       <main className="flex-1 overflow-x-hidden relative z-10">
-        {activeTab === 'chat' && <ChatTab userId={session.user.id} />}
-        {activeTab === 'banca' && <BancaTab />}
-        {activeTab === 'apresentacao' && (
+        {activeTab === 'chat' && <ChatTab userId={session?.user?.id || 'local-arlei'} />}
+        {activeTab === 'banca' && isAdmin && <BancaTab />}
+        {activeTab === 'apresentacao' && isAdmin && (
           <PresentationTab onOpenPresentationGenerator={() => setIsPresentationGenOpen(true)} />
         )}
         {activeTab === 'tese' && <TccDataTab />}
       </main>
 
       {/* Fixed Bottom Gamer Navigation Deck */}
-      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
+      <BottomNav
+        activeTab={activeTab}
+        isAdmin={isAdmin}
+        onTabChange={(tab) => {
+          if (!isAdmin && (tab === 'apresentacao' || tab === 'banca')) return;
+          setActiveTab(tab);
+        }}
+        onLockedTabClick={handleRequestAdminLogin}
+      />
 
       {/* Presentation Generator Modal */}
       <PresentationGeneratorModal

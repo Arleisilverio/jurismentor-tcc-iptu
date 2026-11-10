@@ -25,6 +25,9 @@ import {
   LiveVoiceState,
 } from '@/lib/liveSlideSync';
 import { LiveShareQrModal } from '@/components/LiveShareQrModal';
+import { getSupabaseClient } from '@/lib/supabaseClient';
+
+const ADMIN_EMAILS = ['arleisilverio41@gmail.com', 'arleisilveiro41@gmail.com', 'arlei85@hotmail.com'];
 
 export default function TelaoPage() {
   const [slideIndex, setSlideIndex] = useState(0);
@@ -33,6 +36,7 @@ export default function TelaoPage() {
   const [isRealtimeConnected, setIsRealtimeConnected] = useState(false);
   const [viewerCount, setViewerCount] = useState(1);
   const [isAudienceMode, setIsAudienceMode] = useState(false);
+  const [isAdminTelao, setIsAdminTelao] = useState(false);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [activeVoiceState, setActiveVoiceState] = useState<LiveVoiceState | null>(null);
   const [showTeleprompter, setShowTeleprompter] = useState(true);
@@ -49,7 +53,21 @@ export default function TelaoPage() {
         setIsAudienceMode(true);
       }
     }
+
+    const supabase = getSupabaseClient();
+    if (!supabase) return;
+    supabase.auth.getSession().then(({ data }) => {
+      const email = (data.session?.user?.email || '').trim().toLowerCase();
+      setIsAdminTelao(ADMIN_EMAILS.includes(email));
+    });
+    const { data: listener } = supabase.auth.onAuthStateChange((_ev, newSession) => {
+      const email = (newSession?.user?.email || '').trim().toLowerCase();
+      setIsAdminTelao(ADMIN_EMAILS.includes(email));
+    });
+    return () => listener.subscription.unsubscribe();
   }, []);
+
+  const canControlTelao = isAdminTelao && !isAudienceMode;
 
   const stopTelaoAudio = useCallback((stopAutoMode = true) => {
     if (stopAutoMode) {
@@ -185,7 +203,7 @@ export default function TelaoPage() {
   };
 
   const changeTelaoSlide = (newIndex: number) => {
-    if (isAudienceMode) return;
+    if (!canControlTelao) return;
     const clamped = Math.max(0, Math.min(SLIDES.length - 1, newIndex));
     setSlideIndex(clamped);
     broadcastSlideChange(clamped, customImages[clamped]);
@@ -306,78 +324,80 @@ export default function TelaoPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-2.5">
-          {/* Botão: Narrar Slide Atual com a Voz Clonada do Arlei */}
-          <button
-            type="button"
-            onClick={() =>
-              isPlayingSlideAudio && !isAutoNarratingAll
-                ? stopTelaoAudio(true)
-                : narrateSlideByIndex(slideIndex, false)
-            }
-            className={`px-3 py-1.5 rounded-xl text-xs font-black flex items-center space-x-1.5 border transition ${
-              isPlayingSlideAudio && !isAutoNarratingAll
-                ? 'bg-rose-500 text-white border-rose-400 animate-pulse'
-                : 'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-400/50'
-            }`}
-            title="Ouvir este slide com a voz clonada do Arlei"
-          >
-            {isPlayingSlideAudio && !isAutoNarratingAll ? (
-              <VolumeX className="w-4 h-4" />
-            ) : (
-              <Volume2 className="w-4 h-4 text-emerald-400" />
-            )}
-            <span>
-              {isPlayingSlideAudio && !isAutoNarratingAll
-                ? 'Parar Slide'
-                : `🔊 Narrar Slide ${slide.slide}`}
-            </span>
-          </button>
+          {canControlTelao && (
+            <>
+              {/* Botão: Narrar Slide Atual com a Voz Clonada do Arlei */}
+              <button
+                type="button"
+                onClick={() =>
+                  isPlayingSlideAudio && !isAutoNarratingAll
+                    ? stopTelaoAudio(true)
+                    : narrateSlideByIndex(slideIndex, false)
+                }
+                className={`px-3 py-1.5 rounded-xl text-xs font-black flex items-center space-x-1.5 border transition ${
+                  isPlayingSlideAudio && !isAutoNarratingAll
+                    ? 'bg-rose-500 text-white border-rose-400 animate-pulse'
+                    : 'bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 border-emerald-400/50'
+                }`}
+                title="Ouvir este slide com a voz clonada do Arlei"
+              >
+                {isPlayingSlideAudio && !isAutoNarratingAll ? (
+                  <VolumeX className="w-4 h-4" />
+                ) : (
+                  <Volume2 className="w-4 h-4 text-emerald-400" />
+                )}
+                <span>
+                  {isPlayingSlideAudio && !isAutoNarratingAll
+                    ? 'Parar Slide'
+                    : `🔊 Narrar Slide ${slide.slide}`}
+                </span>
+              </button>
 
-          {/* Botão: Apresentação Completa Automática (Slide 1 -> 7 com Voz do Arlei) */}
-          <button
-            type="button"
-            onClick={() =>
-              isAutoNarratingAll ? stopTelaoAudio(true) : narrateSlideByIndex(slideIndex, true)
-            }
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center space-x-1.5 transition shadow-lg ${
-              isAutoNarratingAll
-                ? 'bg-rose-500 text-white animate-pulse'
-                : 'bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 hover:brightness-110'
-            }`}
-            title="Narrar automaticamente todos os slides até a conclusão com a voz do Arlei"
-          >
-            {isAutoNarratingAll ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            <span>
-              {isAutoNarratingAll
-                ? '⏹️ Parar Apresentação'
-                : '▶️ Apresentar Tudo c/ Voz (1→7)'}
-            </span>
-          </button>
+              {/* Botão: Apresentação Completa Automática (Slide 1 -> 7 com Voz do Arlei) */}
+              <button
+                type="button"
+                onClick={() =>
+                  isAutoNarratingAll ? stopTelaoAudio(true) : narrateSlideByIndex(slideIndex, true)
+                }
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-black flex items-center space-x-1.5 transition shadow-lg ${
+                  isAutoNarratingAll
+                    ? 'bg-rose-500 text-white animate-pulse'
+                    : 'bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 hover:brightness-110'
+                }`}
+                title="Narrar automaticamente todos os slides até a conclusão com a voz do Arlei"
+              >
+                {isAutoNarratingAll ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                <span>
+                  {isAutoNarratingAll
+                    ? '⏹️ Parar Apresentação'
+                    : '▶️ Apresentar Tudo c/ Voz (1→7)'}
+                </span>
+              </button>
 
-          <button
-            type="button"
-            onClick={() => setShowTeleprompter((v) => !v)}
-            className={`px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1 border transition ${
-              showTeleprompter
-                ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400/50'
-                : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
-            }`}
-            title="Mostrar ou ocultar o quadro do Teleprompter (Roteiro de Fala)"
-          >
-            <FileText className="w-3.5 h-3.5" />
-            <span className="hidden md:inline">Teleprompter</span>
-          </button>
+              <button
+                type="button"
+                onClick={() => setShowTeleprompter((v) => !v)}
+                className={`px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1 border transition ${
+                  showTeleprompter
+                    ? 'bg-cyan-500/20 text-cyan-200 border-cyan-400/50'
+                    : 'bg-slate-900 text-slate-400 border-slate-800 hover:text-white'
+                }`}
+                title="Mostrar ou ocultar o quadro do Teleprompter (Roteiro de Fala)"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span className="hidden md:inline">Teleprompter</span>
+              </button>
 
-          {!isAudienceMode && (
-            <button
-              type="button"
-              onClick={() => setIsQrModalOpen(true)}
-              className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 text-xs font-black flex items-center space-x-1.5 transition"
-              title="Gerar QR Code e Link para o grupo acompanhar no celular"
-            >
-              <QrCode className="w-4 h-4" />
-              <span className="hidden sm:inline">QR Code</span>
-            </button>
+              <button
+                type="button"
+                onClick={() => setIsQrModalOpen(true)}
+                className="px-3 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-300 text-xs font-black flex items-center space-x-1.5 transition"
+                title="Gerar QR Code e Link para o grupo acompanhar no celular"
+              >
+                <QrCode className="w-4 h-4" />
+                <span className="hidden sm:inline">QR Code</span>
+              </button>
+            </>
           )}
 
           <span className="px-3 py-1.5 rounded-xl bg-slate-900 border border-amber-500/30 text-amber-300 font-mono text-xs sm:text-sm font-black">
@@ -493,8 +513,8 @@ export default function TelaoPage() {
           </div>
         </div>
 
-        {/* Quadro do Teleprompter & Narração com a Voz Clonada do Arlei (12 cols) */}
-        {showTeleprompter && (
+        {/* Quadro do Teleprompter & Narração com a Voz Clonada do Arlei — EXCLUSIVO DO ARLEI (12 cols) */}
+        {showTeleprompter && canControlTelao && (
           <div className="lg:col-span-12 lg:order-3 p-4 sm:p-5 rounded-2xl bg-slate-900/95 border-2 border-emerald-500/35 shadow-2xl space-y-3">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div className="flex items-center space-x-2">
@@ -584,7 +604,7 @@ export default function TelaoPage() {
             <button
               key={s.slide}
               onClick={() => changeTelaoSlide(idx)}
-              disabled={isAudienceMode}
+              disabled={!canControlTelao}
               className={`h-2.5 rounded-full transition-all ${
                 idx === slideIndex
                   ? 'w-10 sm:w-12 bg-amber-400 shadow-[0_0_10px_#f59e0b]'
@@ -597,7 +617,7 @@ export default function TelaoPage() {
           ))}
         </div>
 
-        {isAudienceMode ? (
+        {!canControlTelao ? (
           <div className="text-[11px] sm:text-xs font-bold text-emerald-300 flex items-center space-x-1.5">
             <Radio className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
             <span>Modo Plateia • Orientadora: Prof.ª Ana Cristina Zadra Valadares (UniDomBosco)</span>

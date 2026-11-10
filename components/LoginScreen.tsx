@@ -14,6 +14,7 @@ import {
   Send,
   Crown,
   Link2,
+  GraduationCap,
 } from 'lucide-react';
 import { getSupabaseClient } from '@/lib/supabaseClient';
 
@@ -41,9 +42,13 @@ const translateAuthError = (msg: string): string => {
 
 interface LoginScreenProps {
   onPasswordRecoverySession?: () => void;
+  onEnterStudentMode?: () => void;
 }
 
-export const LoginScreen: React.FC<LoginScreenProps> = ({ onPasswordRecoverySession }) => {
+export const LoginScreen: React.FC<LoginScreenProps> = ({
+  onPasswordRecoverySession,
+  onEnterStudentMode,
+}) => {
   const [viewMode, setViewMode] = useState<'login' | 'forgot'>('login');
   const [email, setEmail] = useState(ADMIN_DEFAULT_EMAIL);
   const [password, setPassword] = useState('');
@@ -201,13 +206,57 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ onPasswordRecoverySess
           </h1>
           <p className="text-xs sm:text-sm text-slate-300 mt-1">
             {viewMode === 'login'
-              ? 'Acesso Restrito • TCC Imóveis Não Edificados'
+              ? 'Centro Universitário UniDomBosco • Direito Tributário Curitiba/PR'
               : 'Recuperação Segura por E-mail'}
           </p>
         </div>
 
         {/* =========================================================
-            MODO 1: TELA DE LOGIN PRINCIPAL
+            ACESSO LIVRE PARA ALUNOS & PESQUISADORES (FUNÇÃO SOCIAL)
+           ========================================================= */}
+        {viewMode === 'login' && onEnterStudentMode && (
+          <div className="mb-6 p-4 rounded-2xl bg-gradient-to-br from-emerald-500/15 via-slate-950 to-cyan-500/10 border-2 border-emerald-400/50 shadow-[0_0_25px_rgba(16,185,129,0.2)] space-y-3">
+            <div className="flex items-start space-x-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shrink-0 mt-0.5">
+                <GraduationCap className="w-6 h-6" />
+              </div>
+              <div>
+                <span className="inline-block px-2 py-0.5 rounded-full bg-emerald-400/20 text-emerald-300 text-[10px] font-black uppercase tracking-wider mb-1">
+                  Acesso Aberto aos Alunos • Função Social
+                </span>
+                <h2 className="text-sm sm:text-base font-black text-white">
+                  Estudante ou Pesquisador de Direito?
+                </h2>
+                <p className="text-xs text-slate-300 leading-relaxed mt-0.5">
+                  Acesse livremente o <strong>Mentor IA (Chat Jurídico & Revisor ABNT)</strong>, o{' '}
+                  <strong>Artigo Científico Completo</strong> e o <strong>Vade Mecum do IPTU de Curitiba</strong>.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={onEnterStudentMode}
+              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 text-slate-950 font-black text-xs sm:text-sm flex items-center justify-center space-x-2 shadow-[0_0_18px_rgba(16,185,129,0.35)] hover:brightness-110 active:scale-95 transition"
+            >
+              <GraduationCap className="w-5 h-5" />
+              <span>Entrar como Aluno (Mentor IA + Artigo ABNT)</span>
+            </button>
+          </div>
+        )}
+
+        {viewMode === 'login' && onEnterStudentMode && (
+          <div className="relative flex items-center justify-center my-5">
+            <div className="border-t border-slate-800 w-full" />
+            <span className="bg-slate-900 px-3 text-[10px] font-black uppercase tracking-widest text-amber-400 whitespace-nowrap">
+              🔒 Área Exclusiva do Autor (Defesa & Banca)
+            </span>
+            <div className="border-t border-slate-800 w-full" />
+          </div>
+        )}
+
+        {/* =========================================================
+            MODO 1: TELA DE LOGIN PRINCIPAL (ARLEI / ADMIN)
            ========================================================= */}
         {viewMode === 'login' && (
           <form onSubmit={handleLogin} className="space-y-4">
